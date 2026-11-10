@@ -1,5 +1,6 @@
 <section
   class="window"
+  [class.window--chat]="windowId() === 'chat'"
   [attr.aria-label]="title()"
   [style.left.px]="rect().x"
   [style.top.px]="rect().y"

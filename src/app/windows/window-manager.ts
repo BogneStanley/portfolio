@@ -58,7 +58,7 @@ export class WindowManager {
         const rect = {
           x: 280 + index * 24,
           y: 84 + index * 24,
-          width: app.id === 'projects' ? 670 : 510,
+          width: app.id === 'projects' ? 670 : app.id === 'chat' ? 580 : 510,
           height: 540,
         };
         return [
@@ -174,7 +174,7 @@ export class WindowManager {
     this.transitionId.set('group');
     const area = this.area();
     for (const [index, app] of APPLICATIONS.entries()) {
-      const width = app.id === 'projects' ? 670 : 510;
+      const width = app.id === 'projects' ? 670 : app.id === 'chat' ? 580 : 510;
       const rect = clampRect(
         {
           x: area.x + (area.width - width) / 2 + index * 18 - 36,

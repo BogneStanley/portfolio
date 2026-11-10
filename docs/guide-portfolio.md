@@ -176,3 +176,19 @@ Le contrôleur distingue ce mode mobile de la simple absence de souris. Un seul 
 Lors du passage de l’ordinateur au mobile, seule la fenêtre au premier plan reste ouverte ; les autres sont conservées réduites. Sur ordinateur, le dock et l’utilisation simultanée des fenêtres restent disponibles.
 
 La zone utile mobile correspond au viewport entier. Les marges de sécurité de l’appareil sont respectées dans le titre et le contenu. Le focus passe au bouton de fermeture à l’ouverture, puis revient à l’icône du dossier à sa fermeture.
+
+## Un assistant local pour explorer le portfolio
+
+Le dossier **Assistant** reprend la présentation d’un chat : questions suggérées, messages, champ de saisie et boutons pour explorer les rubriques utilisées. Il suit les mêmes règles que les autres fenêtres : redimensionnement et réduction sur ordinateur, plein écran et retour au bureau sur mobile.
+
+Le fonctionnement se répartit en trois parties :
+
+- `src/app/chat/portfolio-answers.ts` reconnaît des sujets (profil, projets, compétences, parcours, contact) dans une question et construit une réponse à partir de `PROFILE`, `PROJECTS`, `SKILLS` et `EXPERIENCES`. Les accents et les majuscules sont normalisés. Une question peut concerner plusieurs rubriques ou un projet précis.
+- `src/app/chat/chat-store.ts` conserve les messages dans un signal partagé. Fermer la fenêtre ne détruit donc pas la conversation. Le bouton « Nouvelle conversation » l’efface ; recharger la page aussi. Aucun message n’est envoyé à un serveur ou enregistré dans le stockage du navigateur.
+- `src/app/components/portfolio-chat` affiche la conversation. Le formulaire utilise Signal Forms : le modèle est un signal, `form()` lui associe les règles de validation et `[formField]` relie le champ à ce modèle. Les questions vides ou dépassant 500 caractères ne sont pas envoyées.
+
+Ce guide est un moteur de réponses déterministes, sans modèle d’IA : il ne comprend pas toutes les formulations et n’interprète pas les questions de suivi à partir des messages précédents. Une question inconnue invite à reformuler. Les informations absentes ne sont pas inventées et les données fictives sont identifiées. Pour personnaliser ses réponses, commence par remplacer les données du portfolio, puis enrichis les sujets reconnus et leurs tests.
+
+Le journal de conversation utilise `role="log"` pour annoncer les nouveaux messages. Il défile indépendamment du champ de saisie et respecte les préférences de réduction des animations. Les sources sont des boutons qui ouvrent les dossiers existants ; sur mobile, le chat est réduit pendant la consultation et peut être retrouvé depuis son icône.
+
+Le champ vide propose les questions les unes après les autres avec un effet d’écriture et d’effacement. Un `effect()` démarre un temporisateur uniquement lorsque la fenêtre est ouverte, le champ vide et sans focus. Sa fonction de nettoyage arrête le temporisateur lors d’un changement d’état ou de la destruction du composant. La préférence de réduction des animations conserve une question fixe. Le libellé accessible du champ reste stable pendant toute l’animation.

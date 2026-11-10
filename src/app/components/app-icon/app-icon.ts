@@ -1,5 +1,8 @@
 import { Component, input } from '@angular/core';
 export type IconName =
+  | 'chat'
+  | 'send'
+  | 'restart'
   | 'projects'
   | 'about'
   | 'skills'
@@ -45,6 +48,9 @@ export type IconName =
 export class AppIcon {
   readonly name = input.required<IconName>();
   protected readonly paths: Record<IconName, string> = {
+    chat: 'M4 4h16v12H9l-5 4V4ZM8 8h8m-8 4h5',
+    send: 'M12 20V4m-6 6 6-6 6 6',
+    restart: 'M4 9a8 8 0 1 1 0 6M4 3v6h6',
     projects: 'M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z',
     about: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 21v-2a7 7 0 0 1 14 0v2',
     skills: 'm8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16',

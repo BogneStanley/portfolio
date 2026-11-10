@@ -1,0 +1,97 @@
+<header class="chat-heading">
+  <div class="chat-heading__identity">
+    <div>
+      <h3>Stanley</h3>
+      <p>Guide du portfolio · local</p>
+    </div>
+  </div>
+  <button
+    class="reset-chat"
+    type="button"
+    (click)="reset()"
+    [disabled]="!chat.messages().length"
+    aria-label="Effacer la conversation"
+    title="Nouvelle conversation"
+  >
+    <app-icon name="restart" />
+  </button>
+</header>
+
+<div
+  #conversation
+  class="conversation"
+  tabindex="0"
+  role="log"
+  aria-label="Conversation sur le portfolio"
+  aria-live="polite"
+  aria-relevant="additions"
+  aria-atomic="false"
+>
+  @if (!chat.messages().length) {
+    <section class="chat-welcome" aria-label="Commencer une conversation">
+      <span class="welcome-icon" aria-hidden="true"><app-icon name="chat" /></span>
+      <div class="suggestions" aria-label="Questions suggérées">
+        @for (question of suggestions; track question) {
+          <button type="button" (click)="ask(question)">
+            {{ question }}
+          </button>
+        }
+      </div>
+    </section>
+  }
+  @for (message of chat.messages(); track message.id) {
+    <article
+      class="message"
+      [class.message--user]="message.role === 'user'"
+      animate.enter="message-enter"
+      [attr.aria-label]="message.role === 'user' ? 'Votre question' : 'Réponse de l’assistant'"
+    >
+      <span class="message__author">{{
+        message.role === 'user' ? 'Vous' : 'Guide de Stanley'
+      }}</span>
+      <p>{{ message.text }}</p>
+      @if (message.sources.length) {
+        <div
+          class="message__sources"
+          role="group"
+          aria-label="Rubriques utilisées pour cette réponse"
+        >
+          @for (source of message.sources; track source) {
+            <button
+              type="button"
+              (click)="openSource(source)"
+              [attr.aria-label]="'Ouvrir ' + sourceLabels[source] + ' depuis la réponse'"
+            >
+              {{ sourceLabels[source] }}<span aria-hidden="true">↗</span>
+            </button>
+          }
+        </div>
+      }
+    </article>
+  }
+</div>
+
+<form class="composer" (submit)="send($event)">
+  <label class="sr-only" for="portfolio-question">Votre question sur {{ profile.name }}</label>
+  <div class="composer__field">
+    <input
+      #questionInput
+      id="portfolio-question"
+      type="text"
+      [formField]="questionForm.question"
+      [placeholder]="focused() ? 'Posez votre question…' : placeholderQuestion()"
+      (focus)="focused.set(true)"
+      (blur)="focused.set(false)"
+      autocomplete="off"
+      aria-describedby="chat-note"
+    />
+    <button
+      type="submit"
+      [disabled]="!draft().question.trim() || questionForm().invalid()"
+      aria-label="Envoyer la question"
+    >
+      <app-icon name="send" />
+    </button>
+  </div>
+  <p id="chat-note">Assistant local · données de démonstration</p>
+</form>

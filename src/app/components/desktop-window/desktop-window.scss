@@ -202,3 +202,8 @@ h2 {
     font-size: calc(14px * var(--text-scale));
   }
 }
+
+.window--chat .window__content {
+  padding: 0;
+  overflow: auto;
+}

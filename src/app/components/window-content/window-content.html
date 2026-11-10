@@ -1,4 +1,7 @@
 @switch (section()) {
+  @case ('chat') {
+    <app-portfolio-chat />
+  }
   @case ('settings') {
     <app-settings-panel />
   }
@@ -157,6 +160,6 @@
     </div>
   }
 }
-@if (section() !== 'settings') {
+@if (section() !== 'settings' && section() !== 'chat') {
   <p class="window-footnote">CONTENU DE DÉMONSTRATION <span>PERSONNALISATION À VENIR</span></p>
 }

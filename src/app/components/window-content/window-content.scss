@@ -454,3 +454,8 @@ h4,
 .experience-highlights li + li {
   margin-top: 4px;
 }
+
+:host(.chat-content) {
+  height: 100%;
+  min-height: 0;
+}
