@@ -29,3 +29,11 @@ Les captures des cinq applications mobiles proviennent de leurs fiches Google Pl
 - The Dev Talk Show CMR : https://www.youtube.com/@TheDevTalkShowCMR
 
 Les captures de ces trois pages publiques sont intégrées aux cadres du portfolio, sur les couvertures SVG existantes. La capture de Blue Data est recadrée à l’affichage de 6 % en haut pour masquer son bandeau sandbox ; le fichier source reste intact.
+
+## Descriptions et classement
+
+Les quinze descriptions précisent le public ou le besoin, les usages principaux et, lorsque le CV le confirme, la contribution de Stanley. Aucun gain chiffré, technologie ou rôle supplémentaire n’est déduit d’une page publique.
+
+Les catégories décrivent le format du livrable : applications mobiles, applications web, API et backend, packages Flutter, podcast et formations. `web` remplace `frontend`, car une page publique ne démontre pas que la contribution était limitée au frontend.
+
+Chaque fiche affiche séparément les domaines et fonctionnalités (tontines, mobilité, billetterie, etc.) et les technologies confirmées. Podcast, montage et design ne sont plus présentés comme des technologies. Les pages pub.dev précisent la navigation typée par annotations de Get Typed Router et les règles composables de Form Validator X. Les sujets du podcast proviennent des épisodes visibles sur la chaîne. Les formations restent décrites à partir des thèmes et de l’auteur fournis, sans supposer le programme détaillé.

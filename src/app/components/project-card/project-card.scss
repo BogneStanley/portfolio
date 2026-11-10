@@ -41,6 +41,7 @@
 .project-card__title {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 6px;
 }
@@ -160,4 +161,13 @@ h4 {
     animation: none !important;
     transition: none !important;
   }
+}
+
+.tags--technologies {
+  margin-top: 8px;
+}
+.tags--technologies li {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--muted);
 }

@@ -11,10 +11,10 @@ import { AppIcon } from '../app-icon/app-icon';
 export class ProjectCard {
   readonly project = input.required<Project>();
   protected readonly categories: Record<ProjectCategory, string> = {
-    frontend: 'Web',
-    backend: 'Backend',
-    mobile: 'Mobile',
-    package: 'Packages',
+    web: 'Application web',
+    backend: 'API & backend',
+    mobile: 'Application mobile',
+    package: 'Package Flutter',
     media: 'Podcast',
     learning: 'Formation',
   };

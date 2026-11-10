@@ -26,19 +26,18 @@
       <span class="project-type">{{ categories[project().category] }}</span>
     </div>
     <p>{{ project().description }}</p>
-    <ul
-      class="tags"
-      [attr.aria-label]="project().technologies.length ? 'Technologies' : 'Domaines'"
-    >
-      @for (
-        technology of project().technologies.length
-          ? project().technologies
-          : (project().topics ?? []);
-        track technology
-      ) {
-        <li>{{ technology }}</li>
+    <ul class="tags" aria-label="Domaines et fonctionnalités">
+      @for (topic of project().topics; track topic) {
+        <li>{{ topic }}</li>
       }
     </ul>
+    @if (project().technologies.length) {
+      <ul class="tags tags--technologies" aria-label="Technologies">
+        @for (technology of project().technologies; track technology) {
+          <li>{{ technology }}</li>
+        }
+      </ul>
+    }
     @if (project().links?.length) {
       <div class="project-card__links" aria-label="Découvrir le projet">
         @for (link of project().links; track link.url) {

@@ -31,12 +31,12 @@ export class WindowContent {
   protected readonly education = EDUCATION;
   protected readonly filters: { value: ProjectFilter; label: string }[] = [
     { value: 'all', label: 'Tous les projets' },
-    { value: 'mobile', label: 'Mobile' },
-    { value: 'frontend', label: 'Web' },
+    { value: 'mobile', label: 'Applications mobiles' },
+    { value: 'web', label: 'Applications web' },
     { value: 'package', label: 'Packages' },
     { value: 'media', label: 'Podcast' },
-    { value: 'learning', label: 'Formation' },
-    { value: 'backend', label: 'Backend' },
+    { value: 'learning', label: 'Formations' },
+    { value: 'backend', label: 'API & backend' },
   ];
   protected readonly activeFilter = signal<ProjectFilter>('all');
   protected readonly filteredProjects = computed(() => {

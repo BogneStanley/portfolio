@@ -2,7 +2,7 @@
 export type WindowId =
   'projects' | 'about' | 'skills' | 'experiences' | 'contact' | 'settings' | 'chat';
 export type WindowStatus = 'closed' | 'open' | 'minimized';
-export type ProjectCategory = 'frontend' | 'backend' | 'mobile' | 'package' | 'media' | 'learning';
+export type ProjectCategory = 'web' | 'backend' | 'mobile' | 'package' | 'media' | 'learning';
 export type ProjectFilter = 'all' | ProjectCategory;
 export const SOCIAL_PROFILES: Partial<Record<'linkedin' | 'github', string>> = {
   linkedin: 'https://www.linkedin.com/in/stanley-bogne-moafo-160bb61a8/',
@@ -16,7 +16,7 @@ export interface Project {
   category: ProjectCategory;
   image: string;
   number: string;
-  topics?: string[];
+  topics: string[];
   links?: { label: string; url: string }[];
   screenshot?: { src: string; kind: 'mobile' | 'web'; alt: string; cropTop?: number };
 }
@@ -53,8 +53,9 @@ export const PROJECTS: Project[] = [
     id: 'freemopay',
     title: 'FreemoPay',
     description:
-      'Application de tontine et d’épargne collaborative conçue chez Freemo avec Flutter et Spring Boot : gestion des cotisations, suivi en temps réel et rapports de contributions.',
+      'Application de tontine et d’épargne collective : centralisation des cotisations, suivi des contributions et bilans de groupe. Conception et développement mobile et backend chez Freemo.',
     technologies: ['Flutter', 'Spring Boot'],
+    topics: ['Tontines', 'Épargne collective', 'Suivi des cotisations'],
     category: 'mobile',
     image: '/projects/freemopay.svg',
     links: [
@@ -74,8 +75,9 @@ export const PROJECTS: Project[] = [
     id: 'mokaa',
     title: 'Mokaa',
     description:
-      'Application Flutter de cartes virtuelles : création et gestion des cartes, rechargement via Mobile Money et suivi des opérations, avec une attention portée à la fiabilité et à l’expérience utilisateur.',
+      'Application de cartes de paiement virtuelles pour les achats en ligne. Elle permet de créer, recharger via Mobile Money, bloquer et débloquer ses cartes, puis de suivre ses opérations. Développement de l’application Flutter.',
     technologies: ['Flutter'],
+    topics: ['Cartes virtuelles', 'Paiement en ligne', 'Mobile Money'],
     category: 'mobile',
     image: '/projects/mokaa.svg',
     links: [
@@ -95,8 +97,9 @@ export const PROJECTS: Project[] = [
     id: 'kusa',
     title: 'Kusa',
     description:
-      'Migration de l’API de paiement de NestJS vers Spring Boot pour améliorer la maintenabilité, la robustesse et l’évolutivité du backend.',
+      'Migration d’une API de paiement de NestJS vers Spring Boot. Reprise du backend pour faciliter sa maintenance et accompagner son évolution, en conservant le paiement comme cœur métier.',
     technologies: ['NestJS', 'Spring Boot'],
+    topics: ['Paiements', 'Migration backend', 'API'],
     category: 'backend',
     image: '/projects/kusa.svg',
     number: '03',
@@ -105,8 +108,9 @@ export const PROJECTS: Project[] = [
     id: 'metoua',
     title: 'Metoua',
     description:
-      'Application de mobilité intégrant taxi à la demande et covoiturage. Lead développement mobile et backend, et pilotage des choix techniques.',
+      'Service de mobilité réunissant taxi à la demande et covoiturage. Lead développement mobile et backend : choix techniques et réalisation des fonctionnalités de l’application.',
     technologies: ['Flutter', 'Spring Boot'],
+    topics: ['Mobilité', 'Taxi à la demande', 'Covoiturage'],
     category: 'mobile',
     image: '/projects/metoua.svg',
     number: '04',
@@ -115,8 +119,9 @@ export const PROJECTS: Project[] = [
     id: 'toupesu',
     title: 'Toupesu',
     description:
-      'Application Flutter de gestion de tontines et d’échange de devises, de la conception au déploiement. Création de groupes, participation à distance, cotisations et suivi des transactions.',
+      'Application de tontines permettant de créer des groupes, cotiser et suivre les transactions à distance. Le projet intègre aussi l’échange de devises. Conception, développement Flutter et déploiement.',
     technologies: ['Flutter'],
+    topics: ['Tontines', 'Cotisations à distance', 'Change de devises'],
     category: 'mobile',
     image: '/projects/toupesu.svg',
     links: [
@@ -136,9 +141,10 @@ export const PROJECTS: Project[] = [
     id: 'afrolancer',
     title: 'Afrolancer',
     description:
-      'Plateforme de mise en relation entre freelances et clients, avec conception et implémentation des interfaces web.',
+      'Plateforme reliant freelances et clients autour de prestations de services. Conception et développement des interfaces Angular pour le parcours web de mise en relation.',
     technologies: ['Angular'],
-    category: 'frontend',
+    topics: ['Freelance', 'Mise en relation', 'Interfaces web'],
+    category: 'web',
     image: '/projects/afrolancer.svg',
     number: '06',
   },
@@ -146,8 +152,9 @@ export const PROJECTS: Project[] = [
     id: 'get-typed-router',
     title: 'Get Typed Router',
     description:
-      'Package Flutter disponible sur pub.dev pour générer des routes fortement typées pour GetX à partir d’annotations et améliorer l’expérience développeur.',
+      'Générateur de routes pour Flutter et GetX : des annotations sur les pages produisent un routeur et des arguments typés. Son outil en ligne de commande évite de maintenir manuellement les listes de routes.',
     technologies: ['Flutter', 'GetX'],
+    topics: ['Navigation typée', 'Génération de code', 'Outils développeur'],
     category: 'package',
     image: '/projects/get-typed-router.svg',
     screenshot: {
@@ -162,8 +169,9 @@ export const PROJECTS: Project[] = [
     id: 'form-validator-x',
     title: 'Form Validator X',
     description:
-      'Package Flutter flexible, modulaire et extensible pour définir des règles de validation réutilisables sur les champs de formulaire.',
+      'Bibliothèque de validation de formulaires Flutter fondée sur des règles composables : champs requis, e-mails, dates, nombres et motifs. Messages personnalisables et règles extensibles, sans dépendance externe hors Flutter.',
     technologies: ['Flutter'],
+    topics: ['Formulaires', 'Validation composable', 'Règles personnalisées'],
     category: 'package',
     image: '/projects/form-validator-x.svg',
     screenshot: {
@@ -178,8 +186,9 @@ export const PROJECTS: Project[] = [
     id: 'dev-talk',
     title: 'The Dev Talk Show CMR',
     description:
-      'Podcast consacré à la tech en Afrique, du développement au management tech. Participation comme podcasteur, monteur et designer.',
-    technologies: ['Podcast', 'Montage', 'Design'],
+      'Podcast de conversations sur les parcours et les métiers de la tech au Cameroun et en Afrique : ingénierie logicielle, entrepreneuriat, freelance et place des femmes dans la tech. Participation à l’animation, au montage et au design.',
+    technologies: [],
+    topics: ['Tech en Afrique', 'Parcours professionnels', 'Entretiens'],
     category: 'media',
     image: '/projects/dev-talk.svg',
     screenshot: {
@@ -194,10 +203,10 @@ export const PROJECTS: Project[] = [
     id: 'lehiboo',
     title: 'Le Hiboo Experiences',
     description:
-      'Plateforme de découverte et de réservation d’événements : concerts, spectacles et ateliers. Un espace organisateur permet de publier des événements et de gérer les réservations, la billetterie et les statistiques.',
+      'Plateforme de sorties et de billetterie locale pour découvrir et réserver concerts, spectacles ou ateliers. Côté organisateurs, elle rassemble publication des événements, réservations, billets et statistiques.',
     technologies: [],
-    topics: ['Événements', 'Billetterie', 'Réservations'],
-    category: 'frontend',
+    topics: ['Événementiel', 'Billetterie', 'Réservation en ligne'],
+    category: 'web',
     links: [
       {
         label: 'Voir le site',
@@ -216,9 +225,9 @@ export const PROJECTS: Project[] = [
     id: 'smalldeals',
     title: 'SmallDeals',
     description:
-      'Marketplace e-commerce au Cameroun : découverte de produits et de boutiques, commandes depuis le mobile, offres promotionnelles et livraison.',
+      'Marketplace mobile dédiée au commerce au Cameroun. Elle réunit des produits et des boutiques dans un même catalogue, avec commande depuis le téléphone, offres promotionnelles et livraison.',
     technologies: [],
-    topics: ['E-commerce', 'Marketplace', 'Livraison'],
+    topics: ['E-commerce', 'Marketplace', 'Commerce local'],
     category: 'mobile',
     links: [
       {
@@ -238,9 +247,9 @@ export const PROJECTS: Project[] = [
     id: 'badgee',
     title: 'Badgee',
     description:
-      'Application de gestion des équipes terrain et des missions d’agence : planning, consignes, formulaires, photos, signatures et échanges avec les équipes. Un espace permet aussi aux agents externes de trouver des missions.',
+      'Outil de coordination des agences et de leurs équipes terrain : planning des missions, consignes, formulaires et preuves d’intervention. Les agents indépendants peuvent aussi consulter les missions proposées et y candidater.',
     technologies: [],
-    topics: ['Gestion d’agence', 'Missions', 'Équipes terrain'],
+    topics: ['Gestion d’agence', 'Équipes terrain', 'Suivi des missions'],
     category: 'mobile',
     links: [
       {
@@ -260,10 +269,10 @@ export const PROJECTS: Project[] = [
     id: 'bluedata',
     title: 'Blue Data',
     description:
-      'Service web de recharge de forfaits internet et de crédit Blue Camtel. Choix d’un forfait, paiement par Mobile Money et suivi de la recharge, pour soi ou pour un proche.',
+      'Service web de recharge de forfaits internet et de crédit Blue Camtel. L’utilisateur choisit une offre, renseigne le numéro bénéficiaire, paie par Mobile Money et suit la recharge pour lui-même ou un proche.',
     technologies: [],
-    topics: ['Blue Camtel', 'Recharge', 'Mobile Money'],
-    category: 'frontend',
+    topics: ['Télécoms', 'Recharge Blue Camtel', 'Mobile Money'],
+    category: 'web',
     links: [
       {
         label: 'Voir le site',
@@ -283,9 +292,9 @@ export const PROJECTS: Project[] = [
     id: 'cours-flutter',
     title: 'Cours Flutter · ITNovation',
     description:
-      'Cours Flutter créés pour ITNovation et réunis dans une playlist YouTube pour accompagner l’apprentissage du développement mobile.',
+      'Cours vidéo Flutter créés pour ITNovation, regroupés dans une playlist YouTube. Une ressource pédagogique consacrée au développement d’applications mobiles et à la prise en main de Flutter.',
     technologies: ['Flutter'],
-    topics: ['Formation', 'ITNovation'],
+    topics: ['Pédagogie', 'Développement mobile', 'ITNovation'],
     category: 'learning',
     links: [
       {
@@ -300,9 +309,9 @@ export const PROJECTS: Project[] = [
     id: 'cours-figma',
     title: 'Cours Figma · ITNovation',
     description:
-      'Cours Figma créés pour ITNovation et disponibles dans une playlist YouTube consacrée à la conception d’interfaces.',
+      'Cours vidéo Figma créés pour ITNovation et réunis dans une playlist YouTube. Une ressource pédagogique dédiée au design d’interfaces et à la prise en main de l’outil.',
     technologies: ['Figma'],
-    topics: ['Formation', 'ITNovation'],
+    topics: ['Pédagogie', 'Design d’interfaces', 'ITNovation'],
     category: 'learning',
     links: [
       {
@@ -317,76 +326,33 @@ export const PROJECTS: Project[] = [
 export const SKILLS = [
   {
     number: '01',
-    title: 'Web & données',
-    description: 'Construire des interfaces web, des API et des services intégrés.',
-    items: [
-      'Java',
-      'Spring Boot',
-      'Angular',
-      'API REST',
-      'MySQL',
-      'PostgreSQL',
-      'MongoDB',
-      'Redis',
-      'Amazon S3',
-      'RustFS',
-    ],
+    title: 'Web & backend',
+    description: 'Développer des interfaces web et les services qui les accompagnent.',
+    items: ['Java', 'Spring Boot', 'Angular', 'API REST', 'PostgreSQL'],
   },
   {
     number: '02',
     title: 'Mobile & design',
-    description: 'Concevoir des applications iOS et Android fiables, cohérentes et accessibles.',
-    items: [
-      'Flutter',
-      'BLoC',
-      'GetX',
-      'Riverpod',
-      'Figma',
-      'Design systems',
-      'Secure Enclave / Keystore',
-      'OWASP Mobile',
-    ],
+    description: 'Concevoir des applications mobiles et des interfaces cohérentes.',
+    items: ['Flutter', 'BLoC', 'Riverpod', 'Figma', 'Design systems'],
   },
   {
     number: '03',
     title: 'DevOps & déploiement',
-    description:
-      'Automatiser les livraisons, observer les services et sécuriser leur exploitation.',
-    items: [
-      'Docker',
-      'Git',
-      'GitHub Actions',
-      'Shorebird',
-      'Xcode Cloud',
-      'Firebase Crashlytics',
-      'Sentry',
-      'Grafana',
-      'k6',
-      'Trivy',
-      'SonarQube',
-      'ClamAV',
-      'Flavors',
-      'Feature Flags',
-      'Google Play Console',
-      'App Store Connect',
-      'VPS',
-    ],
+    description: 'Automatiser les livraisons et suivre les applications en production.',
+    items: ['Docker', 'Git', 'GitHub Actions', 'CI/CD', 'Sentry'],
   },
   {
     number: '04',
     title: 'Architecture & méthode',
-    description: 'Structurer les applications et accompagner leur évolution et les équipes.',
-    items: [
-      'Agile',
-      'Clean Architecture',
-      'Vertical Slice Architecture',
-      'Architecture hexagonale',
-      'MVC',
-      'Documentation technique',
-      'Recettage',
-      'Documentation utilisateur',
-      'Veille technologique',
-    ],
+    description: 'Structurer le code, documenter les choix et travailler en équipe.',
+    items: ['Clean Architecture', 'Architecture hexagonale', 'Agile', 'Documentation technique'],
+  },
+  {
+    number: '05',
+    title: 'IA & développement assisté',
+    description: 'Intégrer l’IA au développement et à la conception d’applications.',
+    items: ['Codex', 'Claude Code', 'Cursor', 'LangChain'],
   },
 ];
 export interface Experience {

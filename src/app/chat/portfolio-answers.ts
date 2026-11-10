@@ -53,7 +53,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
         ? PROJECTS.filter((project) => project.category === 'learning')
         : PROJECTS;
     sections.push({
-      text: `Voici ${projects.length ? 'le détail des projets demandés' : 'les projets présentés'} dans le portfolio :\n\n${selection.map((project) => `${project.title} — ${project.description}\n${project.technologies.length ? 'Technologies : ' + project.technologies.join(', ') + '.' : 'Domaines : ' + (project.topics ?? []).join(', ') + '.'}`).join('\n\n')}`,
+      text: `Voici ${projects.length ? 'le détail des projets demandés' : 'les projets présentés'} dans le portfolio :\n\n${selection.map((project) => `${project.title} — ${project.description}\nDomaines : ${project.topics.join(', ')}.${project.technologies.length ? '\nTechnologies : ' + project.technologies.join(', ') + '.' : ''}`).join('\n\n')}`,
       sources: ['projects'],
     });
   }
@@ -64,7 +64,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
   });
   if (
     matches(
-      /\b(competence\w*|technolog\w*|stack|outil\w*|maitris\w*|sait|savoir|frontend|backend|animation\w*)\b/,
+      /\b(ia|intelligence artificielle|competence\w*|technolog\w*|stack|outil\w*|maitris\w*|sait|savoir|frontend|backend|animation\w*)\b/,
     ) ||
     (mentioned.length && !projects.length && !courseQuestion)
   ) {
