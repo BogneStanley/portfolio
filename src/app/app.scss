@@ -8,7 +8,8 @@
   min-height: 480px;
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(ellipse at 74% 52%, #35352c38, transparent 52%), var(--desktop);
+  background:
+    radial-gradient(ellipse at 74% 52%, var(--accent-soft), transparent 52%), var(--desktop);
 }
 .desktop::before {
   content: '';
@@ -16,7 +17,7 @@
   inset: 0;
   pointer-events: none;
   opacity: 0.19;
-  background-image: radial-gradient(#c9c4b1 0.6px, transparent 0.6px);
+  background-image: radial-gradient(var(--muted) 0.6px, transparent 0.6px);
   background-size: 28px 28px;
   mask-image: linear-gradient(90deg, transparent 20%, #000);
 }
@@ -29,8 +30,8 @@
   gap: 32px;
   padding: 0 28px;
   border-bottom: 1px solid var(--line);
-  background: #141614cc;
-  font-size: 11px;
+  background: var(--surface);
+  font-size: calc((11px) * var(--text-scale));
   letter-spacing: 0.02em;
 }
 .identity {
@@ -45,7 +46,7 @@
 }
 .brand-mark {
   color: var(--accent);
-  font-size: 23px;
+  font-size: calc((23px) * var(--text-scale));
   font-weight: 700;
   letter-spacing: -0.1em;
 }
@@ -55,7 +56,7 @@
 }
 .separator {
   margin: 0 8px;
-  color: #74796e;
+  color: var(--muted);
 }
 .menu-bar__right {
   margin-left: auto;
@@ -100,7 +101,7 @@ time {
   border-radius: 12px;
   background: transparent;
   color: var(--text);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   cursor: pointer;
 }
 .desktop-icon__symbol {
@@ -108,16 +109,16 @@ time {
   place-items: center;
   width: 48px;
   height: 48px;
-  border: 1px solid #ffffff20;
+  border: 1px solid var(--control-line);
   border-radius: 13px;
-  background: linear-gradient(145deg, #333730, #22251f);
+  background: linear-gradient(145deg, var(--surface-strong), var(--surface-raised));
   box-shadow:
-    inset 0 1px #ffffff10,
-    0 5px 10px #0002;
+    inset 0 1px var(--shine),
+    0 5px 10px var(--shadow-soft);
   transition:
     transform 0.25s,
     border-color 0.25s;
-  color: #dfdfd4;
+  color: var(--icon);
 }
 .desktop-icon:hover .desktop-icon__symbol {
   transform: translateY(-4px);
@@ -137,7 +138,7 @@ time {
   pointer-events: none;
 }
 .eyebrow {
-  font-size: 9px;
+  font-size: calc((9px) * var(--text-scale));
   font-weight: 500;
   letter-spacing: 0.17em;
   color: var(--muted);
@@ -150,7 +151,7 @@ time {
   margin-bottom: 22px;
 }
 .hero-title {
-  font-size: clamp(52px, 6.5vw, 98px);
+  font-size: calc((clamp(52px, 6.5vw, 98px)) * var(--text-scale));
   font-weight: 500;
   letter-spacing: -0.065em;
   line-height: 0.98;
@@ -160,14 +161,14 @@ time {
   display: block;
 }
 .hero__outline {
-  color: #939889;
+  color: var(--muted);
 }
 .accent {
   color: var(--accent);
 }
 .hero__description {
-  color: #a5aa9e;
-  font-size: 13px;
+  color: var(--muted);
+  font-size: calc((13px) * var(--text-scale));
   line-height: 1.8;
   margin: 0 0 24px;
 }
@@ -175,12 +176,12 @@ time {
   display: inline-flex;
   align-items: center;
   gap: 25px;
-  background: var(--accent);
-  color: #1b2313;
-  border: 0;
+  background: var(--accent-fill);
+  color: var(--accent-contrast);
+  border: 1px solid var(--accent);
   border-radius: 5px;
   padding: 13px 17px;
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   font-weight: 600;
   cursor: pointer;
 }
@@ -191,7 +192,7 @@ time {
 .hero__annotation {
   margin-top: 17px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
 }
 .windows-layer {
   position: absolute;
@@ -210,8 +211,8 @@ app-desktop-window {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  color: #a5aa9e;
-  font-size: 8px;
+  color: var(--muted);
+  font-size: calc((8px) * var(--text-scale));
   letter-spacing: 0.09em;
   pointer-events: none;
 }
@@ -232,13 +233,13 @@ app-desktop-window {
   display: flex;
   gap: 8px;
   padding: 10px 12px 14px;
-  border: 1px solid #ffffff1c;
+  border: 1px solid var(--control-line);
   border-radius: 19px;
-  background: #292d26e8;
+  background: var(--surface-raised);
   backdrop-filter: blur(20px);
   box-shadow:
-    0 12px 35px #0004,
-    inset 0 1px #ffffff08;
+    0 12px 35px var(--shadow-soft),
+    inset 0 1px var(--shine);
 }
 .dock__item {
   position: relative;
@@ -246,10 +247,10 @@ app-desktop-window {
   place-items: center;
   width: 43px;
   height: 43px;
-  border: 1px solid #ffffff15;
+  border: 1px solid var(--line);
   border-radius: 10px;
-  color: #e1e4d8;
-  background: linear-gradient(140deg, #41473a, #30352c);
+  color: var(--icon);
+  background: linear-gradient(140deg, var(--surface-hover), var(--surface-raised));
   cursor: pointer;
   transition:
     transform 0.2s,
@@ -257,7 +258,7 @@ app-desktop-window {
 }
 .dock__item:hover {
   transform: translateY(-5px);
-  background: #474f3d;
+  background: var(--surface-hover);
 }
 .dock__tooltip {
   position: absolute;
@@ -267,9 +268,9 @@ app-desktop-window {
   padding: 6px 10px;
   border: 1px solid var(--line);
   border-radius: 5px;
-  background: #272b24;
+  background: var(--surface-strong);
   color: var(--text);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
@@ -305,7 +306,7 @@ app-desktop-window {
     left: 150px;
   }
   .hero-title {
-    font-size: clamp(46px, 8vw, 70px);
+    font-size: calc((clamp(46px, 8vw, 70px)) * var(--text-scale));
   }
   .desktop-footer > span:last-child {
     display: none;
@@ -334,7 +335,7 @@ app-desktop-window {
   }
   .desktop-icon {
     width: 65px;
-    font-size: 9px;
+    font-size: calc((9px) * var(--text-scale));
   }
   .desktop-icon__symbol {
     width: 42px;
@@ -348,18 +349,18 @@ app-desktop-window {
     transform: translateY(-36%);
   }
   .hero-title {
-    font-size: clamp(43px, 10.9vw, 64px);
+    font-size: calc((clamp(43px, 10.9vw, 64px)) * var(--text-scale));
   }
   .hero .eyebrow {
     margin-bottom: 17px;
-    font-size: 8px;
+    font-size: calc((8px) * var(--text-scale));
   }
   .hero__description {
-    font-size: 11px;
+    font-size: calc((11px) * var(--text-scale));
     margin-bottom: 18px;
   }
   .hero__annotation {
-    font-size: 9px;
+    font-size: calc((9px) * var(--text-scale));
   }
   .desktop-footer {
     bottom: 108px;
@@ -373,7 +374,7 @@ app-desktop-window {
   .desktop-footer > span:nth-child(2) {
     position: static;
     transform: none;
-    font-size: 8px;
+    font-size: calc((8px) * var(--text-scale));
   }
   .dock {
     bottom: max(16px, env(safe-area-inset-bottom));
@@ -385,7 +386,7 @@ app-desktop-window {
     display: none;
   }
   .hero-title {
-    font-size: clamp(38px, 6vw, 65px);
+    font-size: calc((clamp(38px, 6vw, 65px)) * var(--text-scale));
     margin-bottom: 18px;
   }
   .hero__description {
@@ -415,146 +416,4 @@ app-desktop-window {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-
-.desktop:fullscreen {
-  width: 100%;
-  height: 100dvh;
-}
-.desktop::before {
-  transition: opacity 0.7s;
-}
-.desktop--immersive::before {
-  opacity: 0.35;
-}
-.hero--immersive {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    opacity 0.45s ease,
-    visibility 0s 0.45s;
-}
-.immersive-exit {
-  border: 1px solid #c7e99a55;
-  background: #c7e99a12;
-  color: var(--accent);
-  border-radius: 5px;
-  padding: 7px 10px;
-  font-size: 10px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.immersive-exit:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-.immersive-hint {
-  position: absolute;
-  top: 45%;
-  left: 150px;
-  right: 100px;
-  text-align: center;
-  color: var(--muted);
-  pointer-events: none;
-}
-.immersive-hint .eyebrow {
-  color: var(--accent);
-  font-size: 12px;
-  letter-spacing: 0.22em;
-}
-.immersive-hint p + p {
-  font-size: 12px;
-  line-height: 1.7;
-  margin: 18px 0 12px;
-}
-.immersive-hint span {
-  font-size: 10px;
-}
-.immersive-notice {
-  position: absolute;
-  bottom: 125px;
-  left: 20px;
-  right: 20px;
-  text-align: center;
-  color: var(--text);
-  font-size: 11px;
-  line-height: 1.6;
-  pointer-events: none;
-  z-index: 6;
-}
-.immersive-notice:empty {
-  display: none;
-}
-.immersion-enter {
-  animation: immersion-reveal 0.65s ease 0.2s both;
-}
-@keyframes immersion-reveal {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-@media (max-width: 600px) {
-  .immersive-hint {
-    left: 25px;
-    right: 25px;
-    top: 43%;
-  }
-  .desktop--immersive .menu-bar {
-    gap: 8px;
-  }
-  .desktop--immersive .menu-bar__right {
-    gap: 8px;
-  }
-  .immersive-exit {
-    font-size: 9px;
-    padding: 7px 8px;
-  }
-  .desktop--immersive time {
-    display: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero--immersive,
-  .desktop::before {
-    transition: none;
-  }
-  .immersion-enter {
-    animation: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .desktop-icons {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-  .desktop-icon {
-    flex: 1;
-    min-width: 0;
-    width: auto;
-    padding: 5px 0;
-    font-size: 8.5px;
-  }
-}
-@media (min-width: 601px) and (max-height: 650px) {
-  .desktop-icons {
-    gap: 6px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-  .desktop-icon {
-    gap: 6px;
-    padding: 3px;
-  }
-  .desktop-icon__symbol {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
-  }
 }

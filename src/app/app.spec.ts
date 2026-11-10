@@ -85,7 +85,7 @@ describe('Portfolio desktop', () => {
       fixture.detectChanges();
       await fixture.whenStable();
     }
-    expect(element.querySelectorAll('app-desktop-window')).toHaveLength(5);
+    expect(element.querySelectorAll('app-desktop-window')).toHaveLength(6);
     expect(element.querySelectorAll('.skill-group')).toHaveLength(3);
     expect(element.querySelectorAll('.experience-item')).toHaveLength(3);
     expect(element.textContent).toContain('Atelier Pixel');

@@ -2,6 +2,8 @@ import {
   afterNextRender,
   Component,
   computed,
+  effect,
+  untracked,
   DestroyRef,
   ElementRef,
   inject,
@@ -14,17 +16,19 @@ import { WindowContent } from './components/window-content/window-content';
 import { APPLICATIONS, PROFILE, WindowId, WindowStatus } from './data/portfolio';
 import { WindowManager } from './windows/window-manager';
 import { WindowOverlays } from './components/window-overlays/window-overlays';
+import { PreferencesStore } from './settings/preferences';
 
 @Component({
   selector: 'app-root',
   imports: [DesktopWindow, AppIcon, WindowContent, WindowOverlays],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrls: ['./app.scss', './app-interactions.scss'],
 })
 export class App {
   protected readonly profile = PROFILE;
   protected readonly applications = APPLICATIONS;
   protected readonly currentTime = signal(this.formatTime());
+  protected readonly settings = inject(PreferencesStore);
   protected readonly manager = inject(WindowManager);
   protected readonly windows = this.manager.windows;
   protected readonly activeWindow = computed(() =>
@@ -36,10 +40,18 @@ export class App {
   protected readonly immersiveNotice = signal('');
   private introduction?: gsap.core.Timeline;
   private immersionContext?: gsap.Context;
+  private immersionTimeline?: gsap.core.Timeline;
   private readonly destroyRef = inject(DestroyRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   constructor() {
+    effect(() => {
+      if (this.settings.reducedMotion())
+        untracked(() => {
+          this.introduction?.progress(1).pause();
+          this.immersionTimeline?.progress(1).pause();
+        });
+    });
     afterNextRender(() => {
       const root = this.host.nativeElement;
       const desktop = root.querySelector<HTMLElement>('.desktop');
@@ -96,6 +108,7 @@ export class App {
       media.add(
         '(prefers-reduced-motion: no-preference)',
         () => {
+          if (this.settings.reducedMotion()) return;
           this.introduction = gsap
             .timeline({ defaults: { ease: 'power3.out' } })
             .from('.menu-bar', { y: -12, opacity: 0, duration: 0.6 })
@@ -121,9 +134,9 @@ export class App {
     this.introduction?.progress(1).pause();
     this.immersive.set(true);
     this.immersionContext?.revert();
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!this.settings.reducedMotion()) {
       this.immersionContext = gsap.context(() => {
-        gsap
+        this.immersionTimeline = gsap
           .timeline({ defaults: { ease: 'power3.out' } })
           .fromTo(
             '.desktop-icon',

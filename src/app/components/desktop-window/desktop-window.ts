@@ -7,6 +7,7 @@ import {
   input,
   output,
   computed,
+  effect,
   untracked,
 } from '@angular/core';
 import { gsap } from 'gsap';
@@ -14,6 +15,7 @@ import { AppIcon } from '../app-icon/app-icon';
 import { WindowId } from '../../data/portfolio';
 import { WindowManager } from '../../windows/window-manager';
 import { ResizeEdge, WindowRect } from '../../windows/window-geometry';
+import { PreferencesStore } from '../../settings/preferences';
 @Component({
   selector: 'app-desktop-window',
   imports: [AppIcon],
@@ -30,6 +32,7 @@ export class DesktopWindow {
   readonly closed = output<void>();
   readonly reduced = output<void>();
   readonly activated = output<void>();
+  private readonly preferences = inject(PreferencesStore);
   protected readonly manager = inject(WindowManager);
   protected readonly state = computed(() => this.manager.windows()[this.windowId()]);
   protected readonly rect = computed(() => this.state().rect);
@@ -46,6 +49,14 @@ export class DesktopWindow {
   private hoverTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
+    effect(() => {
+      if (this.preferences.reducedMotion())
+        untracked(() => {
+          this.animation?.progress(1).pause();
+          this.placementAnimation?.progress(1).pause();
+          this.actionAnimation?.progress(1).pause();
+        });
+    });
     // Rejoue l'entrée à l'ouverture et à la restauration, sans perdre la position.
     afterRenderEffect(() => {
       const minimized = this.minimized();
@@ -55,7 +66,7 @@ export class DesktopWindow {
       this.busy = false;
       const panel = this.host.nativeElement.querySelector('.window');
       if (panel) gsap.set(panel, { clearProps: 'transform,opacity' });
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (untracked(() => this.preferences.reducedMotion())) return;
       this.context = gsap.context(() => {
         this.animation = gsap
           .timeline({ defaults: { ease: 'power3.out' } })
@@ -73,9 +84,9 @@ export class DesktopWindow {
       this.previousRect = rect;
       if (
         !previous ||
-        untracked(() => this.manager.transitionId()) !== this.windowId() ||
+        ![this.windowId(), 'group'].includes(untracked(() => this.manager.transitionId()) ?? '') ||
         untracked(() => this.manager.interacting()) ||
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        untracked(() => this.preferences.reducedMotion())
       )
         return;
       const panel = this.host.nativeElement.querySelector('.window');
@@ -126,7 +137,7 @@ export class DesktopWindow {
       if (action === 'close') this.closed.emit();
       else this.reduced.emit();
     };
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (untracked(() => this.preferences.reducedMotion())) {
       finish();
       return;
     }

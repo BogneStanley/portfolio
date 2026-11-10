@@ -45,15 +45,15 @@ import { WindowManager } from '../../windows/window-manager';
       z-index: 2147483003;
       width: 290px;
       padding: 16px;
-      background: #30382b;
-      border: 1px solid #8c9a78;
+      background: var(--surface-strong);
+      border: 1px solid var(--control-line);
       border-radius: 10px;
-      box-shadow: 0 16px 40px #0008;
+      box-shadow: 0 16px 40px var(--shadow);
       pointer-events: auto;
       color: var(--text);
     }
     p {
-      font-size: 11px;
+      font-size: calc((11px) * var(--text-scale));
       margin: 0 0 14px;
     }
     .layouts {
@@ -68,8 +68,8 @@ import { WindowManager } from '../../windows/window-manager';
     }
     button {
       min-width: 0;
-      background: #48533d;
-      border: 1px solid #96aa7b;
+      background: var(--surface-hover);
+      border: 1px solid var(--control-line);
       border-radius: 3px;
       cursor: pointer;
     }
@@ -78,7 +78,7 @@ import { WindowManager } from '../../windows/window-manager';
       background: var(--accent);
     }
     span {
-      font-size: 11px;
+      font-size: calc((11px) * var(--text-scale));
     }
   `,
 })

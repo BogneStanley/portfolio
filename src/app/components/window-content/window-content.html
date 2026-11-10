@@ -1,4 +1,7 @@
 @switch (section()) {
+  @case ('settings') {
+    <app-settings-panel />
+  }
   @case ('projects') {
     <div class="section-heading">
       <div>
@@ -154,4 +157,6 @@
     </div>
   }
 }
-<p class="window-footnote">CONTENU DE DÉMONSTRATION <span>PERSONNALISATION À VENIR</span></p>
+@if (section() !== 'settings') {
+  <p class="window-footnote">CONTENU DE DÉMONSTRATION <span>PERSONNALISATION À VENIR</span></p>
+}

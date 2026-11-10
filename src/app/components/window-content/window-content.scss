@@ -9,7 +9,7 @@
   margin: 0 0 8px;
 }
 h3 {
-  font-size: 30px;
+  font-size: calc((30px) * var(--text-scale));
   line-height: 1.13;
   letter-spacing: -0.04em;
   font-weight: 500;
@@ -17,7 +17,7 @@ h3 {
 }
 .count {
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   white-space: nowrap;
   padding-bottom: 3px;
 }
@@ -33,13 +33,13 @@ h3 {
   border-radius: 5px;
   background: transparent;
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   cursor: pointer;
 }
 .project-filters button.is-active {
   color: var(--accent);
-  background: #c8e99a0d;
-  border-color: #c8e99a40;
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
 }
 .projects-grid {
   display: grid;
@@ -51,18 +51,18 @@ h3 {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 9px;
-  background: #262a23;
+  background: var(--surface-soft);
   transition: border-color 0.2s;
 }
 .project-card:hover {
-  border-color: #c8e99a66;
+  border-color: var(--accent-hover);
 }
 .project-card__preview {
   position: relative;
   width: 100%;
   aspect-ratio: 8 / 5;
   overflow: hidden;
-  background: #33382c;
+  background: var(--surface-strong);
 }
 .project-card__preview img {
   object-fit: cover;
@@ -76,7 +76,7 @@ h3 {
   background: #1118;
   border-radius: 3px;
   color: #fff;
-  font-size: 9px;
+  font-size: calc((9px) * var(--text-scale));
   font-variant-numeric: tabular-nums;
 }
 .project-card__body {
@@ -90,17 +90,17 @@ h3 {
 }
 h4 {
   margin: 0;
-  font-size: 14px;
+  font-size: calc((14px) * var(--text-scale));
   font-weight: 500;
   letter-spacing: -0.02em;
 }
 .project-type {
-  font-size: 8px;
+  font-size: calc((8px) * var(--text-scale));
   color: var(--muted);
 }
 .project-card p,
 .skill-group p {
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   line-height: 1.75;
   color: var(--muted);
   margin: 9px 0 14px;
@@ -115,15 +115,15 @@ h4 {
 }
 .tags li {
   padding: 4px 6px;
-  background: #c8e99a0b;
-  border: 1px solid #c8e99a15;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
   border-radius: 3px;
-  color: #d1dfbd;
-  font-size: 9px;
+  color: var(--accent);
+  font-size: calc((9px) * var(--text-scale));
 }
 .demo-label {
   display: block;
-  font-size: 8px;
+  font-size: calc((8px) * var(--text-scale));
   color: var(--muted);
   margin-top: 15px;
 }
@@ -134,7 +134,7 @@ h4 {
   border-top: 1px solid var(--line);
   padding-top: 18px;
   margin: 24px 0 0;
-  font-size: 7px;
+  font-size: calc((7px) * var(--text-scale));
   letter-spacing: 0.08em;
   color: var(--muted);
 }
@@ -146,7 +146,7 @@ h4 {
   margin: 22px 0 8px;
 }
 .about-intro h3 {
-  font-size: 39px;
+  font-size: calc((39px) * var(--text-scale));
 }
 .avatar {
   position: relative;
@@ -154,22 +154,22 @@ h4 {
   height: 68px;
   display: grid;
   place-items: center;
-  border: 1px solid #c8e99a35;
+  border: 1px solid var(--accent-border);
   border-radius: 17px;
-  background: linear-gradient(135deg, #4d5940, #252c20);
+  background: linear-gradient(135deg, var(--surface-hover), var(--surface-raised));
   color: var(--accent);
-  font-size: 24px;
+  font-size: calc((24px) * var(--text-scale));
   letter-spacing: -0.08em;
 }
 
 .role-label {
   display: block;
   margin-top: 9px;
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   color: var(--accent);
 }
 .lead {
-  font-size: 20px;
+  font-size: calc((20px) * var(--text-scale));
   line-height: 1.45;
   letter-spacing: -0.025em;
   margin: 30px 0 15px;
@@ -177,7 +177,7 @@ h4 {
 }
 .body-copy {
   color: var(--muted);
-  font-size: 12px;
+  font-size: calc((12px) * var(--text-scale));
   line-height: 1.85;
   max-width: 460px;
 }
@@ -192,12 +192,12 @@ h4 {
 .about-notes span {
   display: block;
   color: var(--muted);
-  font-size: 8px;
+  font-size: calc((8px) * var(--text-scale));
   letter-spacing: 0.1em;
   margin-bottom: 8px;
 }
 .about-notes strong {
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   font-weight: 400;
 }
 .text-button {
@@ -208,7 +208,7 @@ h4 {
   border: 0;
   color: var(--accent);
   background: transparent;
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   cursor: pointer;
 }
 .text-button app-icon {
@@ -223,15 +223,15 @@ h4 {
   padding: 21px 0;
 }
 .skill-group__number {
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   color: var(--accent);
   padding-top: 3px;
 }
 .skill-group h4 {
-  font-size: 18px;
+  font-size: calc((18px) * var(--text-scale));
 }
 .contact-title {
-  font-size: clamp(32px, 4vw, 49px);
+  font-size: calc((clamp(32px, 4vw, 49px)) * var(--text-scale));
   margin: 20px 0;
 }
 .email-block {
@@ -241,41 +241,41 @@ h4 {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 25px;
-  border: 1px solid #c8e99a35;
+  border: 1px solid var(--accent-border);
   border-radius: 7px;
   padding: 16px;
-  background: #c8e99a07;
+  background: var(--accent-soft);
 }
 .email-block a {
   color: var(--accent);
-  font-size: clamp(13px, 2vw, 19px);
+  font-size: calc((clamp(13px, 2vw, 19px)) * var(--text-scale));
   overflow-wrap: anywhere;
   text-underline-offset: 5px;
 }
 .copy-button {
-  background: #c8e99a15;
-  border: 1px solid #c8e99a30;
+  background: var(--accent-border);
+  border: 1px solid var(--accent-border);
   border-radius: 4px;
   color: var(--accent);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   padding: 8px 11px;
   cursor: pointer;
 }
 .copy-status {
   min-height: 16px;
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   color: var(--accent);
 }
 .contact-note {
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   display: flex;
   gap: 8px;
   align-items: center;
 }
 .empty-state {
   color: var(--muted);
-  font-size: 12px;
+  font-size: calc((12px) * var(--text-scale));
 }
 .card-enter {
   animation: card-reveal 0.35s both;
@@ -307,7 +307,7 @@ h4 {
   align-items: center;
   gap: 5px;
   color: var(--text);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   text-underline-offset: 4px;
   padding: 6px 0;
 }
@@ -322,10 +322,10 @@ h4 {
     gap: 8px;
   }
   h3 {
-    font-size: 27px;
+    font-size: calc((27px) * var(--text-scale));
   }
   .count {
-    font-size: 9px;
+    font-size: calc((9px) * var(--text-scale));
     padding-top: 6px;
   }
   .projects-grid {
@@ -335,16 +335,16 @@ h4 {
     padding: 15px;
   }
   .project-card p {
-    font-size: 12px;
+    font-size: calc((12px) * var(--text-scale));
   }
   .tags li {
-    font-size: 10px;
+    font-size: calc((10px) * var(--text-scale));
   }
   .window-footnote span {
     display: none;
   }
   .about-intro h3 {
-    font-size: 33px;
+    font-size: calc((33px) * var(--text-scale));
   }
   .about-notes {
     gap: 12px;
@@ -363,7 +363,7 @@ h4 {
   color: var(--accent);
 }
 .eyebrow {
-  font-size: 9px;
+  font-size: calc((9px) * var(--text-scale));
   font-weight: 500;
   letter-spacing: 0.17em;
   color: var(--muted);
@@ -388,7 +388,7 @@ h4,
     flex-wrap: wrap;
   }
   .contact-title {
-    font-size: 32px;
+    font-size: calc((32px) * var(--text-scale));
   }
   .about-notes {
     grid-template-columns: 1fr;
@@ -402,7 +402,7 @@ h4,
   list-style: none;
   margin: 26px 0 0;
   padding: 0 0 0 18px;
-  border-left: 1px solid #c7e99a40;
+  border-left: 1px solid var(--accent-border);
 }
 .experience-item {
   position: relative;
@@ -420,28 +420,28 @@ h4,
   height: 9px;
   border-radius: 50%;
   background: var(--accent);
-  border: 2px solid #20251e;
+  border: 2px solid var(--surface);
 }
 .experience-period {
   display: block;
   color: var(--accent);
-  font-size: 10px;
+  font-size: calc((10px) * var(--text-scale));
   letter-spacing: 0.05em;
   margin-bottom: 10px;
 }
 .experience-item h4 {
-  font-size: 18px;
+  font-size: calc((18px) * var(--text-scale));
   line-height: 1.35;
 }
 .experience-organization {
   color: var(--text);
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   margin: 7px 0 12px;
 }
 .experience-description,
 .experience-highlights {
   color: var(--muted);
-  font-size: 12px;
+  font-size: calc((12px) * var(--text-scale));
   line-height: 1.75;
 }
 .experience-description {

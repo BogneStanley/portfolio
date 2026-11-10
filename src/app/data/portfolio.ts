@@ -1,5 +1,5 @@
 // Données de démonstration : remplace ce fichier pour personnaliser le portfolio.
-export type WindowId = 'projects' | 'about' | 'skills' | 'experiences' | 'contact';
+export type WindowId = 'projects' | 'about' | 'skills' | 'experiences' | 'contact' | 'settings';
 export type WindowStatus = 'closed' | 'open' | 'minimized';
 export type ProjectCategory = 'frontend' | 'backend';
 export type ProjectFilter = 'all' | ProjectCategory;
@@ -26,6 +26,7 @@ export const APPLICATIONS: { id: WindowId; label: string; short: string; file: s
   { id: 'skills', label: 'Compétences', short: 'Construire', file: 'compétences.app' },
   { id: 'experiences', label: 'Expériences', short: 'Parcourir', file: 'expériences.dossier' },
   { id: 'contact', label: 'Contact', short: 'Échanger', file: 'contact.mail' },
+  { id: 'settings', label: 'Paramètres', short: 'Personnaliser', file: 'paramètres.app' },
 ];
 export const PROJECTS: Project[] = [
   {

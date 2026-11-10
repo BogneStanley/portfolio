@@ -1,0 +1,104 @@
+<header class="settings-heading">
+  <p>VOTRE BUREAU, VOS ENVIES</p>
+  <h3>Paramètres<span>.</span></h3>
+  <p>Personnalisez l’apparence et le confort de votre espace.</p>
+</header>
+<section class="settings-section" aria-labelledby="theme-heading">
+  <h4 id="theme-heading">Apparence</h4>
+  <div class="theme-options" role="group" aria-label="Choisir le thème">
+    @for (theme of themes; track theme.id) {
+      <button
+        type="button"
+        [class.selected]="settings.preferences().theme === theme.id"
+        [attr.aria-pressed]="settings.preferences().theme === theme.id"
+        (click)="settings.update({ theme: theme.id })"
+      >
+        <strong>{{ theme.label }}</strong
+        ><span>{{ theme.description }}</span>
+      </button>
+    }
+  </div>
+</section>
+<section class="settings-section" aria-labelledby="accent-heading">
+  <h4 id="accent-heading">Couleur d’accent</h4>
+  <p>Les textes et les contrastes s’adaptent au thème choisi.</p>
+  <div class="accent-options" role="group" aria-label="Couleurs prédéfinies">
+    @for (accent of accents; track accent.color) {
+      <button
+        class="swatch"
+        type="button"
+        [style.--swatch]="accent.color"
+        [attr.aria-label]="accent.name"
+        [attr.aria-pressed]="settings.preferences().accent === accent.color"
+        (click)="settings.update({ accent: accent.color })"
+      >
+        <span aria-hidden="true">{{
+          settings.preferences().accent === accent.color ? '✓' : ''
+        }}</span>
+      </button>
+    }
+  </div>
+  <label class="custom-color"
+    >Couleur personnalisée<input
+      type="color"
+      aria-label="Choisir une couleur personnalisée"
+      [value]="settings.preferences().accent"
+      (input)="setColor($event)"
+    /><span>{{ settings.preferences().accent }}</span></label
+  >
+  <div class="accent-preview">
+    <span class="preview-dot"></span>Aperçu de votre accent<span class="preview-badge"
+      >Votre style</span
+    >
+  </div>
+</section>
+<section class="settings-section" aria-labelledby="comfort-heading">
+  <h4 id="comfort-heading">Confort de lecture</h4>
+  <label class="setting-row"
+    ><span
+      ><strong>Taille du texte</strong
+      ><small>Agrandit les textes sans zoomer le bureau.</small></span
+    ><select
+      aria-label="Taille du texte"
+      [value]="settings.preferences().textScale"
+      (change)="setScale($event)"
+    >
+      <option value="1">100 %</option>
+      <option value="1.1">110 %</option>
+      <option value="1.2">120 %</option>
+    </select></label
+  ><label class="setting-row"
+    ><span
+      ><strong>Réduire les animations</strong
+      ><small>Respecte aussi le réglage de votre appareil.</small></span
+    ><input
+      type="checkbox"
+      [checked]="settings.preferences().reducedMotion"
+      (change)="setMotion($event)"
+  /></label>
+  @if (settings.systemReducedMotion()) {
+    <p class="system-note">La réduction des animations est déjà activée sur votre appareil.</p>
+  }
+  <label class="setting-row"
+    ><span><strong>Grille de fond</strong><small>Afficher les points sur le bureau.</small></span
+    ><input type="checkbox" [checked]="settings.preferences().showGrid" (change)="setGrid($event)"
+  /></label>
+</section>
+<section class="settings-section" aria-labelledby="actions-heading">
+  <h4 id="actions-heading">Actions du bureau</h4>
+  <button class="action-button" type="button" (click)="resetWindows()">
+    Réorganiser les fenêtres
+  </button>
+  <p>Rétablit les tailles et positions, sans fermer vos applications.</p>
+  <button class="action-button" type="button" (click)="resetPreferences()">
+    Réinitialiser les préférences
+  </button>
+</section>
+<p class="settings-status" role="status">{{ message() }}</p>
+<p class="settings-storage">
+  {{
+    settings.storageAvailable()
+      ? 'Vos préférences sont conservées sur cet appareil.'
+      : 'Vos préférences restent actives pour cette visite ; l’enregistrement est indisponible.'
+  }}
+</p>

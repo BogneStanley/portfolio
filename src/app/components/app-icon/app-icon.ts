@@ -4,6 +4,7 @@ export type IconName =
   | 'about'
   | 'skills'
   | 'experiences'
+  | 'settings'
   | 'contact'
   | 'arrow'
   | 'minus'
@@ -44,6 +45,7 @@ export class AppIcon {
     about: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 21v-2a7 7 0 0 1 14 0v2',
     skills: 'm8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16',
     experiences: 'M3 7h18v13H3V7ZM8 7V4h8v3M3 12h18M10 12v3h4v-3',
+    settings: 'M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M10 15v6',
     contact: 'M3 5h18v14H3V5Zm0 1 9 7 9-7',
     arrow: 'M5 19 19 5M5 5h14v14',
     minus: 'M5 12h14',

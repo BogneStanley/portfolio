@@ -1,5 +1,6 @@
 import { Component, computed, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { SettingsPanel } from '../settings-panel/settings-panel';
 import { AppIcon } from '../app-icon/app-icon';
 import {
   PROFILE,
@@ -11,7 +12,7 @@ import {
 } from '../../data/portfolio';
 @Component({
   selector: 'app-window-content',
-  imports: [NgOptimizedImage, AppIcon],
+  imports: [NgOptimizedImage, AppIcon, SettingsPanel],
   templateUrl: './window-content.html',
   styleUrl: './window-content.scss',
 })

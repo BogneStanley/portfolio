@@ -7,13 +7,13 @@
   flex-direction: column;
   min-width: 0;
   margin: 0;
-  border: 1px solid #ffffff22;
+  border: 1px solid var(--control-line);
   border-radius: 12px;
-  background: #20251e;
+  background: var(--surface);
   color: var(--text);
   box-shadow:
-    0 30px 90px #0007,
-    0 2px 7px #0004;
+    0 30px 90px var(--shadow),
+    0 2px 7px var(--shadow-soft);
   pointer-events: auto;
 }
 .window__header {
@@ -25,7 +25,7 @@
   padding: 0 12px 0 18px;
   border-bottom: 1px solid var(--line);
   border-radius: 12px 12px 0 0;
-  background: #252a22;
+  background: var(--surface-raised);
   user-select: none;
 }
 .window__identity {
@@ -43,12 +43,12 @@
 h2 {
   margin: 0;
   font-weight: 500;
-  font-size: 11px;
+  font-size: calc((11px) * var(--text-scale));
   white-space: nowrap;
 }
 .window__identity span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: calc((9px) * var(--text-scale));
   margin-left: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -66,7 +66,7 @@ h2 {
   width: 30px;
   height: 30px;
   background: transparent;
-  color: #aeb5a5;
+  color: var(--muted);
   border: 1px solid transparent;
   border-radius: 5px;
   cursor: pointer;
@@ -76,12 +76,12 @@ h2 {
   height: 14px;
 }
 .window__controls button:hover {
-  background: #ffffff0b;
+  background: var(--shine);
   color: var(--text);
 }
 .window__controls .window__close:hover {
-  background: #cf63542b;
-  color: #ffa496;
+  background: var(--danger-bg);
+  color: var(--danger-text);
 }
 .window__content {
   flex: 1;
@@ -89,7 +89,7 @@ h2 {
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #626b57 transparent;
+  scrollbar-color: var(--muted) transparent;
   padding: 25px;
   border-radius: 0 0 12px 12px;
 }
@@ -164,10 +164,10 @@ h2 {
 @media (max-width: 600px) {
   .window {
     left: 12px !important;
-    top: 144px !important;
+    top: 220px !important;
     width: calc(100% - 24px) !important;
     height: auto !important;
-    max-height: calc(100dvh - 250px);
+    max-height: calc(100dvh - 326px);
   }
   .window__header {
     min-height: 49px;

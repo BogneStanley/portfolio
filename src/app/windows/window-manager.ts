@@ -157,6 +157,26 @@ export class WindowManager {
     this.patch(id, { status });
     this.dismissPanels();
   }
+  resetPositions(): void {
+    this.cancel();
+    this.dismissPanels();
+    this.group.set(null);
+    this.transitionId.set('group');
+    const area = this.area();
+    for (const [index, app] of APPLICATIONS.entries()) {
+      const width = app.id === 'projects' ? 670 : 510;
+      const rect = clampRect(
+        {
+          x: area.x + (area.width - width) / 2 + index * 18 - 36,
+          y: area.y + 26 + index * 20,
+          width,
+          height: 540,
+        },
+        area,
+      );
+      this.patch(app.id, { presentation: 'free', placement: null, rect, freeRect: rect });
+    }
+  }
   dismissPanels(): void {
     this.menu.set(null);
     this.assist.set(false);

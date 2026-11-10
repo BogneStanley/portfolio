@@ -111,6 +111,17 @@ describe('WindowManager', () => {
       12,
     );
   });
+  it('reorganizes windows without closing or restoring minimized applications', () => {
+    manager.snap('projects', 'halves', '0-0');
+    manager.choose('about');
+    manager.setStatus('about', 'minimized');
+    manager.resetPositions();
+    expect(manager.group()).toBeNull();
+    expect(manager.windows().projects.status).toBe('open');
+    expect(manager.windows().about.status).toBe('minimized');
+    expect(manager.windows().projects.presentation).toBe('free');
+    expect(manager.windows().projects.rect.x).toBeGreaterThanOrEqual(area.x);
+  });
   it('does not expose desktop actions on mobile', () => {
     manager.setWorkspace({ ...area, width: 366 }, false);
     manager.toggleMaximize('projects');

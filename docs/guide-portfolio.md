@@ -10,7 +10,7 @@ Les contenus sont fictifs. Cette version reste locale ; aucune publication n’a
 - `src/app/components/desktop-window/` : cadre, contrôles, capture du pointeur et animations.
 - `src/app/components/window-overlays/` : aperçu d’ancrage, séparations et suggestions.
 - `src/app/components/snap-layout-menu/` : menu des dispositions.
-- `src/app/components/window-content/` : contenu des cinq sections et filtres.
+- `src/app/components/window-content/` : contenu des sections du portfolio et accès aux paramètres et filtres.
 - `public/projects/` et `public/cv-demo.html` : illustrations et CV fictifs.
 
 ## 1. Comprendre la géométrie
@@ -144,3 +144,26 @@ Les écouteurs et animations sont nettoyés à la destruction du composant.
 L’application « Expériences » utilise les mêmes contrôles et dispositions que les autres fenêtres.
 Le tableau `EXPERIENCES` dans `portfolio.ts` contient les périodes, postes, organisations, missions et technologies.
 Les trois étapes sont fictives et présentées dans une chronologie, à remplacer par le parcours réel.
+
+## Paramètres et thèmes
+
+L’application « Paramètres » utilise `SettingsPanel`. Le service `PreferencesStore` centralise les préférences dans un signal :
+
+- thème sombre, clair ou automatique, synchronisé avec le thème de l’appareil ;
+- accent prédéfini ou personnalisé, avec une variante lisible calculée pour les textes ;
+- taille des textes à 100 %, 110 % ou 120 % ;
+- réduction des animations, toujours active si l’appareil la demande ;
+- affichage de la grille de fond.
+
+Le thème effectif et la réduction des animations sont des `computed`. Un `effect` applique les attributs et variables CSS au document et enregistre les préférences dans `localStorage`, sous la clé `portfolio.preferences.v1`.
+Le chargement valide chaque valeur et revient aux valeurs par défaut si les données sont invalides. Si le stockage est bloqué, les réglages restent utilisables pendant la visite.
+
+Les couleurs des fenêtres, du dock, des menus d’ancrage et des contenus utilisent les mêmes jetons CSS dans `styles.scss`.
+`--accent-fill` conserve la couleur choisie ; `--accent` fournit une couleur de texte avec un contraste adapté au thème ; `--accent-contrast` choisit le texte lisible sur un bouton rempli.
+`--text-scale` agrandit les textes sans modifier les coordonnées des fenêtres.
+
+« Réorganiser les fenêtres » restaure les tailles et positions libres et retire les ancrages, en conservant le contenu et l’état ouvert ou réduit de chaque application.
+« Réinitialiser les préférences » restaure seulement les réglages visuels et de confort.
+Sur petit écran, les six applications sont disposées en deux rangées pour rester lisibles, y compris avec le texte agrandi.
+
+Exercice : choisir le thème clair et un accent bleu, agrandir le texte, puis recharger la page. Vérifier la conservation des préférences, ouvrir deux fenêtres et les réorganiser. Enfin, rétablir les réglages par défaut.
