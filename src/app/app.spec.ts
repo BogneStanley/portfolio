@@ -130,6 +130,34 @@ describe('Portfolio desktop', () => {
     await fixture.whenStable();
     expect(manager.windows().about.status).toBe('open');
   });
+  it('remeasures current chrome and ignores hidden chrome without collapsing windows', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const manager = TestBed.inject(WindowManager);
+    manager.setWorkspace({ x: 12, y: 58, width: 1000, height: 600 }, true);
+    manager.open('projects');
+    const original = manager.windows().projects.rect;
+    document.dispatchEvent(new Event('fullscreenchange'));
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    expect(manager.windows().projects.rect).toEqual(original);
+    const root = fixture.nativeElement as HTMLElement;
+    for (const selector of ['.menu-bar', '.dock']) {
+      const previous = root.querySelector<HTMLElement>(selector)!;
+      const replacement = previous.cloneNode(true) as HTMLElement;
+      Object.defineProperties(replacement, {
+        offsetHeight: { value: selector === '.menu-bar' ? 46 : 69 },
+        offsetTop: { value: selector === '.menu-bar' ? 0 : 700 },
+      });
+      previous.replaceWith(replacement);
+    }
+    document.dispatchEvent(new Event('fullscreenchange'));
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    expect(manager.area().y).toBe(58);
+    expect(manager.area().height).toBe(630);
+    expect(manager.windows().projects.rect.height).toBeGreaterThanOrEqual(220);
+  });
+
   it('opens every application with its own content', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();

@@ -11,12 +11,12 @@ import {
 } from '@angular/core';
 import { gsap } from 'gsap';
 import { DesktopWindow } from './components/desktop-window/desktop-window';
-import { AppIcon } from './components/app-icon/app-icon';
+import { AppIcon, IconName } from './components/app-icon/app-icon';
 import { WindowContent } from './components/window-content/window-content';
 import { APPLICATIONS, PROFILE, WindowId, WindowStatus } from './data/portfolio';
 import { WindowManager } from './windows/window-manager';
 import { WindowOverlays } from './components/window-overlays/window-overlays';
-import { PreferencesStore } from './settings/preferences';
+import { PreferencesStore, Theme } from './settings/preferences';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +25,11 @@ import { PreferencesStore } from './settings/preferences';
   styleUrls: ['./app.scss', './app-interactions.scss'],
 })
 export class App {
+  protected readonly themes: readonly { value: Theme; label: string; icon: IconName }[] = [
+    { value: 'light', label: 'Thème clair', icon: 'sun' },
+    { value: 'dark', label: 'Thème sombre', icon: 'moon' },
+    { value: 'system', label: 'Thème du système', icon: 'system' },
+  ];
   protected readonly profile = PROFILE;
   protected readonly applications = APPLICATIONS;
   protected readonly currentTime = signal(this.formatTime());
@@ -75,13 +80,17 @@ export class App {
         if (this.focusFrame !== undefined) cancelAnimationFrame(this.focusFrame);
         this.immersionContext?.revert();
       });
-      const bar = root.querySelector<HTMLElement>('.menu-bar');
-      const dock = root.querySelector<HTMLElement>('.dock');
       let frame = 0;
       const measure = () => {
         const mobile = innerWidth <= 600;
+        // Relire les éléments courants : le rechargement à chaud peut remplacer le template.
+        const bar = root.querySelector<HTMLElement>('.menu-bar');
+        const dock = root.querySelector<HTMLElement>('.dock');
+        // Ne pas borner les fenêtres sur une mesure transitoire de chrome masqué/détaché.
+        if (!mobile && (!bar?.offsetHeight || !dock?.offsetHeight)) return;
         const barBottom = bar ? bar.offsetTop + bar.offsetHeight : 46;
         const dockTop = dock ? dock.offsetTop : innerHeight - 90;
+        if (!mobile && dockTop - barBottom <= 24) return;
         this.manager.setWorkspace(
           mobile
             ? { x: 0, y: 0, width: innerWidth, height: innerHeight }
@@ -100,8 +109,8 @@ export class App {
         frame = requestAnimationFrame(measure);
       };
       const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(schedule) : null;
-      if (bar) observer?.observe(bar);
-      if (dock) observer?.observe(dock);
+      observer?.observe(root);
+      for (const chrome of root.querySelectorAll('.menu-bar, .dock')) observer?.observe(chrome);
       window.addEventListener('resize', schedule);
       measure();
       this.destroyRef.onDestroy(() => {

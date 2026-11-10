@@ -13,14 +13,30 @@
       >Portfolio interactif <span class="separator">/</span> 2026</span
     >
     <div class="menu-bar__right">
+      <div class="theme-controls" role="group" aria-label="Thème d’affichage">
+        @for (theme of themes; track theme.value) {
+          <button
+            class="bar-icon-button"
+            type="button"
+            [attr.aria-label]="theme.label"
+            [title]="theme.label"
+            [attr.aria-pressed]="settings.preferences().theme === theme.value"
+            (click)="settings.update({ theme: theme.value })"
+          >
+            <app-icon [name]="theme.icon" />
+          </button>
+        }
+      </div>
       @if (immersive()) {
         <button
-          class="immersive-exit"
+          class="bar-icon-button immersive-exit"
+          aria-label="Quitter le mode immersif"
+          title="Quitter le mode immersif"
           type="button"
           [disabled]="enteringImmersive()"
           (click)="exitImmersive()"
         >
-          Quitter le mode immersif
+          <app-icon name="exit-fullscreen" />
         </button>
       }
       <span class="local-status"><span></span> Local time</span><time>{{ currentTime() }}</time>

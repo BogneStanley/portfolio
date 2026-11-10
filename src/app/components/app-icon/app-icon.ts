@@ -10,7 +10,11 @@ export type IconName =
   | 'minus'
   | 'close'
   | 'maximize'
-  | 'restore';
+  | 'restore'
+  | 'sun'
+  | 'moon'
+  | 'system'
+  | 'exit-fullscreen';
 @Component({
   selector: 'app-icon',
   template: `<svg
@@ -51,6 +55,10 @@ export class AppIcon {
     minus: 'M5 12h14',
     close: 'm6 6 12 12M6 18 18 6',
     maximize: 'M4 4h16v16H4V4Z',
+    sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5',
+    moon: 'M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z',
+    system: 'M3 4h18v13H3V4Zm5 17h8m-4-4v4',
+    'exit-fullscreen': 'M9 3v6H3m12-6v6h6M9 21v-6H3m12 6v-6h6',
     restore: 'M8 8h12v12H8V8ZM4 16V4h12',
   };
 }
