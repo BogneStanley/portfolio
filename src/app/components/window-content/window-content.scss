@@ -46,59 +46,12 @@ h3 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
-.project-card {
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: var(--surface-soft);
-  transition: border-color 0.2s;
-}
-.project-card:hover {
-  border-color: var(--accent-hover);
-}
-.project-card__preview {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 8 / 5;
-  overflow: hidden;
-  background: var(--surface-strong);
-}
-.project-card__preview img {
-  object-fit: cover;
-  transition: transform 0.5s;
-}
-.project-card__number {
-  position: absolute;
-  top: 9px;
-  right: 9px;
-  padding: 4px 6px;
-  background: #1118;
-  border-radius: 3px;
-  color: #fff;
-  font-size: calc((9px) * var(--text-scale));
-  font-variant-numeric: tabular-nums;
-}
-.project-card__body {
-  padding: 15px;
-}
-.project-card__title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 6px;
-}
 h4 {
   margin: 0;
   font-size: calc((14px) * var(--text-scale));
   font-weight: 500;
   letter-spacing: -0.02em;
 }
-.project-type {
-  font-size: calc((8px) * var(--text-scale));
-  color: var(--muted);
-}
-.project-card p,
 .skill-group p {
   font-size: calc((11px) * var(--text-scale));
   line-height: 1.75;
@@ -253,25 +206,6 @@ h4 {
   color: var(--muted);
   font-size: calc((12px) * var(--text-scale));
 }
-.card-enter {
-  animation: card-reveal 0.35s both;
-}
-@keyframes card-reveal {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .project-card:hover img {
-    transform: scale(1.035);
-  }
-}
-
 .contact-links {
   display: flex;
   flex-wrap: wrap;
@@ -306,12 +240,6 @@ h4 {
   }
   .projects-grid {
     grid-template-columns: 1fr;
-  }
-  .project-card__body {
-    padding: 15px;
-  }
-  .project-card p {
-    font-size: calc((12px) * var(--text-scale));
   }
   .tags li {
     font-size: calc((10px) * var(--text-scale));

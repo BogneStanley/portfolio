@@ -22,6 +22,17 @@ describe('Local portfolio answers', () => {
     const combined = answerPortfolio('Quels sont ses projets et ses compétences ?');
     expect(combined.sources).toEqual(['projects', 'skills']);
   });
+  it('finds the new projects and distinguishes teaching playlists from education', () => {
+    const courses = answerPortfolio('Quels cours YouTube a-t-il créés ?');
+    expect(courses.text).toContain('Cours Flutter');
+    expect(courses.text).toContain('Cours Figma');
+    expect(courses.text).not.toContain('FreemoPay');
+    expect(courses.sources).toEqual(['projects']);
+    const blueData = answerPortfolio('Parle-moi de BlueData');
+    expect(blueData.text).toContain('Blue Camtel');
+    expect(blueData.text).not.toContain('Technologies : .');
+    expect(blueData.text).not.toContain('FreemoPay');
+  });
   it('answers education, languages, location and telephone from the CV', () => {
     expect(answerPortfolio('Quelle est sa formation ?').text).toContain('2021 — 2023');
     expect(answerPortfolio('Quel diplôme a-t-il ?').sources).toEqual(['about']);

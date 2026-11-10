@@ -1,0 +1,57 @@
+<article class="project-card" animate.enter="card-enter">
+  <div
+    class="project-card__preview"
+    [class.project-card__preview--web]="project().screenshot?.kind === 'web'"
+  >
+    <img
+      [ngSrc]="project().image"
+      [alt]="'Illustration du projet ' + project().title"
+      fill
+      sizes="(max-width: 600px) 100vw, 50vw"
+    />
+    @if (project().screenshot; as screen) {
+      <div
+        class="project-card__screen"
+        [class.project-card__screen--web]="screen.kind === 'web'"
+        [style.--capture-crop]="(screen.cropTop ?? 0) + '%'"
+      >
+        <img [ngSrc]="screen.src" [alt]="screen.alt" fill sizes="(max-width: 600px) 40vw, 25vw" />
+      </div>
+    }
+    <span class="project-card__number">{{ project().number }}</span>
+  </div>
+  <div class="project-card__body">
+    <div class="project-card__title">
+      <h4>{{ project().title }}</h4>
+      <span class="project-type">{{ categories[project().category] }}</span>
+    </div>
+    <p>{{ project().description }}</p>
+    <ul
+      class="tags"
+      [attr.aria-label]="project().technologies.length ? 'Technologies' : 'Domaines'"
+    >
+      @for (
+        technology of project().technologies.length
+          ? project().technologies
+          : (project().topics ?? []);
+        track technology
+      ) {
+        <li>{{ technology }}</li>
+      }
+    </ul>
+    @if (project().links?.length) {
+      <div class="project-card__links" aria-label="Découvrir le projet">
+        @for (link of project().links; track link.url) {
+          <a
+            [href]="link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="project().title + ' — ' + link.label + ' (nouvel onglet)'"
+          >
+            {{ link.label }}<app-icon name="arrow" />
+          </a>
+        }
+      </div>
+    }
+  </div>
+</article>

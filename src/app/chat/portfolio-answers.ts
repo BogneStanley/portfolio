@@ -18,7 +18,13 @@ export function answerPortfolio(question: string): PortfolioAnswer {
   const query = normalize(question);
   const sections: PortfolioAnswer[] = [];
   const matches = (pattern: RegExp) => pattern.test(query);
-  const projects = PROJECTS.filter((project) => query.includes(normalize(project.title)));
+  const courseQuestion = matches(/\b(cours|playlist\w*|tutoriel\w*|youtube)\b/);
+  const compactQuery = query.replace(/[\s-]+/g, '');
+  const projects = PROJECTS.filter(
+    (project) =>
+      query.includes(normalize(project.title.split(' · ')[0])) ||
+      compactQuery.includes(normalize(project.id).replace(/[\s-]+/g, '')),
+  );
   const missing = matches(/\b(salaire|tarif|tjm|age|ans|disponib\w*|recrut\w*)\b/);
   if (missing)
     sections.push({
@@ -36,10 +42,18 @@ export function answerPortfolio(question: string): PortfolioAnswer {
       sources: ['about'],
     });
   }
-  if (projects.length || matches(/\b(projet\w*|realisation\w*|portfolio|application\w*)\b/)) {
-    const selection = projects.length ? projects : PROJECTS;
+  if (
+    projects.length ||
+    courseQuestion ||
+    matches(/\b(projet\w*|realisation\w*|portfolio|application\w*)\b/)
+  ) {
+    const selection = projects.length
+      ? projects
+      : courseQuestion
+        ? PROJECTS.filter((project) => project.category === 'learning')
+        : PROJECTS;
     sections.push({
-      text: `Voici ${projects.length ? 'le détail des projets demandés' : 'les projets présentés'} dans le portfolio :\n\n${selection.map((project) => `${project.title} — ${project.description}\nTechnologies : ${project.technologies.join(', ')}.`).join('\n\n')}`,
+      text: `Voici ${projects.length ? 'le détail des projets demandés' : 'les projets présentés'} dans le portfolio :\n\n${selection.map((project) => `${project.title} — ${project.description}\n${project.technologies.length ? 'Technologies : ' + project.technologies.join(', ') + '.' : 'Domaines : ' + (project.topics ?? []).join(', ') + '.'}`).join('\n\n')}`,
       sources: ['projects'],
     });
   }
@@ -52,7 +66,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
     matches(
       /\b(competence\w*|technolog\w*|stack|outil\w*|maitris\w*|sait|savoir|frontend|backend|animation\w*)\b/,
     ) ||
-    mentioned.length
+    (mentioned.length && !projects.length && !courseQuestion)
   ) {
     const related = PROJECTS.filter((project) =>
       project.technologies.some((technology) =>
@@ -74,7 +88,10 @@ export function answerPortfolio(question: string): PortfolioAnswer {
       sources: ['experiences'],
     });
   }
-  if (matches(/\b(formation\w*|diplome\w*|etude\w*|ecole|universite|sup.?ptic)\b/))
+  if (
+    !courseQuestion &&
+    matches(/\b(formation\w*|diplome\w*|etude\w*|ecole|universite|sup.?ptic)\b/)
+  )
     sections.push({
       text: EDUCATION.map(
         (step) =>

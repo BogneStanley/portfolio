@@ -28,28 +28,7 @@
     </div>
     <div class="projects-grid">
       @for (project of filteredProjects(); track project.id) {
-        <article class="project-card" animate.enter="card-enter">
-          <div class="project-card__preview">
-            <img
-              [ngSrc]="project.image"
-              [alt]="'Illustration du projet ' + project.title"
-              fill
-              sizes="(max-width: 600px) 100vw, 50vw"
-            /><span class="project-card__number">{{ project.number }}</span>
-          </div>
-          <div class="project-card__body">
-            <div class="project-card__title">
-              <h4>{{ project.title }}</h4>
-              <span class="project-type">{{ categories[project.category] }}</span>
-            </div>
-            <p>{{ project.description }}</p>
-            <ul class="tags" aria-label="Technologies">
-              @for (technology of project.technologies; track technology) {
-                <li>{{ technology }}</li>
-              }
-            </ul>
-          </div>
-        </article>
+        <app-project-card [project]="project" />
       } @empty {
         <p class="empty-state">De nouvelles explorations arrivent bientôt.</p>
       }
