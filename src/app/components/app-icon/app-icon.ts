@@ -3,6 +3,7 @@ export type IconName =
   | 'projects'
   | 'about'
   | 'skills'
+  | 'experiences'
   | 'contact'
   | 'arrow'
   | 'minus'
@@ -42,6 +43,7 @@ export class AppIcon {
     projects: 'M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z',
     about: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 21v-2a7 7 0 0 1 14 0v2',
     skills: 'm8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16',
+    experiences: 'M3 7h18v13H3V7ZM8 7V4h8v3M3 12h18M10 12v3h4v-3',
     contact: 'M3 5h18v14H3V5Zm0 1 9 7 9-7',
     arrow: 'M5 19 19 5M5 5h14v14',
     minus: 'M5 12h14',

@@ -4,13 +4,13 @@ Les contenus sont fictifs. Cette version reste locale ; aucune publication n’a
 
 ## Les fichiers à connaître
 
-- `src/app/data/portfolio.ts` : profil, projets, compétences et applications.
+- `src/app/data/portfolio.ts` : profil, projets, compétences, expériences et applications.
 - `src/app/windows/window-geometry.ts` : calculs purs de rectangles, limites et dispositions.
 - `src/app/windows/window-manager.ts` : contrôleur partagé, états et gestes.
 - `src/app/components/desktop-window/` : cadre, contrôles, capture du pointeur et animations.
 - `src/app/components/window-overlays/` : aperçu d’ancrage, séparations et suggestions.
 - `src/app/components/snap-layout-menu/` : menu des dispositions.
-- `src/app/components/window-content/` : contenu des quatre sections et filtres.
+- `src/app/components/window-content/` : contenu des cinq sections et filtres.
 - `public/projects/` et `public/cv-demo.html` : illustrations et CV fictifs.
 
 ## 1. Comprendre la géométrie
@@ -126,3 +126,21 @@ Vérifie que son filtre reste sélectionné. Détache-la ensuite par le titre, p
 
 Remplacer ensuite le profil, les projets, les compétences, les coordonnées, les liens génériques et le CV de démonstration.
 Retirer les mentions fictives seulement après vérification du contenu. Référencement et déploiement restent une étape distincte.
+
+## Mode immersif
+
+Le CTA « Entrer dans l’expérience » appelle `requestFullscreen` directement depuis le clic,
+car le navigateur exige une activation utilisateur. Le texte d’accueil s’efface et les icônes
+s’animent sans ouvrir automatiquement une application. Le bouton « Quitter le mode immersif »
+et Échap permettent de revenir à l’affichage normal sans fermer les fenêtres.
+
+`fullscreenchange` synchronise l’interface quand le navigateur quitte lui-même le plein écran.
+Si l’API manque ou si la demande est refusée, l’expérience reste utilisable dans la page,
+avec un message explicite et le même bouton de sortie. Les animations respectent la réduction des mouvements.
+Les écouteurs et animations sont nettoyés à la destruction du composant.
+
+## Dossier Expériences
+
+L’application « Expériences » utilise les mêmes contrôles et dispositions que les autres fenêtres.
+Le tableau `EXPERIENCES` dans `portfolio.ts` contient les périodes, postes, organisations, missions et technologies.
+Les trois étapes sont fictives et présentées dans une chronologie, à remplacer par le parcours réel.

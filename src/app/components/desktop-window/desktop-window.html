@@ -65,7 +65,14 @@
       </button>
     </div>
   </header>
-  <div class="window__content"><ng-content /></div>
+  <div
+    class="window__content"
+    tabindex="0"
+    role="region"
+    [attr.aria-label]="'Contenu de ' + title()"
+  >
+    <ng-content />
+  </div>
   @if (manager.desktop()) {
     @for (edge of edges; track edge) {
       @if (!manager.sharedEdge(windowId(), edge)) {

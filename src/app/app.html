@@ -1,4 +1,4 @@
-<main class="desktop" (pointerdown)="dismissMenu($event)">
+<main class="desktop" [class.desktop--immersive]="immersive()" (pointerdown)="dismissMenu($event)">
   <h1 class="sr-only">Portfolio interactif de {{ profile.name }}</h1>
   <header class="menu-bar">
     <a class="identity" href="#"
@@ -8,6 +8,16 @@
       >Portfolio interactif <span class="separator">/</span> 2026</span
     >
     <div class="menu-bar__right">
+      @if (immersive()) {
+        <button
+          class="immersive-exit"
+          type="button"
+          [disabled]="enteringImmersive()"
+          (click)="exitImmersive()"
+        >
+          Quitter le mode immersif
+        </button>
+      }
       <span class="local-status"><span></span> Local time</span><time>{{ currentTime() }}</time>
     </div>
   </header>
@@ -26,7 +36,13 @@
     }
   </nav>
 
-  <section class="hero" [class.hero--quiet]="activeWindow()" aria-labelledby="hero-title">
+  <section
+    class="hero"
+    [class.hero--quiet]="activeWindow()"
+    [class.hero--immersive]="immersive()"
+    [attr.inert]="immersive() ? '' : null"
+    aria-labelledby="hero-title"
+  >
     <p class="eyebrow hero__line"><span class="status-dot"></span> UN ESPACE POUR MES IDÉES</p>
     <h2 class="hero-title" id="hero-title">
       <span class="hero__line">Du code.</span
@@ -37,11 +53,26 @@
       {{ profile.name }} — {{ profile.role }}.<br />J’imagine des interfaces qui donnent envie
       d’explorer.
     </p>
-    <button class="primary-button hero__line" type="button" (click)="open('projects')">
-      Explorer mes projets <app-icon name="arrow" />
+    <button class="primary-button hero__line" type="button" (click)="enterImmersive()">
+      Entrer dans l’expérience <app-icon name="arrow" />
     </button>
-    <span class="hero__annotation hero__line">Faites comme chez vous. Ouvrez une fenêtre.</span>
+    <span class="hero__annotation hero__line">Passez en plein écran. Explorez à votre rythme.</span>
   </section>
+
+  @if (immersive() && !activeWindow()) {
+    <section
+      class="immersive-hint"
+      animate.enter="immersion-enter"
+      aria-label="Bienvenue sur le bureau"
+    >
+      <p class="eyebrow">LE BUREAU EST À VOUS</p>
+      <p>Ouvrez une application depuis les icônes ou le dock.</p>
+      @if (fullscreenActive()) {
+        <span>Échap permet aussi de quitter le plein écran.</span>
+      }
+    </section>
+  }
+  <p class="immersive-notice" role="status">{{ immersiveNotice() }}</p>
 
   <div class="windows-layer">
     @for (app of applications; track app.id) {
@@ -64,8 +95,8 @@
   </div>
 
   <footer class="desktop-footer">
-    <span>CONÇU AVEC CURIOSITÉ <span class="accent">✳</span></span
-    ><span>Version démo — données fictives</span><span>ANGULAR × GSAP</span>
+    <span>CONÇU AVEC CURIOSITÉ</span><span>Version démo — données fictives</span
+    ><span>ANGULAR × GSAP</span>
   </footer>
   <nav class="dock" aria-label="Dock des applications">
     @for (app of applications; track app.id) {

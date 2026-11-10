@@ -51,7 +51,7 @@
   }
   @case ('about') {
     <div class="about-intro">
-      <div class="avatar" aria-hidden="true">BS<span>✳</span></div>
+      <div class="avatar" aria-hidden="true">BS</div>
       <p class="eyebrow">DERRIÈRE LES PIXELS</p>
       <h3>{{ profile.name }}<span class="accent">.</span></h3>
       <span class="role-label">{{ profile.role }} & esprit curieux</span>
@@ -89,6 +89,39 @@
         </section>
       }
     </div>
+  }
+  @case ('experiences') {
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">AU FIL DES PROJETS</p>
+        <h3>Expériences<span class="accent">.</span></h3>
+      </div>
+      <span class="count">{{ experiences.length }} étapes</span>
+    </div>
+    <p class="body-copy">
+      Un parcours fictif pour présenter les missions, les apprentissages et les réalisations qui
+      jalonnent une expérience.
+    </p>
+    <ol class="experience-list" aria-label="Parcours professionnel de démonstration">
+      @for (experience of experiences; track experience.id) {
+        <li class="experience-item">
+          <span class="experience-period">{{ experience.period }}</span>
+          <h4>{{ experience.role }}</h4>
+          <p class="experience-organization">{{ experience.organization }}</p>
+          <p class="experience-description">{{ experience.description }}</p>
+          <ul class="experience-highlights">
+            @for (highlight of experience.highlights; track highlight) {
+              <li>{{ highlight }}</li>
+            }
+          </ul>
+          <ul class="tags" aria-label="Technologies utilisées">
+            @for (technology of experience.technologies; track technology) {
+              <li>{{ technology }}</li>
+            }
+          </ul>
+        </li>
+      }
+    </ol>
   }
   @case ('contact') {
     <p class="eyebrow">UNE IDÉE, UNE QUESTION ?</p>

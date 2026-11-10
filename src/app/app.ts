@@ -30,12 +30,37 @@ export class App {
   protected readonly activeWindow = computed(() =>
     Object.values(this.windows()).some((item) => item.status === 'open'),
   );
+  protected readonly immersive = signal(false);
+  protected readonly fullscreenActive = signal(false);
+  protected readonly enteringImmersive = signal(false);
+  protected readonly immersiveNotice = signal('');
+  private introduction?: gsap.core.Timeline;
+  private immersionContext?: gsap.Context;
   private readonly destroyRef = inject(DestroyRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   constructor() {
     afterNextRender(() => {
       const root = this.host.nativeElement;
+      const desktop = root.querySelector<HTMLElement>('.desktop');
+      const onFullscreenChange = () => {
+        const active = document.fullscreenElement === desktop;
+        const wasActive = this.fullscreenActive();
+        this.fullscreenActive.set(active);
+        if (wasActive && !active) this.finishImmersive();
+        schedule();
+      };
+      const onEscape = (event: KeyboardEvent) => {
+        if (event.key === 'Escape' && this.immersive() && !this.enteringImmersive())
+          void this.exitImmersive();
+      };
+      document.addEventListener('fullscreenchange', onFullscreenChange);
+      document.addEventListener('keydown', onEscape);
+      this.destroyRef.onDestroy(() => {
+        document.removeEventListener('fullscreenchange', onFullscreenChange);
+        document.removeEventListener('keydown', onEscape);
+        this.immersionContext?.revert();
+      });
       const bar = root.querySelector<HTMLElement>('.menu-bar');
       const dock = root.querySelector<HTMLElement>('.dock');
       let frame = 0;
@@ -71,7 +96,7 @@ export class App {
       media.add(
         '(prefers-reduced-motion: no-preference)',
         () => {
-          gsap
+          this.introduction = gsap
             .timeline({ defaults: { ease: 'power3.out' } })
             .from('.menu-bar', { y: -12, opacity: 0, duration: 0.6 })
             .from('.hero__line', { y: 35, opacity: 0, stagger: 0.09, duration: 0.8 }, '-=0.3')
@@ -85,6 +110,72 @@ export class App {
         media.revert();
       });
     });
+  }
+  protected async enterImmersive(): Promise<void> {
+    if (this.immersive() || this.enteringImmersive()) return;
+    const desktop = this.host.nativeElement.querySelector<HTMLElement>('.desktop');
+    if (!desktop) return;
+    this.enteringImmersive.set(true);
+    this.immersiveNotice.set('');
+    this.manager.dismissPanels();
+    this.introduction?.progress(1).pause();
+    this.immersive.set(true);
+    this.immersionContext?.revert();
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.immersionContext = gsap.context(() => {
+        gsap
+          .timeline({ defaults: { ease: 'power3.out' } })
+          .fromTo(
+            '.desktop-icon',
+            { y: 12, opacity: 0.35 },
+            { y: 0, opacity: 1, stagger: 0.06, duration: 0.45, clearProps: 'transform,opacity' },
+          )
+          .fromTo(
+            '.dock',
+            { opacity: 0.25 },
+            { opacity: 1, duration: 0.5, clearProps: 'opacity' },
+            0,
+          );
+      }, this.host.nativeElement);
+    }
+    try {
+      // Appel direct depuis le clic : le navigateur exige une activation utilisateur.
+      if (!desktop.requestFullscreen || document.fullscreenEnabled === false) {
+        this.immersiveNotice.set(
+          'Le plein écran n’est pas disponible ici. Le bureau reste accessible dans la page.',
+        );
+      } else {
+        await desktop.requestFullscreen({ navigationUI: 'hide' });
+        if (!this.destroyRef.destroyed)
+          this.fullscreenActive.set(document.fullscreenElement === desktop);
+      }
+    } catch {
+      if (!this.destroyRef.destroyed)
+        this.immersiveNotice.set(
+          'Le plein écran a été refusé. Vous pouvez explorer le bureau dans la page.',
+        );
+    } finally {
+      if (!this.destroyRef.destroyed) this.enteringImmersive.set(false);
+    }
+  }
+  protected async exitImmersive(): Promise<void> {
+    const desktop = this.host.nativeElement.querySelector('.desktop');
+    try {
+      if (document.fullscreenElement === desktop && document.exitFullscreen)
+        await document.exitFullscreen();
+      if (!this.destroyRef.destroyed) this.finishImmersive();
+    } catch {
+      if (!this.destroyRef.destroyed && this.immersive())
+        this.immersiveNotice.set(
+          'Utilisez la commande de votre navigateur pour quitter le plein écran.',
+        );
+    }
+  }
+  private finishImmersive(): void {
+    this.immersive.set(false);
+    this.fullscreenActive.set(false);
+    this.immersiveNotice.set('');
+    this.manager.dismissPanels();
   }
   protected dismissMenu(event: PointerEvent): void {
     if (

@@ -1,7 +1,14 @@
 import { Component, computed, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { AppIcon } from '../app-icon/app-icon';
-import { PROFILE, PROJECTS, SKILLS, ProjectFilter, WindowId } from '../../data/portfolio';
+import {
+  PROFILE,
+  PROJECTS,
+  SKILLS,
+  EXPERIENCES,
+  ProjectFilter,
+  WindowId,
+} from '../../data/portfolio';
 @Component({
   selector: 'app-window-content',
   imports: [NgOptimizedImage, AppIcon],
@@ -14,6 +21,7 @@ export class WindowContent {
   protected readonly profile = PROFILE;
   protected readonly projects = PROJECTS;
   protected readonly skills = SKILLS;
+  protected readonly experiences = EXPERIENCES;
   protected readonly filters: { value: ProjectFilter; label: string }[] = [
     { value: 'all', label: 'Tous les projets' },
     { value: 'frontend', label: 'Frontend' },

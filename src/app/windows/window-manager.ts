@@ -111,7 +111,7 @@ export class WindowManager {
       zone = this.assistZone();
     return group && zone ? zoneRect(this.area(), group.layout, zone) : null;
   });
-  private highestLayer = 4;
+  private highestLayer = APPLICATIONS.length;
   private gesture: Gesture | null = null;
   private separatorGesture: SeparatorGesture | null = null;
   private target: SnapTarget | 'maximized' | null = null;
