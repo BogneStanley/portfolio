@@ -1,0 +1,124 @@
+@switch (section()) {
+  @case ('projects') {
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">UNE SÉLECTION D’EXPLORATIONS</p>
+        <h3>Projets choisis<span class="accent">.</span></h3>
+      </div>
+      <span class="count">{{ projects.length.toString().padStart(2, '0') }} projets</span>
+    </div>
+    <div class="project-filters" role="group" aria-label="Filtrer les projets">
+      @for (filter of filters; track filter.value) {
+        <button
+          type="button"
+          [class.is-active]="activeFilter() === filter.value"
+          [attr.aria-pressed]="activeFilter() === filter.value"
+          (click)="activeFilter.set(filter.value)"
+        >
+          {{ filter.label }}
+        </button>
+      }
+    </div>
+    <div class="projects-grid">
+      @for (project of filteredProjects(); track project.id) {
+        <article class="project-card" animate.enter="card-enter">
+          <div class="project-card__preview">
+            <img
+              [ngSrc]="project.image"
+              [alt]="'Aperçu du projet fictif ' + project.title"
+              fill
+              sizes="(max-width: 600px) 100vw, 50vw"
+            /><span class="project-card__number">{{ project.number }}</span>
+          </div>
+          <div class="project-card__body">
+            <div class="project-card__title">
+              <h4>{{ project.title }}</h4>
+              <span class="project-type">{{ project.category }}</span>
+            </div>
+            <p>{{ project.description }}</p>
+            <ul class="tags" aria-label="Technologies">
+              @for (technology of project.technologies; track technology) {
+                <li>{{ technology }}</li>
+              }
+            </ul>
+            <span class="demo-label">Projet de démonstration</span>
+          </div>
+        </article>
+      } @empty {
+        <p class="empty-state">De nouvelles explorations arrivent bientôt.</p>
+      }
+    </div>
+  }
+  @case ('about') {
+    <div class="about-intro">
+      <div class="avatar" aria-hidden="true">BS<span>✳</span></div>
+      <p class="eyebrow">DERRIÈRE LES PIXELS</p>
+      <h3>{{ profile.name }}<span class="accent">.</span></h3>
+      <span class="role-label">{{ profile.role }} & esprit curieux</span>
+    </div>
+    <p class="lead">{{ profile.introduction }}</p>
+    <p class="body-copy">{{ profile.biography }}</p>
+    <div class="about-notes">
+      <div><span>01 / APPROCHE</span><strong>Simple, mais singulier.</strong></div>
+      <div><span>02 / ATTENTION</span><strong>Le détail fait l’ensemble.</strong></div>
+    </div>
+    <button class="text-button" type="button" (click)="contactRequested.emit()">
+      Et si on échangeait ? <app-icon name="arrow" />
+    </button>
+  }
+  @case ('skills') {
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">MA BOÎTE À OUTILS</p>
+        <h3>Penser. Construire.<br />Faire vivre<span class="accent">.</span></h3>
+      </div>
+    </div>
+    <div class="skill-list">
+      @for (group of skills; track group.number) {
+        <section class="skill-group">
+          <span class="skill-group__number">{{ group.number }}</span>
+          <div>
+            <h4>{{ group.title }}</h4>
+            <p>{{ group.description }}</p>
+            <ul class="tags">
+              @for (skill of group.items; track skill) {
+                <li>{{ skill }}</li>
+              }
+            </ul>
+          </div>
+        </section>
+      }
+    </div>
+  }
+  @case ('contact') {
+    <p class="eyebrow">UNE IDÉE, UNE QUESTION ?</p>
+    <h3 class="contact-title">
+      Les belles choses<br />commencent par<br /><span class="accent">un bonjour.</span>
+    </h3>
+    <p class="body-copy">
+      Un projet à imaginer ensemble, une collaboration ou simplement l’envie d’échanger.
+    </p>
+    <div class="email-block">
+      <a [href]="'mailto:' + profile.email">{{ profile.email }}</a
+      ><button class="copy-button" type="button" (click)="copyEmail()">
+        {{ copied() ? 'Copié !' : 'Copier' }}
+      </button>
+    </div>
+    <p class="copy-status" role="status">
+      {{ copied() ? 'Adresse copiée dans le presse-papiers.' : '' }}
+    </p>
+    <div class="contact-links">
+      <a href="https://github.com/" target="_blank" rel="noopener noreferrer"
+        >GitHub · exemple <app-icon name="arrow" /></a
+      ><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer"
+        >LinkedIn · exemple <app-icon name="arrow" /></a
+      ><a href="/cv-demo.html" download="CV-demonstration-Bogne-Stanley.html"
+        >CV de démonstration ↓</a
+      >
+    </div>
+    <div class="contact-note">
+      <span class="status-dot"></span> Coordonnées fictives pour cette démonstration.
+    </div>
+  }
+}
+<p class="window-footnote">CONTENU DE DÉMONSTRATION <span>PERSONNALISATION À VENIR</span></p>

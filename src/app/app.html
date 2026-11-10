@@ -1,125 +1,88 @@
-<nav class="dock" aria-label="Applications">
-  <button class="dock__item" type="button" aria-label="Ouvrir les projets" [class.dock__item--open]="projectsOpen()"
-    (click)="projectsOpen.set(true); bringToFront('projects')">
-    <span aria-hidden="true">📁</span>
-    <span class="dock__tooltip">Projets</span>
-  </button>
-
-  <button class="dock__item" type="button" aria-label="Ouvrir la présentation" [class.dock__item--open]="aboutOpen()"
-    (click)="aboutOpen.set(true); bringToFront('about')">
-    <span aria-hidden="true">👤</span>
-    <span class="dock__tooltip">À propos</span>
-  </button>
-</nav>
 <main class="desktop">
   <header class="menu-bar">
-    <div class="menu-bar__identity">
-      <span aria-hidden="true">◈</span>
-      <span>Bogne Stanley</span>
-      <span class="menu-bar__subtitle">Développeur web</span>
+    <a class="identity" href="#" aria-label="Bogne Stanley, accueil"
+      ><span class="brand-mark" aria-hidden="true">b.</span><strong>{{ profile.name }}</strong></a
+    >
+    <span class="menu-bar__subtitle"
+      >Portfolio interactif <span class="separator">/</span> 2026</span
+    >
+    <div class="menu-bar__right">
+      <span class="local-status"><span></span> Local time</span><time>{{ currentTime() }}</time>
     </div>
-
-    <time>{{ currentTime() }}</time>
   </header>
 
-  <nav class="desktop-icons" aria-label="Navigation du portfolio">
-    <button class="desktop-icon" type="button" (click)="projectsOpen.set(true); bringToFront('projects')">
-      <span class="desktop-icon__symbol" aria-hidden="true">📁</span>
-      <span>Projets</span>
-    </button>
-    <button class="desktop-icon" type="button" (click)="aboutOpen.set(true); bringToFront('about')">
-      <span class="desktop-icon__symbol" aria-hidden="true">👤</span>
-      <span>À propos</span>
-    </button>
+  <nav class="desktop-icons" aria-label="Applications du bureau">
+    @for (app of applications; track app.id) {
+      <button
+        class="desktop-icon"
+        type="button"
+        (click)="open(app.id)"
+        [attr.aria-label]="'Ouvrir ' + app.label"
+      >
+        <span class="desktop-icon__symbol"><app-icon [name]="app.id" /></span
+        ><span>{{ app.label }}</span>
+      </button>
+    }
   </nav>
 
+  <section class="hero" [class.hero--quiet]="activeWindow()" aria-labelledby="hero-title">
+    <p class="eyebrow hero__line"><span class="status-dot"></span> UN ESPACE POUR MES IDÉES</p>
+    <h1 id="hero-title">
+      <span class="hero__line">Du code.</span
+      ><span class="hero__line">Du sens<span class="accent">.</span></span
+      ><span class="hero__line hero__outline">Du mouvement.</span>
+    </h1>
+    <p class="hero__description hero__line">
+      {{ profile.name }} — {{ profile.role }}.<br />J’imagine des interfaces qui donnent envie
+      d’explorer.
+    </p>
+    <button class="primary-button hero__line" type="button" (click)="open('projects')">
+      Explorer mes projets <app-icon name="arrow" />
+    </button>
+    <span class="hero__annotation hero__line">Faites comme chez vous. Ouvrez une fenêtre.</span>
+  </section>
+
   <div class="windows-layer">
-    @if (projectsOpen()) {
-    <app-desktop-window title="Projets" [layer]="projectsLayer()" (closed)="projectsOpen.set(false)"
-      (activated)="bringToFront('projects')">
-
-      <div class="project-filters" role="group" aria-label="Filtrer les projets">
-        @for (filter of filters; track filter.value) {
-        <button class="project-filters__button" type="button" [class.project-filters__button--active]="
-        activeFilter() === filter.value
-      " [attr.aria-pressed]="activeFilter() === filter.value" (click)="activeFilter.set(filter.value)">
-          {{ filter.label }}
-        </button>
-        }
-      </div>
-
-      <div class="projects-grid">
-        @for (project of filteredProjects(); track project.id) {
-        <article class="project-card">
-          <div class="project-card__preview">
-            @if (project.image) {
-            <img [ngSrc]="project.image" [alt]="'Aperçu du projet ' + project.title" fill
-              sizes="(max-width: 540px) 100vw, 50vw">
-            } @else {
-            <span aria-hidden="true">
-              {{ project.title.charAt(0) }}
-            </span>
-            }
-          </div>
-
-          <div class="project-card__body">
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.description }}</p>
-
-            <ul class="project-card__tags" aria-label="Technologies">
-              @for (technology of project.technologies; track technology) {
-              <li>{{ technology }}</li>
-              }
-            </ul>
-            @if (project.demoUrl || project.repositoryUrl) {
-            <div class="project-card__links">
-              @if (project.demoUrl) {
-              <a [href]="project.demoUrl" target="_blank" rel="noopener noreferrer">
-                Voir le projet ↗
-              </a>
-              }
-
-              @if (project.repositoryUrl) {
-              <a [href]="project.repositoryUrl" target="_blank" rel="noopener noreferrer">
-                Code source ↗
-              </a>
-              }
-            </div>
-            }
-          </div>
-        </article>
-        }@empty {
-        <p class="projects-empty">
-          Aucun projet dans cette catégorie pour le moment.
-        </p>
-        }
-      </div>
-
-    </app-desktop-window>
-
-    }
-
-    @if (aboutOpen()) {
-    <app-desktop-window title="À propos" [layer]="aboutLayer()" [top]="150" [offsetX]="40"
-      (activated)="bringToFront('about')" (closed)="aboutOpen.set(false)">
-      <div class="about">
-        <span class="about__label">Qui suis-je ?</span>
-
-        <h3>Bienvenue dans mon univers.</h3>
-
-        <p>
-          Je développe des interfaces web et j’explore la création
-          d’expériences interactives avec Angular et GSAP.
-        </p>
-
-        <p>
-          Ce portfolio est mon terrain d’expérimentation :
-          j’y partage mes projets et ma progression.
-        </p>
-      </div>
-    </app-desktop-window>
+    @for (app of applications; track app.id; let index = $index) {
+      @if (windows()[app.id].status !== 'closed') {
+        <app-desktop-window
+          [windowId]="app.id"
+          [title]="app.label"
+          [subtitle]="app.file"
+          [layer]="windows()[app.id].layer"
+          [top]="84 + index * 24"
+          [offsetX]="index * 28 - 30"
+          [minimized]="windows()[app.id].status === 'minimized'"
+          (activated)="bringToFront(app.id)"
+          (closed)="setStatus(app.id, 'closed')"
+          (reduced)="setStatus(app.id, 'minimized')"
+        >
+          <app-window-content [section]="app.id" (contactRequested)="open('contact')" />
+        </app-desktop-window>
+      }
     }
   </div>
 
-
+  <footer class="desktop-footer">
+    <span>CONÇU AVEC CURIOSITÉ <span class="accent">✳</span></span
+    ><span>Version démo — données fictives</span><span>ANGULAR × GSAP</span>
+  </footer>
+  <nav class="dock" aria-label="Dock des applications">
+    @for (app of applications; track app.id) {
+      <button
+        class="dock__item"
+        [attr.id]="'dock-' + app.id"
+        type="button"
+        [class.is-open]="windows()[app.id].status !== 'closed'"
+        [class.is-minimized]="windows()[app.id].status === 'minimized'"
+        [attr.aria-label]="
+          (windows()[app.id].status === 'minimized' ? 'Restaurer ' : 'Ouvrir ') + app.label
+        "
+        (click)="open(app.id)"
+      >
+        <app-icon [name]="app.id" /><span class="dock__tooltip">{{ app.label }}</span
+        ><span class="dock__dot" aria-hidden="true"></span>
+      </button>
+    }
+  </nav>
 </main>

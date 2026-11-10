@@ -1,0 +1,41 @@
+import { Component, input } from '@angular/core';
+export type IconName = 'projects' | 'about' | 'skills' | 'contact' | 'arrow' | 'minus' | 'close';
+@Component({
+  selector: 'app-icon',
+  template: `<svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path [attr.d]="paths[name()]" />
+  </svg>`,
+  styles: `
+    :host {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  `,
+  host: { 'aria-hidden': 'true' },
+})
+export class AppIcon {
+  readonly name = input.required<IconName>();
+  protected readonly paths: Record<IconName, string> = {
+    projects: 'M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z',
+    about: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 21v-2a7 7 0 0 1 14 0v2',
+    skills: 'm8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16',
+    contact: 'M3 5h18v14H3V5Zm0 1 9 7 9-7',
+    arrow: 'M5 19 19 5M5 5h14v14',
+    minus: 'M5 12h14',
+    close: 'm6 6 12 12M6 18 18 6',
+  };
+}
