@@ -184,3 +184,29 @@
     display: none;
   }
 }
+
+@media (max-width: 600px) {
+  .desktop {
+    min-height: 0;
+  }
+  .dock {
+    display: none;
+  }
+  .desktop-footer {
+    bottom: 20px;
+  }
+  .desktop--mobile-folder {
+    background: var(--surface);
+  }
+  .desktop--mobile-folder::before {
+    display: none;
+  }
+  .desktop--mobile-folder > .menu-bar,
+  .desktop--mobile-folder > .desktop-icons,
+  .desktop--mobile-folder > .hero,
+  .desktop--mobile-folder > .immersive-hint,
+  .desktop--mobile-folder > .immersive-notice,
+  .desktop--mobile-folder > .desktop-footer {
+    display: none;
+  }
+}

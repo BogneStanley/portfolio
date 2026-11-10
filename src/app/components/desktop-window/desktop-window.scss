@@ -163,35 +163,42 @@ h2 {
 }
 @media (max-width: 600px) {
   .window {
-    left: 12px !important;
-    top: 220px !important;
-    width: calc(100% - 24px) !important;
-    height: auto !important;
-    max-height: calc(100dvh - 326px);
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
   }
   .window__header {
-    min-height: 49px;
-    padding: 0 8px 0 15px;
+    min-height: calc(52px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) max(12px, env(safe-area-inset-right, 0px)) 0
+      max(16px, env(safe-area-inset-left, 0px));
+    border-radius: 0;
   }
   .window__identity span {
     display: none;
   }
   .window__controls button {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
   .window__content {
-    padding: 20px 17px;
+    padding: 20px max(17px, env(safe-area-inset-right, 0px))
+      max(20px, env(safe-area-inset-bottom, 0px)) max(17px, env(safe-area-inset-left, 0px));
+    border-radius: 0;
   }
 }
-@media (max-width: 600px) and (max-height: 550px) {
-  .window {
-    top: 54px !important;
-    max-height: calc(100dvh - 150px);
-  }
-}
-
 .window__content:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -3px;
+}
+
+@media (max-width: 600px) {
+  h2 {
+    font-size: calc(14px * var(--text-scale));
+  }
 }

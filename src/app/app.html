@@ -1,4 +1,9 @@
-<main class="desktop" [class.desktop--immersive]="immersive()" (pointerdown)="dismissMenu($event)">
+<main
+  class="desktop"
+  [class.desktop--immersive]="immersive()"
+  [class.desktop--mobile-folder]="manager.mobile() && activeWindow()"
+  (pointerdown)="dismissMenu($event)"
+>
   <h1 class="sr-only">Portfolio interactif de {{ profile.name }}</h1>
   <header class="menu-bar">
     <a class="identity" href="#"
@@ -26,6 +31,7 @@
     @for (app of applications; track app.id) {
       <button
         class="desktop-icon"
+        [attr.data-window-id]="app.id"
         type="button"
         (click)="open(app.id)"
         [attr.aria-label]="'Ouvrir ' + app.label"
@@ -66,7 +72,13 @@
       aria-label="Bienvenue sur le bureau"
     >
       <p class="eyebrow">LE BUREAU EST À VOUS</p>
-      <p>Ouvrez une application depuis les icônes ou le dock.</p>
+      <p>
+        {{
+          manager.mobile()
+            ? 'Ouvrez un dossier depuis les icônes du bureau.'
+            : 'Ouvrez une application depuis les icônes ou le dock.'
+        }}
+      </p>
       @if (fullscreenActive()) {
         <span>Échap permet aussi de quitter le plein écran.</span>
       }

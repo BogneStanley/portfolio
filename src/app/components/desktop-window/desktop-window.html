@@ -24,14 +24,16 @@
       <span>{{ subtitle() }}</span>
     </div>
     <div class="window__controls">
-      <button
-        class="window__minimize"
-        type="button"
-        [attr.aria-label]="'Réduire ' + title()"
-        (click)="minimize()"
-      >
-        <app-icon name="minus" />
-      </button>
+      @if (!manager.mobile()) {
+        <button
+          class="window__minimize"
+          type="button"
+          [attr.aria-label]="'Réduire ' + title()"
+          (click)="minimize()"
+        >
+          <app-icon name="minus" />
+        </button>
+      }
       @if (manager.desktop()) {
         <button
           type="button"
@@ -58,7 +60,7 @@
       <button
         class="window__close"
         type="button"
-        [attr.aria-label]="'Fermer ' + title()"
+        [attr.aria-label]="'Fermer ' + title() + (manager.mobile() ? ' et revenir au bureau' : '')"
         (click)="close()"
       >
         <app-icon name="close" />

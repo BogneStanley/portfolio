@@ -51,6 +51,7 @@ interface SeparatorGesture {
 export class WindowManager {
   readonly area = signal<WindowRect>({ x: 12, y: 58, width: 1256, height: 620 });
   readonly desktop = signal(true);
+  readonly mobile = signal(false);
   readonly windows = signal<Windows>(
     Object.fromEntries(
       APPLICATIONS.map((app, index) => {
@@ -124,6 +125,7 @@ export class WindowManager {
   }
   open(id: WindowId): void {
     this.dismissPanels();
+    if (this.mobile()) this.keepOnlyOpen(id);
     const state = this.windows()[id];
     if (state.status === 'minimized' && state.presentation === 'snapped' && state.placement) {
       const group = this.group();
@@ -157,6 +159,14 @@ export class WindowManager {
     this.patch(id, { status });
     this.dismissPanels();
   }
+  private keepOnlyOpen(id: WindowId): void {
+    for (const app of APPLICATIONS) {
+      if (app.id !== id && this.windows()[app.id].status === 'open') {
+        this.detach(app.id);
+        this.patch(app.id, { status: 'minimized' });
+      }
+    }
+  }
   resetPositions(): void {
     this.cancel();
     this.dismissPanels();
@@ -189,11 +199,12 @@ export class WindowManager {
       if (occupant === id) delete occupants[zone];
     this.group.set({ ...group, occupants });
   }
-  setWorkspace(area: WindowRect, desktop: boolean): void {
+  setWorkspace(area: WindowRect, desktop: boolean, mobile = !desktop && area.width <= 600): void {
     if (this.interacting()) this.cancel();
     this.transitionId.set(null);
     this.area.set(area);
     this.desktop.set(desktop);
+    this.mobile.set(mobile);
     this.dismissPanels();
     let group = this.group();
     if (group && (!desktop || !fits(area, group.layout))) {
@@ -201,6 +212,14 @@ export class WindowManager {
         if (id) this.patch(id, { presentation: 'free', placement: null });
       this.group.set(null);
       group = null;
+    }
+    if (mobile) {
+      const foreground = APPLICATIONS.filter(
+        (app) => this.windows()[app.id].status === 'open',
+      ).sort(
+        (first, second) => this.windows()[second.id].layer - this.windows()[first.id].layer,
+      )[0];
+      if (foreground) this.keepOnlyOpen(foreground.id);
     }
     for (const app of APPLICATIONS) {
       const state = this.windows()[app.id];

@@ -24,7 +24,7 @@ Chaque fenêtre possède un rectangle dans le contrôleur :
 Les coordonnées sont exprimées en pixels dans le bureau. Angular applique `left`, `top`, `width` et `height`.
 La géométrie n’utilise pas `transform` : cette propriété reste disponible pour GSAP.
 
-La zone utile commence 12 px sous la barre supérieure et s’arrête 12 px au-dessus du dock.
+Sur ordinateur, la zone utile commence 12 px sous la barre supérieure et s’arrête 12 px au-dessus du dock.
 Les marges latérales et les séparations font 12 px. `ResizeObserver` et l’événement `resize` recalculent cette zone.
 Les mesures utilisent `offsetTop` et `offsetHeight`, afin d’ignorer les transformations de l’animation d’entrée du bureau.
 
@@ -94,7 +94,7 @@ Dans une grille, la séparation verticale traverse les deux rangées et la sépa
 ## 7. Responsive et animation
 
 Les gestes de placement sont réservés aux écrans de plus de 600 px utilisant un pointeur précis, comme une souris.
-Les événements tactiles ne démarrent pas de déplacement ou redimensionnement. Sur mobile, le contenu défile dans une fenêtre adaptée et le dock reste accessible.
+Les événements tactiles ne démarrent pas de déplacement ou redimensionnement. Sur mobile, le dossier actif occupe tout le viewport et son contenu défile sous sa barre de titre ; le dock est masqué.
 
 Les `container queries` adaptent le contenu à la largeur réelle de sa fenêtre : sous 540 px, les projets passent en une colonne, même sur un grand écran.
 Lors d’un changement de viewport, une disposition devenue impossible se dissout et les fenêtres libres sont bornées à la nouvelle zone utile.
@@ -167,3 +167,12 @@ Les couleurs des fenêtres, du dock, des menus d’ancrage et des contenus utili
 Sur petit écran, les six applications sont disposées en deux rangées pour rester lisibles, y compris avec le texte agrandi.
 
 Exercice : choisir le thème clair et un accent bleu, agrandir le texte, puis recharger la page. Vérifier la conservation des préférences, ouvrir deux fenêtres et les réorganiser. Enfin, rétablir les réglages par défaut.
+
+## Navigation mobile en plein écran
+
+À 600 px de largeur ou moins, le dock est masqué. Ouvrir un dossier masque le bureau et donne à sa fenêtre toute la hauteur et la largeur du viewport, avec une barre de titre et un bouton de fermeture toujours visibles. Le contenu défile à l’intérieur ; aucune commande de réduction, d’ancrage ou de redimensionnement n’est présentée.
+
+Le contrôleur distingue ce mode mobile de la simple absence de souris. Un seul dossier est ouvert à la fois. Lorsqu’un lien interne ouvre un autre dossier, le précédent est masqué en conservant son contenu. Fermer le dossier actif ramène au bureau ; le précédent ne réapparaît pas automatiquement.
+Lors du passage de l’ordinateur au mobile, seule la fenêtre au premier plan reste ouverte ; les autres sont conservées réduites. Sur ordinateur, le dock et l’utilisation simultanée des fenêtres restent disponibles.
+
+La zone utile mobile correspond au viewport entier. Les marges de sécurité de l’appareil sont respectées dans le titre et le contenu. Le focus passe au bouton de fermeture à l’ouverture, puis revient à l’icône du dossier à sa fermeture.

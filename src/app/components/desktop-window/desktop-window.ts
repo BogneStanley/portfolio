@@ -65,6 +65,8 @@ export class DesktopWindow {
       this.context?.revert();
       this.busy = false;
       const panel = this.host.nativeElement.querySelector('.window');
+      if (untracked(() => this.manager.mobile()))
+        panel?.querySelector<HTMLButtonElement>('.window__close')?.focus({ preventScroll: true });
       if (panel) gsap.set(panel, { clearProps: 'transform,opacity' });
       if (untracked(() => this.preferences.reducedMotion())) return;
       this.context = gsap.context(() => {

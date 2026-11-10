@@ -38,6 +38,7 @@ export class App {
   protected readonly fullscreenActive = signal(false);
   protected readonly enteringImmersive = signal(false);
   protected readonly immersiveNotice = signal('');
+  private focusFrame?: number;
   private introduction?: gsap.core.Timeline;
   private immersionContext?: gsap.Context;
   private immersionTimeline?: gsap.core.Timeline;
@@ -71,22 +72,27 @@ export class App {
       this.destroyRef.onDestroy(() => {
         document.removeEventListener('fullscreenchange', onFullscreenChange);
         document.removeEventListener('keydown', onEscape);
+        if (this.focusFrame !== undefined) cancelAnimationFrame(this.focusFrame);
         this.immersionContext?.revert();
       });
       const bar = root.querySelector<HTMLElement>('.menu-bar');
       const dock = root.querySelector<HTMLElement>('.dock');
       let frame = 0;
       const measure = () => {
+        const mobile = innerWidth <= 600;
         const barBottom = bar ? bar.offsetTop + bar.offsetHeight : 46;
         const dockTop = dock ? dock.offsetTop : innerHeight - 90;
         this.manager.setWorkspace(
-          {
-            x: 12,
-            y: barBottom + 12,
-            width: Math.max(1, innerWidth - 24),
-            height: Math.max(1, dockTop - 12 - barBottom - 12),
-          },
-          innerWidth > 600 && matchMedia('(pointer: fine)').matches,
+          mobile
+            ? { x: 0, y: 0, width: innerWidth, height: innerHeight }
+            : {
+                x: 12,
+                y: barBottom + 12,
+                width: Math.max(1, innerWidth - 24),
+                height: Math.max(1, dockTop - 12 - barBottom - 12),
+              },
+          !mobile && matchMedia('(pointer: fine)').matches,
+          mobile,
         );
       };
       const schedule = () => {
@@ -202,6 +208,15 @@ export class App {
   }
   protected setStatus(id: WindowId, status: WindowStatus): void {
     this.manager.setStatus(id, status);
+    if (this.manager.mobile() && status === 'closed') {
+      if (this.focusFrame !== undefined) cancelAnimationFrame(this.focusFrame);
+      this.focusFrame = requestAnimationFrame(() => {
+        if (!this.activeWindow() && this.manager.mobile())
+          this.host.nativeElement
+            .querySelector<HTMLButtonElement>(`.desktop-icon[data-window-id="${id}"]`)
+            ?.focus({ preventScroll: true });
+      });
+    }
   }
   protected bringToFront(id: WindowId): void {
     this.manager.activate(id);

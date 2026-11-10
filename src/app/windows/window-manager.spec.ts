@@ -122,6 +122,23 @@ describe('WindowManager', () => {
     expect(manager.windows().projects.presentation).toBe('free');
     expect(manager.windows().projects.rect.x).toBeGreaterThanOrEqual(area.x);
   });
+
+  it('keeps only the foreground folder open when entering mobile mode', () => {
+    manager.setWorkspace({ x: 0, y: 0, width: 390, height: 844 }, false, true);
+    expect(manager.mobile()).toBe(true);
+    expect(manager.windows().about.status).toBe('open');
+    expect(manager.windows().projects.status).toBe('minimized');
+    manager.open('skills');
+    expect(manager.windows().about.status).toBe('minimized');
+    manager.setStatus('skills', 'closed');
+    expect(Object.values(manager.windows()).some((state) => state.status === 'open')).toBe(false);
+    manager.setWorkspace(area, true, false);
+    manager.open('about');
+    manager.open('projects');
+    expect(manager.mobile()).toBe(false);
+    expect(manager.windows().about.status).toBe('open');
+    expect(manager.windows().projects.status).toBe('open');
+  });
   it('does not expose desktop actions on mobile', () => {
     manager.setWorkspace({ ...area, width: 366 }, false);
     manager.toggleMaximize('projects');

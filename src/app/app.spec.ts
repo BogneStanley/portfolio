@@ -76,6 +76,60 @@ describe('Portfolio desktop', () => {
     expect(root.querySelector('.separator--vertical')).not.toBeNull();
   });
 
+  it('returns to the mobile desktop after closing each full-screen folder', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const manager = TestBed.inject(WindowManager);
+    manager.setWorkspace({ x: 0, y: 0, width: 390, height: 844 }, false, true);
+    const root = fixture.nativeElement as HTMLElement;
+    const click = async (selector: string) => {
+      root.querySelector<HTMLButtonElement>(selector)!.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    };
+    await click('[data-window-id="projects"]');
+    expect(root.querySelector('.desktop')?.classList.contains('desktop--mobile-folder')).toBe(true);
+    expect(root.querySelector('.window__minimize')).toBeNull();
+    await click('.window__close');
+    expect(root.querySelector('.desktop')?.classList.contains('desktop--mobile-folder')).toBe(
+      false,
+    );
+    await click('[data-window-id="experiences"]');
+    expect(root.querySelector('.experience-list')).not.toBeNull();
+    await click('.window__close');
+    expect(
+      Object.values(manager.windows()).filter((state) => state.status === 'open'),
+    ).toHaveLength(0);
+  });
+  it('does not reveal the previous mobile folder when an internal destination is closed', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const manager = TestBed.inject(WindowManager);
+    manager.setWorkspace({ x: 0, y: 0, width: 390, height: 844 }, false, true);
+    const root = fixture.nativeElement as HTMLElement;
+    manager.open('about');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    root.querySelector<HTMLButtonElement>('.text-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(manager.windows().about.status).toBe('minimized');
+    expect(manager.windows().contact.status).toBe('open');
+    root
+      .querySelector<HTMLButtonElement>('app-desktop-window:not(.is-minimized) .window__close')!
+      .click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(root.querySelector('.desktop')?.classList.contains('desktop--mobile-folder')).toBe(
+      false,
+    );
+    manager.open('about');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(manager.windows().about.status).toBe('open');
+  });
   it('opens every application with its own content', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
