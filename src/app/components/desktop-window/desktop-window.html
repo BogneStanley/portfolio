@@ -1,0 +1,15 @@
+<section class="window" [style.top.px]="top() + dragY()" [style.margin-left.px]="offsetX() + dragX()"
+    [attr.aria-label]="title()" [style.z-index]="layer()" (pointerdown)="activated.emit()" (focusin)="activated.emit()">
+    <header class="window__header" (pointerdown)="startDrag($event)" (pointermove)="moveDrag($event)"
+        (pointerup)="endDrag($event)" (pointercancel)="endDrag($event)" (lostpointercapture)="endDrag($event)">
+        <h2>{{ title() }}</h2>
+
+        <button class="window__close" type="button" aria-label="Fermer la fenêtre" (click)="close()">
+            ×
+        </button>
+    </header>
+
+    <div class="window__content">
+        <ng-content />
+    </div>
+</section>
