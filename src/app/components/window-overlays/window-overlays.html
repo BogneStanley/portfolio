@@ -1,0 +1,68 @@
+@if (manager.desktop()) {
+  @if (manager.preview(); as rect) {
+    <div
+      class="snap-preview"
+      [style.z-index]="manager.previewLayer()"
+      aria-hidden="true"
+      [style.left.px]="rect.x"
+      [style.top.px]="rect.y"
+      [style.width.px]="rect.width"
+      [style.height.px]="rect.height"
+    ></div>
+  }
+  @for (separator of manager.separators(); track separator.axis + separator.index) {
+    <div
+      class="separator"
+      [style.z-index]="manager.separatorLayer()"
+      [class.separator--vertical]="separator.axis === 'columns'"
+      aria-hidden="true"
+      [style.left.px]="separator.rect.x"
+      [style.top.px]="separator.rect.y"
+      [style.width.px]="separator.rect.width"
+      [style.height.px]="separator.rect.height"
+      (pointerdown)="start($event, separator.axis, separator.index)"
+      (pointermove)="move($event)"
+      (pointerup)="end($event)"
+      (pointercancel)="end($event, true)"
+      (lostpointercapture)="end($event, true)"
+    ></div>
+  }
+  @if (manager.assistRect() && manager.candidates().length) {
+    <div class="dismiss-layer" aria-hidden="true" (pointerdown)="manager.dismissPanels()"></div>
+  }
+  <app-snap-layout-menu />
+  @if (manager.assistRect(); as rect) {
+    @if (manager.candidates().length) {
+      <section
+        class="snap-assist"
+        aria-label="Choisir une fenêtre voisine"
+        [style.left.px]="rect.x"
+        [style.top.px]="rect.y"
+        [style.width.px]="rect.width"
+        [style.height.px]="rect.height"
+      >
+        <header>
+          <h2>Compléter cet espace</h2>
+          <button
+            type="button"
+            aria-label="Fermer les suggestions"
+            (click)="manager.assist.set(false)"
+          >
+            ×
+          </button>
+        </header>
+        <p>Choisissez une fenêtre déjà ouverte.</p>
+        <div class="suggestions">
+          @for (app of manager.candidates(); track app.id) {
+            <button type="button" (click)="manager.choose(app.id)">
+              <app-icon [name]="app.id" /><span>{{ app.label }}</span
+              ><small>{{
+                manager.windows()[app.id].status === 'minimized' ? 'Réduite' : 'Ouverte'
+              }}</small>
+            </button>
+          }
+        </div>
+      </section>
+    }
+  }
+}

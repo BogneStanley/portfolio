@@ -1,5 +1,14 @@
 import { Component, input } from '@angular/core';
-export type IconName = 'projects' | 'about' | 'skills' | 'contact' | 'arrow' | 'minus' | 'close';
+export type IconName =
+  | 'projects'
+  | 'about'
+  | 'skills'
+  | 'contact'
+  | 'arrow'
+  | 'minus'
+  | 'close'
+  | 'maximize'
+  | 'restore';
 @Component({
   selector: 'app-icon',
   template: `<svg
@@ -37,5 +46,7 @@ export class AppIcon {
     arrow: 'M5 19 19 5M5 5h14v14',
     minus: 'M5 12h14',
     close: 'm6 6 12 12M6 18 18 6',
+    maximize: 'M4 4h16v16H4V4Z',
+    restore: 'M8 8h12v12H8V8ZM4 16V4h12',
   };
 }

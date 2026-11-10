@@ -321,7 +321,7 @@ h4 {
   height: 11px;
 }
 
-@media (max-width: 600px) {
+@container window-content (max-width: 540px) {
   .section-heading {
     align-items: flex-start;
     gap: 8px;
@@ -360,6 +360,9 @@ h4 {
 }
 :host {
   display: block;
+  min-width: 0;
+  container-type: inline-size;
+  container-name: window-content;
 }
 .accent {
   color: var(--accent);
@@ -377,5 +380,25 @@ h4 {
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+h3,
+h4,
+.email-block a {
+  overflow-wrap: anywhere;
+}
+@container window-content (max-width: 360px) {
+  .section-heading {
+    flex-wrap: wrap;
+  }
+  .contact-title {
+    font-size: 32px;
+  }
+  .about-notes {
+    grid-template-columns: 1fr;
+  }
+  .email-block {
+    padding: 10px;
   }
 }

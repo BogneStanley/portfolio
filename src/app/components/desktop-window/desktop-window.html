@@ -1,19 +1,22 @@
 <section
   class="window"
-  [class.window--compact]="windowId() !== 'projects'"
   [attr.aria-label]="title()"
-  [style.--window-top]="top() + dragY() + 'px'"
-  [style.--window-offset]="offsetX() + dragX() + 'px'"
+  [style.left.px]="rect().x"
+  [style.top.px]="rect().y"
+  [style.width.px]="rect().width"
+  [style.height.px]="rect().height"
+  [class.window--managed]="manager.desktop()"
   [style.z-index]="layer()"
   (pointerdown)="activated.emit()"
 >
   <header
     class="window__header"
+    (dblclick)="doubleClick($event)"
     (pointerdown)="startDrag($event)"
     (pointermove)="moveDrag($event)"
     (pointerup)="endDrag($event)"
-    (pointercancel)="endDrag($event)"
-    (lostpointercapture)="endDrag($event)"
+    (pointercancel)="endDrag($event, true)"
+    (lostpointercapture)="endDrag($event, true)"
   >
     <div class="window__identity">
       <app-icon [name]="windowId()" />
@@ -27,8 +30,32 @@
         [attr.aria-label]="'Réduire ' + title()"
         (click)="minimize()"
       >
-        <app-icon name="minus" /></button
-      ><button
+        <app-icon name="minus" />
+      </button>
+      @if (manager.desktop()) {
+        <button
+          type="button"
+          class="window__maximize"
+          [attr.aria-label]="
+            (state().presentation === 'maximized' ? 'Restaurer ' : 'Agrandir ') + title()
+          "
+          (pointerenter)="scheduleMenu()"
+          (pointerleave)="cancelMenuTimer()"
+          (click)="toggleMaximize()"
+        >
+          <app-icon [name]="state().presentation === 'maximized' ? 'restore' : 'maximize'" />
+        </button>
+        <button
+          type="button"
+          class="window__layouts"
+          [attr.aria-label]="'Dispositions pour ' + title()"
+          [attr.aria-expanded]="manager.menu() === windowId()"
+          (click)="toggleMenu()"
+        >
+          ▾
+        </button>
+      }
+      <button
         class="window__close"
         type="button"
         [attr.aria-label]="'Fermer ' + title()"
@@ -39,4 +66,19 @@
     </div>
   </header>
   <div class="window__content"><ng-content /></div>
+  @if (manager.desktop()) {
+    @for (edge of edges; track edge) {
+      @if (!manager.sharedEdge(windowId(), edge)) {
+        <div
+          [class]="'resize-handle resize-' + edge"
+          aria-hidden="true"
+          (pointerdown)="startResize($event, edge)"
+          (pointermove)="moveDrag($event)"
+          (pointerup)="endDrag($event)"
+          (pointercancel)="endDrag($event, true)"
+          (lostpointercapture)="endDrag($event, true)"
+        ></div>
+      }
+    }
+  }
 </section>

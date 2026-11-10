@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './app';
+import { WindowManager } from './windows/window-manager';
 
 describe('Portfolio desktop', () => {
   beforeEach(() => {
@@ -46,6 +47,33 @@ describe('Portfolio desktop', () => {
     expect(element.querySelectorAll('.project-card')).toHaveLength(1);
     await click('.window__close');
     expect(element.querySelector('app-desktop-window')).toBeNull();
+  });
+
+  it('uses the layout menu and assistant without recreating the project content', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const manager = TestBed.inject(WindowManager);
+    manager.setWorkspace({ x: 12, y: 58, width: 1256, height: 640 }, true);
+    manager.open('projects');
+    manager.open('about');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const projectContent = root.querySelector('app-window-content');
+    root.querySelectorAll<HTMLButtonElement>('.project-filters button')[2].click();
+    fixture.detectChanges();
+    manager.menu.set('projects');
+    fixture.detectChanges();
+    root.querySelector<HTMLButtonElement>('[aria-label="Deux moitiés, zone 1 / 1"]')!.click();
+    fixture.detectChanges();
+    expect(root.querySelector('.snap-assist')).not.toBeNull();
+    root.querySelector<HTMLButtonElement>('.suggestions button')!.click();
+    fixture.detectChanges();
+    expect(manager.group()?.occupants).toEqual({ '0-0': 'projects', '0-1': 'about' });
+    expect(root.querySelector('app-window-content')).toBe(projectContent);
+    expect(root.querySelectorAll('.project-card')).toHaveLength(1);
+    expect(root.querySelector('.separator--vertical')).not.toBeNull();
   });
 
   it('opens every application with its own content', async () => {

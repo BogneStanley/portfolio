@@ -1,6 +1,7 @@
-<main class="desktop">
+<main class="desktop" (pointerdown)="dismissMenu($event)">
+  <h1 class="sr-only">Portfolio interactif de {{ profile.name }}</h1>
   <header class="menu-bar">
-    <a class="identity" href="#" aria-label="Bogne Stanley, accueil"
+    <a class="identity" href="#"
       ><span class="brand-mark" aria-hidden="true">b.</span><strong>{{ profile.name }}</strong></a
     >
     <span class="menu-bar__subtitle"
@@ -27,11 +28,11 @@
 
   <section class="hero" [class.hero--quiet]="activeWindow()" aria-labelledby="hero-title">
     <p class="eyebrow hero__line"><span class="status-dot"></span> UN ESPACE POUR MES IDÉES</p>
-    <h1 id="hero-title">
+    <h2 class="hero-title" id="hero-title">
       <span class="hero__line">Du code.</span
       ><span class="hero__line">Du sens<span class="accent">.</span></span
       ><span class="hero__line hero__outline">Du mouvement.</span>
-    </h1>
+    </h2>
     <p class="hero__description hero__line">
       {{ profile.name }} — {{ profile.role }}.<br />J’imagine des interfaces qui donnent envie
       d’explorer.
@@ -43,15 +44,13 @@
   </section>
 
   <div class="windows-layer">
-    @for (app of applications; track app.id; let index = $index) {
+    @for (app of applications; track app.id) {
       @if (windows()[app.id].status !== 'closed') {
         <app-desktop-window
           [windowId]="app.id"
           [title]="app.label"
           [subtitle]="app.file"
           [layer]="windows()[app.id].layer"
-          [top]="84 + index * 24"
-          [offsetX]="index * 28 - 30"
           [minimized]="windows()[app.id].status === 'minimized'"
           (activated)="bringToFront(app.id)"
           (closed)="setStatus(app.id, 'closed')"
@@ -61,6 +60,7 @@
         </app-desktop-window>
       }
     }
+    <app-window-overlays />
   </div>
 
   <footer class="desktop-footer">
