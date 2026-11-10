@@ -1,4 +1,4 @@
-import { EXPERIENCES, PROFILE, PROJECTS, SKILLS } from '../data/portfolio';
+import { EDUCATION, EXPERIENCES, PROFILE, PROJECTS, SKILLS } from '../data/portfolio';
 
 export type ChatSource = 'about' | 'projects' | 'skills' | 'experiences' | 'contact';
 export interface PortfolioAnswer {
@@ -18,16 +18,8 @@ export function answerPortfolio(question: string): PortfolioAnswer {
   const query = normalize(question);
   const sections: PortfolioAnswer[] = [];
   const matches = (pattern: RegExp) => pattern.test(query);
-  const projects = PROJECTS.filter(
-    (project) =>
-      query.includes(normalize(project.title)) ||
-      (project.id === 'orbit' && /\borbit\b/.test(query)) ||
-      (project.id === 'studio' && /\bforma\b/.test(query)) ||
-      (project.id === 'desktop' && /\bdesktop\b/.test(query)),
-  );
-  const missing = matches(
-    /\b(salaire|tarif|tjm|age|ans|adresse|ville|pays|diplome|formation|disponib\w*|recrut\w*|telephone|cv|linkedin|github)\b/,
-  );
+  const projects = PROJECTS.filter((project) => query.includes(normalize(project.title)));
+  const missing = matches(/\b(salaire|tarif|tjm|age|ans|disponib\w*|recrut\w*)\b/);
   if (missing)
     sections.push({
       text: 'Cette information n’est pas renseignée dans le portfolio. Vous pouvez la demander directement à Stanley.',
@@ -40,7 +32,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
     !projects.length
   ) {
     sections.push({
-      text: `${PROFILE.name} est ${PROFILE.role.toLowerCase()}. ${PROFILE.introduction}\n\n${PROFILE.biography}`,
+      text: `${PROFILE.fullName} est ${PROFILE.role.toLowerCase()}. ${PROFILE.introduction}\n\n${PROFILE.biography}`,
       sources: ['about'],
     });
   }
@@ -52,7 +44,10 @@ export function answerPortfolio(question: string): PortfolioAnswer {
     });
   }
   const technologies = [...new Set(SKILLS.flatMap((group) => group.items))];
-  const mentioned = technologies.filter((skill) => query.includes(normalize(skill)));
+  const mentioned = technologies.filter((skill) => {
+    const phrase = normalize(skill).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`(^|[^a-z0-9])${phrase}($|[^a-z0-9])`).test(query);
+  });
   if (
     matches(
       /\b(competence\w*|technolog\w*|stack|outil\w*|maitris\w*|sait|savoir|frontend|backend|animation\w*)\b/,
@@ -71,19 +66,55 @@ export function answerPortfolio(question: string): PortfolioAnswer {
   }
   if (
     matches(
-      /\b(experience\w*|parcours|mission\w*|entreprise\w*|carriere|travaille\w*|atelier|pixel|laboratoire)\b/,
+      /\b(experience\w*|parcours|mission\w*|entreprise\w*|carriere|travaille\w*|freemo|sdk|itnovation)\b/,
     )
   ) {
     sections.push({
-      text: `Le parcours comporte ${EXPERIENCES.length} étapes :\n\n${EXPERIENCES.map((experience) => `${experience.period} · ${experience.organization}\n${experience.role}. ${experience.description}`).join('\n\n')}`,
+      text: `Le parcours comporte ${EXPERIENCES.length} étapes :\n\n${EXPERIENCES.map((experience) => `${experience.period} · ${experience.organization}\n${experience.role}. ${experience.description}\n${experience.highlights.join(' ')}`).join('\n\n')}`,
       sources: ['experiences'],
     });
   }
-  if (!missing && matches(/\b(contact\w*|mail|email|e-mail|joindre|ecrire|collabor\w*)\b/))
+  if (matches(/\b(formation\w*|diplome\w*|etude\w*|ecole|universite|sup.?ptic)\b/))
     sections.push({
-      text: `L’adresse affichée est ${PROFILE.email}. Le dossier Contact regroupe les coordonnées et les liens disponibles.`,
+      text: EDUCATION.map(
+        (step) =>
+          `${step.period} · ${step.degree}\nOption : ${step.specialization}.\n${step.school}, ${step.location}.`,
+      ).join('\n\n'),
+      sources: ['about'],
+    });
+  if (matches(/\b(langue\w*|francais|anglais)\b/))
+    sections.push({ text: PROFILE.languages.join('\n'), sources: ['about'] });
+  if (matches(/\b(association\w*|associati\w*|encadr\w*|club)\b/))
+    sections.push({ text: PROFILE.community, sources: ['about'] });
+  if (matches(/\b(loisir\w*|interet\w*|passion\w*)\b/))
+    sections.push({
+      text: `Ses centres d’intérêt : ${PROFILE.interests.join(', ')}.`,
+      sources: ['about'],
+    });
+  if (
+    matches(/\b(adresse|ville|pays|localisation|habite|base|mobilite)\b/) ||
+    /ou (est|vit|travaille)/.test(query)
+  )
+    sections.push({
+      text: `${PROFILE.name} est basé à ${PROFILE.location}. ${PROFILE.mobility}.`,
       sources: ['contact'],
     });
+  if (
+    !missing &&
+    matches(
+      /\b(contact\w*|mail|email|e-mail|joindre|ecrire|collabor\w*|telephone|tel|numero|cv|curriculum)\b/,
+    )
+  )
+    sections.push({
+      text: `Vous pouvez joindre ${PROFILE.name} à ${PROFILE.email} ou au ${PROFILE.phone}. Il est basé à ${PROFILE.location}. Son CV au format PDF est téléchargeable depuis le dossier Contact.`,
+      sources: ['contact'],
+    });
+  if (matches(/\b(linkedin|github|reseaux|reseau|social|sociaux)\b/)) {
+    sections.push({
+      text: `Retrouvez ${PROFILE.name} sur LinkedIn et GitHub via les liens ci-dessous.`,
+      sources: ['contact'],
+    });
+  }
   if (sections.length)
     return {
       text: sections.map((section) => section.text).join('\n\n'),

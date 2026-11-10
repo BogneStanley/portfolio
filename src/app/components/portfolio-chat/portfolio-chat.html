@@ -50,6 +50,9 @@
         message.role === 'user' ? 'Vous' : 'Guide de Stanley'
       }}</span>
       <p>{{ message.text }}</p>
+      @if (message.sources.includes('contact')) {
+        <app-social-links />
+      }
       @if (message.sources.length) {
         <div
           class="message__sources"

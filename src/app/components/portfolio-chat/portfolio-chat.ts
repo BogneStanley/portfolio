@@ -10,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { form, FormField, maxLength } from '@angular/forms/signals';
+import { SocialLinks } from '../social-links/social-links';
 import { AppIcon } from '../app-icon/app-icon';
 import { ChatStore, MAX_QUESTION_LENGTH } from '../../chat/chat-store';
 import { ChatSource } from '../../chat/portfolio-answers';
@@ -19,7 +20,7 @@ import { WindowManager } from '../../windows/window-manager';
 
 @Component({
   selector: 'app-portfolio-chat',
-  imports: [AppIcon, FormField],
+  imports: [AppIcon, FormField, SocialLinks],
   templateUrl: './portfolio-chat.html',
   styleUrl: './portfolio-chat.scss',
 })

@@ -9,6 +9,8 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { SocialLinks } from './components/social-links/social-links';
+import { BrandMark } from './components/brand-mark/brand-mark';
 import { gsap } from 'gsap';
 import { DesktopWindow } from './components/desktop-window/desktop-window';
 import { AppIcon, IconName } from './components/app-icon/app-icon';
@@ -20,7 +22,7 @@ import { PreferencesStore, Theme } from './settings/preferences';
 
 @Component({
   selector: 'app-root',
-  imports: [DesktopWindow, AppIcon, WindowContent, WindowOverlays],
+  imports: [DesktopWindow, AppIcon, WindowContent, WindowOverlays, BrandMark, SocialLinks],
   templateUrl: './app.html',
   styleUrls: ['./app.scss', './app-interactions.scss'],
 })
@@ -36,6 +38,24 @@ export class App {
   protected readonly settings = inject(PreferencesStore);
   protected readonly manager = inject(WindowManager);
   protected readonly windows = this.manager.windows;
+  protected readonly dockApplications = computed(() =>
+    this.applications.filter(
+      (app) =>
+        app.id === 'chat' || app.id === 'settings' || this.windows()[app.id].status !== 'closed',
+    ),
+  );
+  protected readonly foregroundWindow = computed(() => {
+    let foreground: WindowId | null = null;
+    for (const app of this.applications) {
+      const state = this.windows()[app.id];
+      if (
+        state.status === 'open' &&
+        (foreground === null || state.layer > this.windows()[foreground].layer)
+      )
+        foreground = app.id;
+    }
+    return foreground;
+  });
   protected readonly activeWindow = computed(() =>
     Object.values(this.windows()).some((item) => item.status === 'open'),
   );

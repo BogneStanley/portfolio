@@ -18,6 +18,7 @@
         <button
           type="button"
           [class.is-active]="activeFilter() === filter.value"
+          [attr.data-filter]="filter.value"
           [attr.aria-pressed]="activeFilter() === filter.value"
           (click)="activeFilter.set(filter.value)"
         >
@@ -31,7 +32,7 @@
           <div class="project-card__preview">
             <img
               [ngSrc]="project.image"
-              [alt]="'Aperçu du projet ' + project.title"
+              [alt]="'Illustration du projet ' + project.title"
               fill
               sizes="(max-width: 600px) 100vw, 50vw"
             /><span class="project-card__number">{{ project.number }}</span>
@@ -39,7 +40,7 @@
           <div class="project-card__body">
             <div class="project-card__title">
               <h4>{{ project.title }}</h4>
-              <span class="project-type">{{ project.category }}</span>
+              <span class="project-type">{{ categories[project.category] }}</span>
             </div>
             <p>{{ project.description }}</p>
             <ul class="tags" aria-label="Technologies">
@@ -56,17 +57,34 @@
   }
   @case ('about') {
     <div class="about-intro">
-      <div class="avatar" aria-hidden="true">BS</div>
+      <div class="avatar" aria-hidden="true"><app-brand-mark /></div>
       <p class="eyebrow">DERRIÈRE LES PIXELS</p>
-      <h3>{{ profile.name }}<span class="accent">.</span></h3>
-      <span class="role-label">{{ profile.role }} & esprit curieux</span>
+      <h3>{{ profile.fullName }}<span class="accent">.</span></h3>
+      <span class="role-label">{{ profile.role }} · {{ profile.location }}</span>
     </div>
+    <app-social-links />
     <p class="lead">{{ profile.introduction }}</p>
     <p class="body-copy">{{ profile.biography }}</p>
     <div class="about-notes">
-      <div><span>01 / APPROCHE</span><strong>Simple, mais singulier.</strong></div>
-      <div><span>02 / ATTENTION</span><strong>Le détail fait l’ensemble.</strong></div>
+      <div><span>01 / APPROCHE</span><strong>Autonome & autodidacte.</strong></div>
+      <div><span>02 / ATTENTION</span><strong>Proactif & esprit d’équipe.</strong></div>
     </div>
+    <section class="profile-details" aria-label="Formation et engagement">
+      <h4>Formation</h4>
+      @for (step of education; track step.period) {
+        <p>
+          <span>{{ step.period }}</span
+          ><strong>{{ step.degree }}</strong
+          >{{ step.specialization }}<br />{{ step.school }} · {{ step.location }}
+        </p>
+      }
+      <h4>Transmission</h4>
+      <p>{{ profile.community }}</p>
+      <h4>Langues</h4>
+      <p>{{ profile.languages.join(' · ') }}</p>
+      <h4>Centres d’intérêt</h4>
+      <p>{{ profile.interests.join(' · ') }}</p>
+    </section>
     <button class="text-button" type="button" (click)="contactRequested.emit()">
       Et si on échangeait ? <app-icon name="arrow" />
     </button>
@@ -111,7 +129,9 @@
         <li class="experience-item">
           <span class="experience-period">{{ experience.period }}</span>
           <h4>{{ experience.role }}</h4>
-          <p class="experience-organization">{{ experience.organization }}</p>
+          <p class="experience-organization">
+            {{ experience.organization }} · {{ experience.location }}
+          </p>
           <p class="experience-description">{{ experience.description }}</p>
           <ul class="experience-highlights">
             @for (highlight of experience.highlights; track highlight) {
@@ -144,12 +164,11 @@
     <p class="copy-status" role="status">
       {{ copied() ? 'Adresse copiée dans le presse-papiers.' : '' }}
     </p>
+    <app-social-links />
+    <p class="body-copy">{{ profile.location }} · {{ profile.mobility }}</p>
     <div class="contact-links">
-      <a href="https://github.com/" target="_blank" rel="noopener noreferrer"
-        >GitHub <app-icon name="arrow" /></a
-      ><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer"
-        >LinkedIn <app-icon name="arrow" /></a
-      ><a href="/cv.html" download="CV-Bogne-Stanley.html">Télécharger mon CV ↓</a>
+      <a [href]="'tel:' + profile.phoneHref">{{ profile.phone }}</a>
+      <a [href]="profile.cv" download="CV-Bogne-Stanley.pdf">Télécharger mon CV (PDF) ↓</a>
     </div>
   }
 }

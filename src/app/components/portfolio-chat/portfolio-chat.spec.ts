@@ -53,7 +53,7 @@ describe('Portfolio chat', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(root.querySelectorAll('.message')).toHaveLength(2);
-    expect(root.textContent).toContain('Portfolio Desktop');
+    expect(root.textContent).toContain('FreemoPay');
     root.querySelector<HTMLButtonElement>('.message__sources button')!.click();
     expect(manager.windows().projects.status).toBe('open');
     expect(manager.windows().chat.status).toBe('minimized');

@@ -1,3 +1,5 @@
+import { SocialLinks } from '../social-links/social-links';
+import { BrandMark } from '../brand-mark/brand-mark';
 import { Component, computed, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { PortfolioChat } from '../portfolio-chat/portfolio-chat';
@@ -8,12 +10,13 @@ import {
   PROJECTS,
   SKILLS,
   EXPERIENCES,
+  EDUCATION,
   ProjectFilter,
   WindowId,
 } from '../../data/portfolio';
 @Component({
   selector: 'app-window-content',
-  imports: [NgOptimizedImage, AppIcon, SettingsPanel, PortfolioChat],
+  imports: [NgOptimizedImage, AppIcon, SettingsPanel, PortfolioChat, BrandMark, SocialLinks],
   templateUrl: './window-content.html',
   styleUrl: './window-content.scss',
   host: { '[class.chat-content]': "section() === 'chat'" },
@@ -25,9 +28,20 @@ export class WindowContent {
   protected readonly projects = PROJECTS;
   protected readonly skills = SKILLS;
   protected readonly experiences = EXPERIENCES;
+  protected readonly education = EDUCATION;
+  protected readonly categories = {
+    frontend: 'Web',
+    backend: 'Backend',
+    mobile: 'Mobile',
+    package: 'Packages',
+    media: 'Podcast',
+  };
   protected readonly filters: { value: ProjectFilter; label: string }[] = [
     { value: 'all', label: 'Tous les projets' },
-    { value: 'frontend', label: 'Frontend' },
+    { value: 'mobile', label: 'Mobile' },
+    { value: 'frontend', label: 'Web' },
+    { value: 'package', label: 'Packages' },
+    { value: 'media', label: 'Podcast' },
     { value: 'backend', label: 'Backend' },
   ];
   protected readonly activeFilter = signal<ProjectFilter>('all');

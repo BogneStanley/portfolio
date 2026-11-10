@@ -16,15 +16,27 @@ describe('Local portfolio answers', () => {
     expect(experience.sources).toEqual(['experiences']);
   });
   it('selects a named project and supports questions spanning multiple sections', () => {
-    const detail = answerPortfolio('Parle-moi de Orbit API');
+    const detail = answerPortfolio('Parle-moi de Kusa');
     expect(detail.text).toContain(PROJECTS[2].description);
-    expect(detail.text).not.toContain('Forma Studio');
+    expect(detail.text).not.toContain('FreemoPay');
     const combined = answerPortfolio('Quels sont ses projets et ses compétences ?');
     expect(combined.sources).toEqual(['projects', 'skills']);
+  });
+  it('answers education, languages, location and telephone from the CV', () => {
+    expect(answerPortfolio('Quelle est sa formation ?').text).toContain('2021 — 2023');
+    expect(answerPortfolio('Quel diplôme a-t-il ?').sources).toEqual(['about']);
+    expect(answerPortfolio('Quelles langues parle-t-il ?').text).toContain('Anglais · B1');
+    expect(answerPortfolio('Dans quelle ville est-il basé ?').text).toContain(PROFILE.location);
+    expect(answerPortfolio('Quel est son téléphone ?').text).toContain(PROFILE.phone);
+    expect(answerPortfolio('Où télécharger son CV ?').text).toContain('PDF');
   });
   it('uses portfolio contact details and does not invent missing facts', () => {
     expect(answerPortfolio('Comment le contacter ?').text).toContain(PROFILE.email);
     expect(answerPortfolio('Comment le contacter ?').sources).toEqual(['contact']);
+    const social = answerPortfolio('Quels sont ses profils LinkedIn et GitHub ?');
+    expect(social.text).toContain('LinkedIn et GitHub');
+    expect(social.text).not.toContain('n’est pas renseignée');
+    expect(social.sources).toEqual(['contact']);
     for (const question of [
       'Quel est son âge ?',
       'Est-il disponible ?',

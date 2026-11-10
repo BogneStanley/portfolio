@@ -45,10 +45,8 @@
   font-weight: 500;
 }
 .brand-mark {
-  color: var(--accent);
-  font-size: calc((23px) * var(--text-scale));
-  font-weight: 700;
-  letter-spacing: -0.1em;
+  width: 24px;
+  height: 32px;
 }
 .menu-bar__subtitle,
 .local-status {
@@ -212,10 +210,24 @@ app-desktop-window {
   justify-content: space-between;
   gap: 20px;
   color: var(--muted);
-  font-size: calc((8px) * var(--text-scale));
-  letter-spacing: 0.09em;
+  font-size: calc(11px * var(--text-scale));
+  letter-spacing: 0.01em;
+  align-items: center;
   pointer-events: none;
 }
+.desktop-footer a {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.desktop-footer a:hover {
+  color: var(--accent);
+}
+.desktop-footer__email {
+  padding: 8px 0;
+  overflow-wrap: anywhere;
+}
+
 .dock {
   position: absolute;
   z-index: 5;
@@ -279,12 +291,15 @@ app-desktop-window {
   border-radius: 50%;
   background: var(--accent);
   opacity: 0;
+  transition:
+    width 0.2s,
+    opacity 0.2s;
 }
 .is-open .dock__dot {
   opacity: 1;
 }
-.is-minimized .dock__dot {
-  width: 10px;
+.is-active .dock__dot {
+  width: 22px;
   border-radius: 2px;
 }
 @media (max-width: 800px) {
@@ -299,9 +314,6 @@ app-desktop-window {
   }
   .hero-title {
     font-size: calc((clamp(46px, 8vw, 70px)) * var(--text-scale));
-  }
-  .desktop-footer > span:last-child {
-    display: none;
   }
 }
 @media (max-width: 600px) {
@@ -358,10 +370,8 @@ app-desktop-window {
     bottom: 108px;
     left: 20px;
     right: 20px;
-    justify-content: center;
-  }
-  .desktop-footer > span:first-child {
-    display: none;
+    justify-content: space-between;
+    gap: 12px;
   }
   .dock {
     bottom: max(16px, env(safe-area-inset-bottom));

@@ -7,7 +7,7 @@
   <h1 class="sr-only">Portfolio interactif de {{ profile.name }}</h1>
   <header class="menu-bar">
     <a class="identity" href="#"
-      ><span class="brand-mark" aria-hidden="true">b.</span><strong>{{ profile.name }}</strong></a
+      ><app-brand-mark class="brand-mark" /><strong>{{ profile.name }}</strong></a
     >
     <span class="menu-bar__subtitle"
       >Portfolio interactif <span class="separator">/</span> 2026</span
@@ -65,15 +65,16 @@
     [attr.inert]="immersive() ? '' : null"
     aria-labelledby="hero-title"
   >
-    <p class="eyebrow hero__line"><span class="status-dot"></span> UN ESPACE POUR MES IDÉES</p>
     <h2 class="hero-title" id="hero-title">
-      <span class="hero__line">Du code.</span
-      ><span class="hero__line">Du sens<span class="accent">.</span></span
-      ><span class="hero__line hero__outline">Du mouvement.</span>
+      <span class="hero__line"></span>
+      <span class="hero__line">De l'idée</span>
+      <span class="hero__line hero__outline--blue"
+        >à la <span class="accent">solution</span><span class="accent">.</span></span
+      >
     </h2>
     <p class="hero__description hero__line">
-      {{ profile.name }} — {{ profile.role }}.<br />J’imagine des interfaces qui donnent envie
-      d’explorer.
+      {{ profile.name }} <br />
+      {{ profile.role }}.<br />Java, Spring Boot, Angular et Flutter.
     </p>
     <button class="primary-button hero__line" type="button" (click)="enterImmersive()">
       Entrer dans l’expérience <app-icon name="arrow" />
@@ -123,16 +124,19 @@
   </div>
 
   <footer class="desktop-footer">
-    <span>CONÇU AVEC CURIOSITÉ</span><span>ANGULAR × GSAP</span>
+    <a class="desktop-footer__email" [href]="'mailto:' + profile.email">{{ profile.email }}</a>
+    <app-social-links [compact]="true" />
   </footer>
   <nav class="dock" aria-label="Dock des applications">
-    @for (app of applications; track app.id) {
+    @for (app of dockApplications(); track app.id) {
       <button
         class="dock__item"
         [attr.id]="'dock-' + app.id"
         type="button"
-        [class.is-open]="windows()[app.id].status !== 'closed'"
+        [class.is-open]="windows()[app.id].status === 'open'"
+        [class.is-active]="foregroundWindow() === app.id"
         [class.is-minimized]="windows()[app.id].status === 'minimized'"
+        [attr.aria-current]="foregroundWindow() === app.id ? 'true' : null"
         [attr.aria-label]="
           (windows()[app.id].status === 'minimized' ? 'Restaurer ' : 'Ouvrir ') + app.label
         "

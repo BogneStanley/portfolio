@@ -432,3 +432,38 @@ h4,
   height: 100%;
   min-height: 0;
 }
+
+.profile-details {
+  margin: 28px 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.profile-details h4 {
+  margin: 20px 0 10px;
+  font-size: calc(14px * var(--text-scale));
+  font-weight: 500;
+}
+.profile-details p {
+  font-size: calc(12px * var(--text-scale));
+  line-height: 1.7;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.profile-details strong,
+.profile-details span {
+  display: block;
+}
+.profile-details strong {
+  color: var(--text);
+  font-weight: 500;
+}
+.profile-details span {
+  font-size: calc(10px * var(--text-scale));
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.avatar app-brand-mark {
+  width: 32px;
+  height: 46px;
+}

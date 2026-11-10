@@ -11,7 +11,7 @@ Cette version reste locale ; aucune publication n’a été effectuée.
 - `src/app/components/window-overlays/` : aperçu d’ancrage, séparations et suggestions.
 - `src/app/components/snap-layout-menu/` : menu des dispositions.
 - `src/app/components/window-content/` : contenu des sections du portfolio et accès aux paramètres et filtres.
-- `public/projects/` et `public/cv.html` : illustrations et CV.
+- `public/projects/` et `public/cv-bogne-stanley.pdf` : illustrations et CV.
 
 ## 1. Comprendre la géométrie
 
@@ -196,3 +196,19 @@ Le champ vide propose les questions les unes après les autres avec un effet d�
 Chaque appel à `WindowManager.open()` incrémente aussi `openRequest` pour la fenêtre concernée. L’ouverture interrompt l’ancienne transition et relance l’entrée. Le callback d’une fermeture ou d’une réduction vérifie ce numéro avant de changer la visibilité : si le dossier a été rouvert entre-temps, ce callback devient obsolète. Cela évite qu’une animation encore en cours masque une fenêtre qui vient d’être rouverte depuis le dock.
 
 Lors du passage au mobile, le plein écran est appliqué par les styles de la fenêtre : le contrôleur conserve `rect` et `freeRect` pour l’ordinateur. Il ne les borne pas à la largeur du téléphone. Au retour sur ordinateur, ces rectangles sont adaptés uniquement à la zone de bureau disponible. La même règle s’applique aux dossiers fermés puis ouverts depuis le mobile, ainsi qu’à la réorganisation des fenêtres dans les paramètres. Les dispositions ancrées sont dissoutes en retrouvant leur dernière géométrie libre.
+
+## Les états du dock
+
+`dockApplications` filtre la liste des applications : Assistant et Paramètres restent épinglés, les autres apparaissent lorsqu’ils sont ouverts ou réduits et disparaissent à leur fermeture. `foregroundWindow` retrouve la fenêtre ouverte ayant la couche la plus élevée. Son icône reçoit `aria-current` et une barre de 22 px ; les autres fenêtres ouvertes ont un point discret. Une fenêtre réduite reste dans le dock pour pouvoir être restaurée, sans indicateur dessous. Sur mobile, le dock reste masqué. Ces informations sont calculées à partir de l’état existant, sans ajouter un second état à synchroniser.
+
+## Personnalisation du profil
+
+Le profil, les trois expériences professionnelles, les deux formations, les compétences, les langues et les neuf projets sont renseignés à partir du CV fourni. Les réalisations en entreprise figurent aux côtés des packages Flutter et du podcast. Les illustrations de projets sont des couvertures graphiques, pas des captures des applications. Les liens GitHub et LinkedIn génériques ont été retirés en l’absence d’adresses personnelles dans le CV. Le téléchargement utilise le PDF fourni, conservé sans modification. Les réponses du chat lisent les mêmes données, y compris pour les études, les langues, la localisation et le téléphone.
+
+## Le monogramme Impulsion
+
+La direction retenue est **Impulsion**, avec une inclinaison vers l’avant et des terminaisons en biais. Le composant `BrandMark` dessine le monogramme en SVG dans la barre supérieure et la rubrique À propos. Le corps suit `--text` et le point carré suit `--accent`, ce qui conserve la lisibilité entre les thèmes. Les fichiers réutilisables se trouvent dans `public/branding/` : `impulsion.svg` (noir), `impulsion-accent.svg` (noir avec accent sauge) et `impulsion-light.svg` (blanc avec accent sauge). Le favicon `public/favicon.svg` reprend la silhouette sur un fond sombre.
+
+Le footer affiche `PROFILE.email` comme lien `mailto:` et les profils LinkedIn/GitHub renseignés dans `SOCIAL_PROFILES`. Les réseaux utilisent des icônes avec un libellé accessible et s’ouvrent dans un nouvel onglet avec `noopener noreferrer`. Un profil non renseigné n’affiche pas de lien.
+
+Les réseaux professionnels utilisent le composant partagé `SocialLinks` dans le footer (icônes seules), À propos, Contact et les réponses du chat liées au contact. Les URL restent définies à un seul endroit, `SOCIAL_PROFILES`, et chaque icône conserve son libellé accessible et l’ouverture sécurisée dans un nouvel onglet.

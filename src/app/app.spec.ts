@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './app';
+import { PROJECTS, PROFILE, SKILLS, SOCIAL_PROFILES } from './data/portfolio';
 import { WindowManager } from './windows/window-manager';
 
 describe('Portfolio desktop', () => {
@@ -22,6 +23,42 @@ describe('Portfolio desktop', () => {
     vi.unstubAllGlobals();
   });
 
+  it('keeps only pinned or launched apps in the dock and follows the foreground window', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const dockIds = () => [...root.querySelectorAll('.dock__item')].map((item) => item.id);
+    const click = async (selector: string) => {
+      root.querySelector<HTMLButtonElement>(selector)!.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+    };
+    expect(dockIds()).toEqual(['dock-chat', 'dock-settings']);
+    await click('[data-window-id="projects"]');
+    await click('[data-window-id="about"]');
+    expect(dockIds()).toEqual(['dock-projects', 'dock-about', 'dock-chat', 'dock-settings']);
+    expect(root.querySelector('.dock__item.is-active')?.id).toBe('dock-about');
+    root.querySelector('.window[aria-label="Projets"]')!.dispatchEvent(new Event('pointerdown'));
+    fixture.detectChanges();
+    expect(root.querySelector('.dock__item.is-active')?.id).toBe('dock-projects');
+    expect(root.querySelector('#dock-projects')?.getAttribute('aria-current')).toBe('true');
+    await click('.window[aria-label="Projets"] .window__minimize');
+    expect(dockIds()).toContain('dock-projects');
+    expect(root.querySelector('#dock-projects')?.classList.contains('is-open')).toBe(false);
+    expect(root.querySelector('.dock__item.is-active')?.id).toBe('dock-about');
+    await click('.window[aria-label="À propos"] .window__close');
+    expect(dockIds()).not.toContain('dock-about');
+    expect(root.querySelector('.dock__item.is-active')).toBeNull();
+    await click('#dock-projects');
+    expect(root.querySelector('#dock-projects')?.classList.contains('is-open')).toBe(true);
+    expect(root.querySelector('.dock__item.is-active')?.id).toBe('dock-projects');
+    await click('.window__close');
+    await click('#dock-chat');
+    await click('.window__close');
+    expect(dockIds()).toEqual(['dock-chat', 'dock-settings']);
+  });
+
   it('opens, minimizes, restores and closes a window without losing its filter', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
@@ -34,10 +71,10 @@ describe('Portfolio desktop', () => {
       await fixture.whenStable();
     };
     await click('.desktop-icon');
-    expect(element.querySelectorAll('.project-card')).toHaveLength(3);
+    expect(element.querySelectorAll('.project-card')).toHaveLength(PROJECTS.length);
     await click('.project-filters button:last-child');
     expect(element.querySelectorAll('.project-card')).toHaveLength(1);
-    expect(element.querySelector('.project-card h4')?.textContent).toContain('Orbit');
+    expect(element.querySelector('.project-card h4')?.textContent).toContain('Kusa');
     const original = element.querySelector('app-desktop-window');
     await click('.window__minimize');
     expect(original?.classList.contains('is-minimized')).toBe(true);
@@ -61,7 +98,7 @@ describe('Portfolio desktop', () => {
     await fixture.whenStable();
     const root = fixture.nativeElement as HTMLElement;
     const projectContent = root.querySelector('app-window-content');
-    root.querySelectorAll<HTMLButtonElement>('.project-filters button')[2].click();
+    root.querySelector<HTMLButtonElement>('[data-filter="backend"]')!.click();
     fixture.detectChanges();
     manager.menu.set('projects');
     fixture.detectChanges();
@@ -168,11 +205,21 @@ describe('Portfolio desktop', () => {
       await fixture.whenStable();
     }
     expect(element.querySelectorAll('app-desktop-window')).toHaveLength(7);
-    expect(element.querySelectorAll('.skill-group')).toHaveLength(3);
+    expect(element.querySelectorAll('.skill-group')).toHaveLength(SKILLS.length);
     expect(element.querySelectorAll('.experience-item')).toHaveLength(3);
-    expect(element.textContent).toContain('Atelier Pixel');
+    expect(element.textContent).toContain('Freemo');
+    for (const section of ['À propos', 'Contact']) {
+      const panel = element.querySelector(`.window[aria-label="${section}"]`)!;
+      for (const [network, href] of Object.entries(SOCIAL_PROFILES)) {
+        const link = panel.querySelector<HTMLAnchorElement>(`app-social-links a[href="${href}"]`);
+        expect(link, network).not.toBeNull();
+        expect(link!.target).toBe('_blank');
+        expect(link!.rel).toContain('noopener');
+        expect(link!.querySelector('app-icon')).not.toBeNull();
+      }
+    }
     expect(element.querySelector<HTMLAnchorElement>('.email-block a')?.getAttribute('href')).toBe(
-      'mailto:bonjour@example.com',
+      'mailto:' + PROFILE.email,
     );
   });
 });
