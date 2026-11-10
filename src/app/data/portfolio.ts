@@ -1,4 +1,4 @@
-// Données de démonstration : remplace ce fichier pour personnaliser le portfolio.
+// Profil et contenus du portfolio.
 export type WindowId =
   'projects' | 'about' | 'skills' | 'experiences' | 'contact' | 'settings' | 'chat';
 export type WindowStatus = 'closed' | 'open' | 'minimized';

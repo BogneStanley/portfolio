@@ -1,6 +1,6 @@
 # Comprendre le portfolio et ses fenêtres
 
-Les contenus sont fictifs. Cette version reste locale ; aucune publication n’a été effectuée.
+Cette version reste locale ; aucune publication n’a été effectuée.
 
 ## Les fichiers à connaître
 
@@ -11,7 +11,7 @@ Les contenus sont fictifs. Cette version reste locale ; aucune publication n’a
 - `src/app/components/window-overlays/` : aperçu d’ancrage, séparations et suggestions.
 - `src/app/components/snap-layout-menu/` : menu des dispositions.
 - `src/app/components/window-content/` : contenu des sections du portfolio et accès aux paramètres et filtres.
-- `public/projects/` et `public/cv-demo.html` : illustrations et CV fictifs.
+- `public/projects/` et `public/cv.html` : illustrations et CV.
 
 ## 1. Comprendre la géométrie
 
@@ -124,8 +124,8 @@ Vérifie que son filtre reste sélectionné. Détache-la ensuite par le titre, p
 
 ## Personnaliser les données
 
-Remplacer ensuite le profil, les projets, les compétences, les coordonnées, les liens génériques et le CV de démonstration.
-Retirer les mentions fictives seulement après vérification du contenu. Référencement et déploiement restent une étape distincte.
+Remplacer ensuite le profil, les projets, les compétences, les coordonnées, les liens génériques et le CV.
+Référencement et déploiement restent une étape distincte.
 
 ## Mode immersif
 
@@ -143,7 +143,7 @@ Les écouteurs et animations sont nettoyés à la destruction du composant.
 
 L’application « Expériences » utilise les mêmes contrôles et dispositions que les autres fenêtres.
 Le tableau `EXPERIENCES` dans `portfolio.ts` contient les périodes, postes, organisations, missions et technologies.
-Les trois étapes sont fictives et présentées dans une chronologie, à remplacer par le parcours réel.
+Les trois étapes sont présentées dans une chronologie.
 
 ## Paramètres et thèmes
 
@@ -187,8 +187,12 @@ Le fonctionnement se répartit en trois parties :
 - `src/app/chat/chat-store.ts` conserve les messages dans un signal partagé. Fermer la fenêtre ne détruit donc pas la conversation. Le bouton « Nouvelle conversation » l’efface ; recharger la page aussi. Aucun message n’est envoyé à un serveur ou enregistré dans le stockage du navigateur.
 - `src/app/components/portfolio-chat` affiche la conversation. Le formulaire utilise Signal Forms : le modèle est un signal, `form()` lui associe les règles de validation et `[formField]` relie le champ à ce modèle. Les questions vides ou dépassant 500 caractères ne sont pas envoyées.
 
-Ce guide est un moteur de réponses déterministes, sans modèle d’IA : il ne comprend pas toutes les formulations et n’interprète pas les questions de suivi à partir des messages précédents. Une question inconnue invite à reformuler. Les informations absentes ne sont pas inventées et les données fictives sont identifiées. Pour personnaliser ses réponses, commence par remplacer les données du portfolio, puis enrichis les sujets reconnus et leurs tests.
+Ce guide est un moteur de réponses déterministes, sans modèle d’IA : il ne comprend pas toutes les formulations et n’interprète pas les questions de suivi à partir des messages précédents. Une question inconnue invite à reformuler. Les informations absentes ne sont pas inventées. Pour personnaliser ses réponses, commence par remplacer les données du portfolio, puis enrichis les sujets reconnus et leurs tests.
 
 Le journal de conversation utilise `role="log"` pour annoncer les nouveaux messages. Il défile indépendamment du champ de saisie et respecte les préférences de réduction des animations. Les sources sont des boutons qui ouvrent les dossiers existants ; sur mobile, le chat est réduit pendant la consultation et peut être retrouvé depuis son icône.
 
 Le champ vide propose les questions les unes après les autres avec un effet d’écriture et d’effacement. Un `effect()` démarre un temporisateur uniquement lorsque la fenêtre est ouverte, le champ vide et sans focus. Sa fonction de nettoyage arrête le temporisateur lors d’un changement d’état ou de la destruction du composant. La préférence de réduction des animations conserve une question fixe. Le libellé accessible du champ reste stable pendant toute l’animation.
+
+Chaque appel à `WindowManager.open()` incrémente aussi `openRequest` pour la fenêtre concernée. L’ouverture interrompt l’ancienne transition et relance l’entrée. Le callback d’une fermeture ou d’une réduction vérifie ce numéro avant de changer la visibilité : si le dossier a été rouvert entre-temps, ce callback devient obsolète. Cela évite qu’une animation encore en cours masque une fenêtre qui vient d’être rouverte depuis le dock.
+
+Lors du passage au mobile, le plein écran est appliqué par les styles de la fenêtre : le contrôleur conserve `rect` et `freeRect` pour l’ordinateur. Il ne les borne pas à la largeur du téléphone. Au retour sur ordinateur, ces rectangles sont adaptés uniquement à la zone de bureau disponible. La même règle s’applique aux dossiers fermés puis ouverts depuis le mobile, ainsi qu’à la réorganisation des fenêtres dans les paramètres. Les dispositions ancrées sont dissoutes en retrouvant leur dernière géométrie libre.

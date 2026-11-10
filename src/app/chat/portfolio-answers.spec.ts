@@ -13,7 +13,7 @@ describe('Local portfolio answers', () => {
       for (const skill of group.items) expect(skills.text).toContain(skill);
     const experience = answerPortfolio('Quel est son parcours ?');
     for (const step of EXPERIENCES) expect(experience.text).toContain(step.organization);
-    expect(experience.text).toContain('fictives');
+    expect(experience.sources).toEqual(['experiences']);
   });
   it('selects a named project and supports questions spanning multiple sections', () => {
     const detail = answerPortfolio('Parle-moi de Orbit API');
@@ -22,9 +22,9 @@ describe('Local portfolio answers', () => {
     const combined = answerPortfolio('Quels sont ses projets et ses compétences ?');
     expect(combined.sources).toEqual(['projects', 'skills']);
   });
-  it('identifies contact details as demonstration data and does not invent missing facts', () => {
+  it('uses portfolio contact details and does not invent missing facts', () => {
     expect(answerPortfolio('Comment le contacter ?').text).toContain(PROFILE.email);
-    expect(answerPortfolio('Comment le contacter ?').text).toContain('démonstration');
+    expect(answerPortfolio('Comment le contacter ?').sources).toEqual(['contact']);
     for (const question of [
       'Quel est son âge ?',
       'Est-il disponible ?',

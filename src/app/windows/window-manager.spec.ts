@@ -12,6 +12,38 @@ describe('WindowManager', () => {
     manager.open('about');
   });
   afterEach(() => TestBed.resetTestingModule());
+  it('preserves desktop geometry across mobile navigation and repeated viewport changes', () => {
+    const original = manager.windows().projects.rect;
+    const closed = manager.windows().skills.freeRect;
+    for (let count = 0; count < 2; count++) {
+      manager.setWorkspace({ x: 0, y: 0, width: 390, height: 844 }, false, true);
+      manager.open('skills');
+      manager.setStatus('skills', 'closed');
+      manager.open('projects');
+      manager.setWorkspace({ x: 0, y: 0, width: 320, height: 568 }, false, true);
+      expect(manager.windows().projects.freeRect).toEqual(original);
+      expect(manager.windows().skills.freeRect).toEqual(closed);
+      manager.setWorkspace(area, true, false);
+      expect(manager.windows().projects.rect).toEqual(original);
+      manager.open('skills');
+      expect(manager.windows().skills.rect).toEqual(closed);
+    }
+  });
+  it('restores free desktop geometry after mobile dissolves a snapped layout', () => {
+    const original = manager.windows().projects.freeRect;
+    manager.snap('projects', 'halves', '0-0');
+    manager.setWorkspace({ x: 0, y: 0, width: 390, height: 844 }, false, true);
+    expect(manager.group()).toBeNull();
+    manager.setWorkspace(area, true, false);
+    expect(manager.windows().projects.presentation).toBe('free');
+    expect(manager.windows().projects.rect).toEqual(original);
+    manager.toggleMaximize('projects');
+    manager.setWorkspace({ x: 0, y: 0, width: 390, height: 844 }, false, true);
+    manager.setWorkspace(area, true, false);
+    expect(manager.windows().projects.rect).toEqual(area);
+    manager.toggleMaximize('projects');
+    expect(manager.windows().projects.rect).toEqual(original);
+  });
   it('maximizes and restores the exact free rectangle', () => {
     const free = manager.windows().projects.rect;
     manager.toggleMaximize('projects');

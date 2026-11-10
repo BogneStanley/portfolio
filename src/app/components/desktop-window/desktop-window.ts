@@ -36,6 +36,7 @@ export class DesktopWindow {
   protected readonly manager = inject(WindowManager);
   protected readonly state = computed(() => this.manager.windows()[this.windowId()]);
   protected readonly rect = computed(() => this.state().rect);
+  private readonly openRequest = computed(() => this.state().openRequest);
   protected readonly edges: ResizeEdge[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
@@ -59,6 +60,7 @@ export class DesktopWindow {
     });
     // Rejoue l'entrée à l'ouverture et à la restauration, sans perdre la position.
     afterRenderEffect(() => {
+      this.openRequest();
       const minimized = this.minimized();
       if (minimized) return;
       this.actionAnimation?.kill();
@@ -135,7 +137,11 @@ export class DesktopWindow {
     this.cancelMenuTimer();
     this.manager.dismissPanels();
     this.finishAnimations();
+    const request = this.openRequest();
     const finish = () => {
+      // Une réouverture rend la fermeture/réduction précédente obsolète,
+      // même si son callback arrive avant le prochain rendu Angular.
+      if (this.destroyRef.destroyed || this.openRequest() !== request) return;
       if (action === 'close') this.closed.emit();
       else this.reduced.emit();
     };

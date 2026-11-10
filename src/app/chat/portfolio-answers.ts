@@ -30,7 +30,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
   );
   if (missing)
     sections.push({
-      text: 'Cette information n’est pas renseignée dans le portfolio. Le parcours et les coordonnées présentés sont encore fictifs : il faut les confirmer directement avec Stanley.',
+      text: 'Cette information n’est pas renseignée dans le portfolio. Vous pouvez la demander directement à Stanley.',
       sources: ['contact'],
     });
   if (
@@ -47,7 +47,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
   if (projects.length || matches(/\b(projet\w*|realisation\w*|portfolio|application\w*)\b/)) {
     const selection = projects.length ? projects : PROJECTS;
     sections.push({
-      text: `Voici ${projects.length ? 'le détail des projets demandés' : 'les projets présentés'} dans cette démonstration :\n\n${selection.map((project) => `${project.title} — ${project.description}\nTechnologies : ${project.technologies.join(', ')}.`).join('\n\n')}`,
+      text: `Voici ${projects.length ? 'le détail des projets demandés' : 'les projets présentés'} dans le portfolio :\n\n${selection.map((project) => `${project.title} — ${project.description}\nTechnologies : ${project.technologies.join(', ')}.`).join('\n\n')}`,
       sources: ['projects'],
     });
   }
@@ -75,13 +75,13 @@ export function answerPortfolio(question: string): PortfolioAnswer {
     )
   ) {
     sections.push({
-      text: `Le parcours de démonstration comporte ${EXPERIENCES.length} étapes fictives :\n\n${EXPERIENCES.map((experience) => `${experience.period} · ${experience.organization}\n${experience.role}. ${experience.description}`).join('\n\n')}`,
+      text: `Le parcours comporte ${EXPERIENCES.length} étapes :\n\n${EXPERIENCES.map((experience) => `${experience.period} · ${experience.organization}\n${experience.role}. ${experience.description}`).join('\n\n')}`,
       sources: ['experiences'],
     });
   }
   if (!missing && matches(/\b(contact\w*|mail|email|e-mail|joindre|ecrire|collabor\w*)\b/))
     sections.push({
-      text: `L’adresse affichée est ${PROFILE.email}. C’est une adresse de démonstration, à remplacer avant de prendre contact. Le dossier Contact regroupe les coordonnées et les liens disponibles.`,
+      text: `L’adresse affichée est ${PROFILE.email}. Le dossier Contact regroupe les coordonnées et les liens disponibles.`,
       sources: ['contact'],
     });
   if (sections.length)
@@ -91,7 +91,7 @@ export function answerPortfolio(question: string): PortfolioAnswer {
     };
   if (matches(/\b(bonjour|salut|hello|coucou|merci)\b/))
     return {
-      text: `Bonjour ! Je peux vous présenter ${PROFILE.name}, ses projets, ses compétences ou son parcours de démonstration. Que souhaitez-vous découvrir ?`,
+      text: `Bonjour ! Je peux vous présenter ${PROFILE.name}, ses projets, ses compétences ou son parcours. Que souhaitez-vous découvrir ?`,
       sources: [],
     };
   return {

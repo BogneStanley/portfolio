@@ -19,6 +19,7 @@ import {
 export interface ManagedWindow {
   status: WindowStatus;
   layer: number;
+  openRequest: number;
   presentation: WindowPresentation;
   rect: WindowRect;
   freeRect: WindowRect;
@@ -66,6 +67,7 @@ export class WindowManager {
           {
             status: 'closed',
             layer: index + 1,
+            openRequest: 0,
             presentation: 'free',
             rect,
             freeRect: rect,
@@ -113,6 +115,7 @@ export class WindowManager {
     return group && zone ? zoneRect(this.area(), group.layout, zone) : null;
   });
   private highestLayer = APPLICATIONS.length;
+  private desktopArea = this.area();
   private gesture: Gesture | null = null;
   private separatorGesture: SeparatorGesture | null = null;
   private target: SnapTarget | 'maximized' | null = null;
@@ -150,9 +153,13 @@ export class WindowManager {
       this.patch(id, {
         presentation: 'free',
         placement: null,
-        rect: clampRect(state.freeRect, this.area()),
+        rect: this.mobile() ? state.freeRect : clampRect(state.freeRect, this.area()),
       });
-    this.patch(id, { status: 'open', layer: ++this.highestLayer });
+    this.patch(id, {
+      status: 'open',
+      layer: ++this.highestLayer,
+      openRequest: state.openRequest + 1,
+    });
   }
   setStatus(id: WindowId, status: WindowStatus): void {
     this.detach(id);
@@ -172,7 +179,7 @@ export class WindowManager {
     this.dismissPanels();
     this.group.set(null);
     this.transitionId.set('group');
-    const area = this.area();
+    const area = this.mobile() ? this.desktopArea : this.area();
     for (const [index, app] of APPLICATIONS.entries()) {
       const width = app.id === 'projects' ? 670 : app.id === 'chat' ? 580 : 510;
       const rect = clampRect(
@@ -203,13 +210,19 @@ export class WindowManager {
     if (this.interacting()) this.cancel();
     this.transitionId.set(null);
     this.area.set(area);
+    if (!mobile) this.desktopArea = area;
     this.desktop.set(desktop);
     this.mobile.set(mobile);
     this.dismissPanels();
     let group = this.group();
     if (group && (!desktop || !fits(area, group.layout))) {
       for (const id of Object.values(group.occupants))
-        if (id) this.patch(id, { presentation: 'free', placement: null });
+        if (id)
+          this.patch(id, {
+            presentation: 'free',
+            placement: null,
+            ...(mobile ? { rect: this.windows()[id].freeRect } : {}),
+          });
       this.group.set(null);
       group = null;
     }
@@ -220,6 +233,9 @@ export class WindowManager {
         (first, second) => this.windows()[second.id].layer - this.windows()[first.id].layer,
       )[0];
       if (foreground) this.keepOnlyOpen(foreground.id);
+      // Le plein écran mobile est porté par le CSS, sans écraser les rectangles
+      // conservés pour le retour sur ordinateur, y compris les dossiers fermés.
+      return;
     }
     for (const app of APPLICATIONS) {
       const state = this.windows()[app.id];

@@ -121,23 +121,6 @@ h4 {
   color: var(--accent);
   font-size: calc((9px) * var(--text-scale));
 }
-.demo-label {
-  display: block;
-  font-size: calc((8px) * var(--text-scale));
-  color: var(--muted);
-  margin-top: 15px;
-}
-.window-footnote {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  border-top: 1px solid var(--line);
-  padding-top: 18px;
-  margin: 24px 0 0;
-  font-size: calc((7px) * var(--text-scale));
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
 .about-intro {
   position: relative;
   padding-top: 12px;
@@ -266,13 +249,6 @@ h4 {
   font-size: calc((10px) * var(--text-scale));
   color: var(--accent);
 }
-.contact-note {
-  color: var(--muted);
-  font-size: calc((10px) * var(--text-scale));
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
 .empty-state {
   color: var(--muted);
   font-size: calc((12px) * var(--text-scale));
@@ -339,9 +315,6 @@ h4 {
   }
   .tags li {
     font-size: calc((10px) * var(--text-scale));
-  }
-  .window-footnote span {
-    display: none;
   }
   .about-intro h3 {
     font-size: calc((33px) * var(--text-scale));

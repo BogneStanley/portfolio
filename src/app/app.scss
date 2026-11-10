@@ -216,14 +216,6 @@ app-desktop-window {
   letter-spacing: 0.09em;
   pointer-events: none;
 }
-.desktop-footer > span:nth-child(2) {
-  position: absolute;
-  left: 50%;
-  bottom: 92px;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  letter-spacing: 0.03em;
-}
 .dock {
   position: absolute;
   z-index: 5;
@@ -370,11 +362,6 @@ app-desktop-window {
   }
   .desktop-footer > span:first-child {
     display: none;
-  }
-  .desktop-footer > span:nth-child(2) {
-    position: static;
-    transform: none;
-    font-size: calc((8px) * var(--text-scale));
   }
   .dock {
     bottom: max(16px, env(safe-area-inset-bottom));

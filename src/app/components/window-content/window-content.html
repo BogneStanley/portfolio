@@ -31,7 +31,7 @@
           <div class="project-card__preview">
             <img
               [ngSrc]="project.image"
-              [alt]="'Aperçu du projet fictif ' + project.title"
+              [alt]="'Aperçu du projet ' + project.title"
               fill
               sizes="(max-width: 600px) 100vw, 50vw"
             /><span class="project-card__number">{{ project.number }}</span>
@@ -47,7 +47,6 @@
                 <li>{{ technology }}</li>
               }
             </ul>
-            <span class="demo-label">Projet de démonstration</span>
           </div>
         </article>
       } @empty {
@@ -105,10 +104,9 @@
       <span class="count">{{ experiences.length }} étapes</span>
     </div>
     <p class="body-copy">
-      Un parcours fictif pour présenter les missions, les apprentissages et les réalisations qui
-      jalonnent une expérience.
+      Les missions, les apprentissages et les réalisations qui jalonnent une expérience.
     </p>
-    <ol class="experience-list" aria-label="Parcours professionnel de démonstration">
+    <ol class="experience-list" aria-label="Parcours professionnel">
       @for (experience of experiences; track experience.id) {
         <li class="experience-item">
           <span class="experience-period">{{ experience.period }}</span>
@@ -148,18 +146,10 @@
     </p>
     <div class="contact-links">
       <a href="https://github.com/" target="_blank" rel="noopener noreferrer"
-        >GitHub · exemple <app-icon name="arrow" /></a
+        >GitHub <app-icon name="arrow" /></a
       ><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer"
-        >LinkedIn · exemple <app-icon name="arrow" /></a
-      ><a href="/cv-demo.html" download="CV-demonstration-Bogne-Stanley.html"
-        >CV de démonstration ↓</a
-      >
-    </div>
-    <div class="contact-note">
-      <span class="status-dot"></span> Coordonnées fictives pour cette démonstration.
+        >LinkedIn <app-icon name="arrow" /></a
+      ><a href="/cv.html" download="CV-Bogne-Stanley.html">Télécharger mon CV ↓</a>
     </div>
   }
-}
-@if (section() !== 'settings' && section() !== 'chat') {
-  <p class="window-footnote">CONTENU DE DÉMONSTRATION <span>PERSONNALISATION À VENIR</span></p>
 }
