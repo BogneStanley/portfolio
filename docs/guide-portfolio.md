@@ -221,4 +221,4 @@ Les styles du bureau sont répartis entre structure, raccourcis, dock et interac
 
 La compilation produit une application statique. Le script de build génère les URL de référencement à partir de `SITE_URL`, ainsi que le sitemap et `robots.txt`. Docker compile avec Node, puis copie uniquement le résultat dans une petite image Nginx. Traefik reçoit le trafic HTTPS et transmet la requête à Nginx sur le réseau Docker partagé.
 
-Le [README](../README.md) décrit les commandes et les variables de déploiement. Le [rapport de performances](performance.md) distingue la taille brute, l’estimation Angular et la mesure gzip locale.
+Le [guide de déploiement](deploiement.md) décrit les commandes et les variables de déploiement. Le [rapport de performances](performance.md) distingue la taille brute, l’estimation Angular et la mesure gzip locale.
