@@ -53,36 +53,61 @@ jobs:
       SSH_HOST: ${{ secrets.SSH_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
       SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-      - name: Configure SSH
+      - name: Validate deployment settings
         shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           set -euo pipefail
           [[ "$SSH_HOST" =~ ^[a-zA-Z0-9.-]+$ ]] || { echo 'SSH_HOST manquant ou invalide'; exit 1; }
           [[ "$SSH_USER" =~ ^[a-zA-Z0-9_-]+$ ]] || { echo 'SSH_USER manquant ou invalide'; exit 1; }
           [[ "$SSH_PORT" =~ ^[0-9]{1,5}$ ]] && ((10#$SSH_PORT > 0 && 10#$SSH_PORT <= 65535)) || { echo 'SSH_PORT invalide'; exit 1; }
           [[ "$DEPLOY_PATH" =~ ^/([a-zA-Z0-9_.-]+/)*[a-zA-Z0-9_.-]+$ && "$DEPLOY_PATH/" != *'/../'* && "$DEPLOY_PATH/" != *'/./'* ]] || { echo 'DEPLOY_PATH manquant ou invalide'; exit 1; }
-          [[ -n "$SSH_PRIVATE_KEY" && -n "$SSH_KNOWN_HOSTS" ]] || { echo 'Clé SSH ou known_hosts manquant'; exit 1; }
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/portfolio
-          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/portfolio ~/.ssh/known_hosts
-          printf 'Host portfolio-deploy\n  HostName %s\n  User %s\n  Port %s\n  IdentityFile ~/.ssh/portfolio\n  IdentitiesOnly yes\n  BatchMode yes\n  StrictHostKeyChecking yes\n  ConnectTimeout 15\n  ServerAliveInterval 15\n  ServerAliveCountMax 4\n' "$SSH_HOST" "$SSH_USER" "$SSH_PORT" > ~/.ssh/config
-      - name: Transfer exact tested revision
-        shell: bash
-        run: |
-          set -euo pipefail
-          git archive --format=tar HEAD | gzip > "$RUNNER_TEMP/portfolio.tar.gz"
-          ssh portfolio-deploy "test -f '$DEPLOY_PATH/.env' && mkdir -p '$DEPLOY_PATH/incoming' '$DEPLOY_PATH/releases/$GITHUB_SHA'"
-          scp "$RUNNER_TEMP/portfolio.tar.gz" "portfolio-deploy:$DEPLOY_PATH/incoming/$GITHUB_SHA.tar.gz"
-          ssh portfolio-deploy "tar -xzf '$DEPLOY_PATH/incoming/$GITHUB_SHA.tar.gz' -C '$DEPLOY_PATH/releases/$GITHUB_SHA' && bash '$DEPLOY_PATH/releases/$GITHUB_SHA/scripts/deploy.sh' '$DEPLOY_PATH' '$GITHUB_SHA'"
-      - name: Clean runner credentials
-        if: always()
-        shell: bash
-        run: rm -f ~/.ssh/portfolio ~/.ssh/config ~/.ssh/known_hosts
+          [[ -n "$SSH_PRIVATE_KEY" ]] || { echo 'SSH_PRIVATE_KEY manquant'; exit 1; }
+      - name: Archive exact tested revision
+        run: git archive --format=tar HEAD | gzip > portfolio.tar.gz
+      - name: Prepare remote release
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+          envs: DEPLOY_PATH,GITHUB_SHA
+          command_timeout: 1m
+          script: |
+            set -eu
+            test -f "$DEPLOY_PATH/.env"
+            mkdir -p "$DEPLOY_PATH/incoming" "$DEPLOY_PATH/releases/$GITHUB_SHA"
+      - name: Transfer release archive
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+          source: portfolio.tar.gz
+          target: ${{ secrets.DEPLOY_PATH }}/incoming
+          overwrite: true
+          command_timeout: 5m
+      - name: Deploy and verify health
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+          envs: DEPLOY_PATH,GITHUB_SHA
+          command_timeout: 25m
+          script: |
+            set -eu
+            tar -xzf "$DEPLOY_PATH/incoming/portfolio.tar.gz" -C "$DEPLOY_PATH/releases/$GITHUB_SHA"
+            bash "$DEPLOY_PATH/releases/$GITHUB_SHA/scripts/deploy.sh" "$DEPLOY_PATH" "$GITHUB_SHA"

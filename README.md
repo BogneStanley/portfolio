@@ -117,16 +117,17 @@ Conserver `.env` à la racine du dossier de déploiement. Il n’est jamais envo
 
 Dans **Settings → Environments → production**, créer les secrets suivants (ou les définir dans les secrets Actions du dépôt) :
 
-| Secret            | Valeur                                                                                                                                                  |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SSH_HOST`        | Nom DNS ou IPv4 du serveur, sans protocole                                                                                                              |
-| `SSH_USER`        | Utilisateur SSH autorisé à lancer Docker                                                                                                                |
-| `SSH_PORT`        | Port SSH, facultatif : `22` par défaut                                                                                                                  |
-| `SSH_PRIVATE_KEY` | Clé privée dédiée au déploiement, sans phrase secrète ; sa clé publique doit être autorisée sur le serveur                                              |
-| `SSH_KNOWN_HOSTS` | Entrée `known_hosts` du serveur, dont l’empreinte a été vérifiée par un canal de confiance ; pour un port non standard, utiliser la forme `[hôte]:port` |
-| `DEPLOY_PATH`     | Dossier absolu préparé sur le serveur, par exemple `/opt/portfolio`, sans espace ni slash final                                                         |
+| Secret            | Valeur                                                                                                     |
+| ----------------- | ---------------------------------------------------------------------------------------------------------- |
+| `SSH_HOST`        | Nom DNS ou IPv4 du serveur, sans protocole                                                                 |
+| `SSH_USER`        | Utilisateur SSH autorisé à lancer Docker                                                                   |
+| `SSH_PORT`        | Port SSH, facultatif : `22` par défaut                                                                     |
+| `SSH_PRIVATE_KEY` | Clé privée dédiée au déploiement, sans phrase secrète ; sa clé publique doit être autorisée sur le serveur |
+| `DEPLOY_PATH`     | Dossier absolu préparé sur le serveur, par exemple `/opt/portfolio`, sans espace ni slash final            |
 
 L’environnement `production` ne doit pas imposer d’approbation manuelle si le déploiement doit être entièrement automatique. Aucun jeton GitHub de déploiement ni accès Git au dépôt depuis le serveur n’est nécessaire : le runner transmet une archive de la révision exacte validée.
+
+Les commandes distantes utilisent `appleboy/ssh-action@v1.2.5` et le transfert utilise `appleboy/scp-action@v1.0.0`. Aucun fichier `known_hosts` n’est requis. Le secret **facultatif** `SSH_FINGERPRINT` peut contenir l’empreinte SHA256 de la clé hôte pour vérifier l’identité du serveur ; lorsqu’il est absent, cette vérification n’est pas effectuée par les actions.
 
 ### Livraison et retour arrière
 
