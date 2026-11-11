@@ -22,7 +22,7 @@ export interface Project {
 }
 export const PROFILE = {
   name: 'Bogne Stanley',
-  fullName: 'Bogne Moafo Diderot Stanley',
+  fullName: 'Bogne Stanley',
   role: 'Ingénieur logiciel',
   email: 'stanley.moafo@gmail.com',
   phone: '+237 6 55 11 95 02',
