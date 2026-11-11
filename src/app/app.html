@@ -4,13 +4,10 @@
   [class.desktop--mobile-folder]="manager.mobile() && activeWindow()"
   (pointerdown)="dismissMenu($event)"
 >
-  <h1 class="sr-only">Portfolio interactif de {{ profile.name }}</h1>
+  <h1 class="sr-only">Portfolio de {{ profile.name }}</h1>
   <header class="menu-bar">
     <a class="identity" href="#"
       ><app-brand-mark class="brand-mark" /><strong>{{ profile.name }}</strong></a
-    >
-    <span class="menu-bar__subtitle"
-      >Portfolio interactif <span class="separator">/</span> 2026</span
     >
     <div class="menu-bar__right">
       <div class="theme-controls" role="group" aria-label="Thème d’affichage">

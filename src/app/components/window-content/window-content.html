@@ -1,149 +1,143 @@
 @switch (section()) {
-  @case ('chat') {
-    <app-portfolio-chat />
+@case ('chat') {
+<app-portfolio-chat />
+}
+@case ('settings') {
+<app-settings-panel />
+}
+@case ('projects') {
+<div class="section-heading">
+  <div>
+    <h3>Projets<span class="accent">.</span></h3>
+  </div>
+  <span class="count">{{ projects.length.toString().padStart(2, '0') }} projets</span>
+</div>
+<div class="project-filters" role="group" aria-label="Filtrer les projets">
+  @for (filter of filters; track filter.value) {
+  <button type="button" [class.is-active]="activeFilter() === filter.value" [attr.data-filter]="filter.value"
+    [attr.aria-pressed]="activeFilter() === filter.value" (click)="activeFilter.set(filter.value)">
+    {{ filter.label }}
+  </button>
   }
-  @case ('settings') {
-    <app-settings-panel />
+</div>
+<div class="projects-grid">
+  @for (project of filteredProjects(); track project.id) {
+  <app-project-card [project]="project" />
+  } @empty {
+  <p class="empty-state">De nouvelles explorations arrivent bientôt.</p>
   }
-  @case ('projects') {
-    <div class="section-heading">
-      <div>
-        <h3>Projets<span class="accent">.</span></h3>
-      </div>
-      <span class="count">{{ projects.length.toString().padStart(2, '0') }} projets</span>
-    </div>
-    <div class="project-filters" role="group" aria-label="Filtrer les projets">
-      @for (filter of filters; track filter.value) {
-        <button
-          type="button"
-          [class.is-active]="activeFilter() === filter.value"
-          [attr.data-filter]="filter.value"
-          [attr.aria-pressed]="activeFilter() === filter.value"
-          (click)="activeFilter.set(filter.value)"
-        >
-          {{ filter.label }}
-        </button>
-      }
-    </div>
-    <div class="projects-grid">
-      @for (project of filteredProjects(); track project.id) {
-        <app-project-card [project]="project" />
-      } @empty {
-        <p class="empty-state">De nouvelles explorations arrivent bientôt.</p>
-      }
-    </div>
+</div>
+}
+@case ('about') {
+<div class="about-intro">
+  <div class="avatar" aria-hidden="true"><app-brand-mark /></div><br />
+  <h3>{{ profile.fullName }}<span class="accent">.</span></h3>
+  <span class="role-label">{{ profile.role }} · {{ profile.location }}</span>
+</div>
+<app-social-links />
+<p class="lead">{{ profile.introduction }}</p>
+<p class="body-copy">{{ profile.biography }}</p>
+<div class="about-notes">
+  <div><span>01 / APPROCHE</span><strong>Autonome & autodidacte.</strong></div>
+  <div><span>02 / ATTENTION</span><strong>Proactif & esprit d’équipe.</strong></div>
+</div>
+<section class="profile-details" aria-label="Formation et engagement">
+  <h4>Formation</h4>
+  @for (step of education; track step.period) {
+  <p>
+    <span>{{ step.period }}</span><strong>{{ step.degree }}</strong>{{ step.specialization }}<br />{{ step.school }} ·
+    {{ step.location }}
+  </p>
   }
-  @case ('about') {
-    <div class="about-intro">
-      <div class="avatar" aria-hidden="true"><app-brand-mark /></div>
-      <h3>{{ profile.fullName }}<span class="accent">.</span></h3>
-      <span class="role-label">{{ profile.role }} · {{ profile.location }}</span>
+  <h4>Transmission</h4>
+  <p>{{ profile.community }}</p>
+  <h4>Langues</h4>
+  <p>{{ profile.languages.join(' · ') }}</p>
+  <h4>Centres d’intérêt</h4>
+  <p>{{ profile.interests.join(' · ') }}</p>
+</section>
+<button class="text-button" type="button" (click)="contactRequested.emit()">
+  Et si on échangeait ? <app-icon name="arrow" />
+</button>
+}
+@case ('skills') {
+<div class="section-heading">
+  <div>
+    <h3>Ma boîte à outils<span class="accent">.</span></h3>
+  </div>
+</div>
+<div class="skill-list">
+  @for (group of skills; track group.number) {
+  <section class="skill-group">
+    <span class="skill-group__number">{{ group.number }}</span>
+    <div>
+      <h4>{{ group.title }}</h4>
+      <p>{{ group.description }}</p>
+      <ul class="tags">
+        @for (skill of group.items; track skill) {
+        <li>{{ skill }}</li>
+        }
+      </ul>
     </div>
-    <app-social-links />
-    <p class="lead">{{ profile.introduction }}</p>
-    <p class="body-copy">{{ profile.biography }}</p>
-    <div class="about-notes">
-      <div><span>01 / APPROCHE</span><strong>Autonome & autodidacte.</strong></div>
-      <div><span>02 / ATTENTION</span><strong>Proactif & esprit d’équipe.</strong></div>
-    </div>
-    <section class="profile-details" aria-label="Formation et engagement">
-      <h4>Formation</h4>
-      @for (step of education; track step.period) {
-        <p>
-          <span>{{ step.period }}</span
-          ><strong>{{ step.degree }}</strong
-          >{{ step.specialization }}<br />{{ step.school }} · {{ step.location }}
-        </p>
-      }
-      <h4>Transmission</h4>
-      <p>{{ profile.community }}</p>
-      <h4>Langues</h4>
-      <p>{{ profile.languages.join(' · ') }}</p>
-      <h4>Centres d’intérêt</h4>
-      <p>{{ profile.interests.join(' · ') }}</p>
-    </section>
-    <button class="text-button" type="button" (click)="contactRequested.emit()">
-      Et si on échangeait ? <app-icon name="arrow" />
-    </button>
+  </section>
   }
-  @case ('skills') {
-    <div class="section-heading">
-      <div>
-        <h3>Ma boîte à outils<span class="accent">.</span></h3>
-      </div>
-    </div>
-    <div class="skill-list">
-      @for (group of skills; track group.number) {
-        <section class="skill-group">
-          <span class="skill-group__number">{{ group.number }}</span>
-          <div>
-            <h4>{{ group.title }}</h4>
-            <p>{{ group.description }}</p>
-            <ul class="tags">
-              @for (skill of group.items; track skill) {
-                <li>{{ skill }}</li>
-              }
-            </ul>
-          </div>
-        </section>
-      }
-    </div>
-  }
-  @case ('experiences') {
-    <div class="section-heading">
-      <div>
-        <h3>Expériences<span class="accent">.</span></h3>
-      </div>
-      <span class="count">{{ experiences.length }} étapes</span>
-    </div>
-    <p class="body-copy">
-      Les missions, les apprentissages et les réalisations qui jalonnent une expérience.
+</div>
+}
+@case ('experiences') {
+<div class="section-heading">
+  <div>
+    <h3>Expériences<span class="accent">.</span></h3>
+  </div>
+  <span class="count">{{ experiences.length }} étapes</span>
+</div>
+<p class="body-copy">
+  Les missions, les apprentissages et les réalisations qui jalonnent une expérience.
+</p>
+<ol class="experience-list" aria-label="Parcours professionnel">
+  @for (experience of experiences; track experience.id) {
+  <li class="experience-item">
+    <span class="experience-period">{{ experience.period }}</span>
+    <h4>{{ experience.role }}</h4>
+    <p class="experience-organization">
+      {{ experience.organization }} · {{ experience.location }}
     </p>
-    <ol class="experience-list" aria-label="Parcours professionnel">
-      @for (experience of experiences; track experience.id) {
-        <li class="experience-item">
-          <span class="experience-period">{{ experience.period }}</span>
-          <h4>{{ experience.role }}</h4>
-          <p class="experience-organization">
-            {{ experience.organization }} · {{ experience.location }}
-          </p>
-          <p class="experience-description">{{ experience.description }}</p>
-          <ul class="experience-highlights">
-            @for (highlight of experience.highlights; track highlight) {
-              <li>{{ highlight }}</li>
-            }
-          </ul>
-          <ul class="tags" aria-label="Technologies utilisées">
-            @for (technology of experience.technologies; track technology) {
-              <li>{{ technology }}</li>
-            }
-          </ul>
-        </li>
+    <p class="experience-description">{{ experience.description }}</p>
+    <ul class="experience-highlights">
+      @for (highlight of experience.highlights; track highlight) {
+      <li>{{ highlight }}</li>
       }
-    </ol>
+    </ul>
+    <ul class="tags" aria-label="Technologies utilisées">
+      @for (technology of experience.technologies; track technology) {
+      <li>{{ technology }}</li>
+      }
+    </ul>
+  </li>
   }
-  @case ('contact') {
-    <p class="eyebrow">UNE IDÉE, UNE QUESTION ?</p>
-    <h3 class="contact-title">
-      Les belles choses<br />commencent par<br /><span class="accent">un bonjour.</span>
-    </h3>
-    <p class="body-copy">
-      Un projet à imaginer ensemble, une collaboration ou simplement l’envie d’échanger.
-    </p>
-    <div class="email-block">
-      <a [href]="'mailto:' + profile.email">{{ profile.email }}</a
-      ><button class="copy-button" type="button" (click)="copyEmail()">
-        {{ copied() ? 'Copié !' : 'Copier' }}
-      </button>
-    </div>
-    <p class="copy-status" role="status">
-      {{ copied() ? 'Adresse copiée dans le presse-papiers.' : '' }}
-    </p>
-    <app-social-links />
-    <p class="body-copy">{{ profile.location }} · {{ profile.mobility }}</p>
-    <div class="contact-links">
-      <a [href]="'tel:' + profile.phoneHref">{{ profile.phone }}</a>
-      <a [href]="profile.cv" download="CV-Bogne-Stanley.pdf">Télécharger mon CV (PDF) ↓</a>
-    </div>
-  }
+</ol>
+}
+@case ('contact') {
+<p class="eyebrow">UNE IDÉE, UNE QUESTION ?</p>
+<h3 class="contact-title">
+  Les belles choses<br />commencent par<br /><span class="accent">un bonjour.</span>
+</h3>
+<p class="body-copy">
+  Un projet à imaginer ensemble, une collaboration ou simplement l’envie d’échanger.
+</p>
+<div class="email-block">
+  <a [href]="'mailto:' + profile.email">{{ profile.email }}</a><button class="copy-button" type="button"
+    (click)="copyEmail()">
+    {{ copied() ? 'Copié !' : 'Copier' }}
+  </button>
+</div>
+<p class="copy-status" role="status">
+  {{ copied() ? 'Adresse copiée dans le presse-papiers.' : '' }}
+</p>
+<app-social-links />
+<p class="body-copy">{{ profile.location }} · {{ profile.mobility }}</p>
+<div class="contact-links">
+  <a [href]="'tel:' + profile.phoneHref">{{ profile.phone }}</a>
+  <a [href]="profile.cv" download="CV-Bogne-Stanley.pdf">Télécharger mon CV (PDF) ↓</a>
+</div>
+}
 }
