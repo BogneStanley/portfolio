@@ -18,7 +18,7 @@ import {
   selector: 'app-window-content',
   imports: [ProjectCard, AppIcon, SettingsPanel, PortfolioChat, BrandMark, SocialLinks],
   templateUrl: './window-content.html',
-  styleUrl: './window-content.scss',
+  styleUrls: ['./window-content.scss', './window-profile.scss'],
   host: { '[class.chat-content]': "section() === 'chat'" },
 })
 export class WindowContent {

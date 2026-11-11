@@ -1,0 +1,15 @@
+node_modules
+.angular
+dist
+.git
+.github
+.codex
+.vscode
+docs
+.env
+.env.*
+coverage
+*.log
+Dockerfile
+compose*.yaml
+README.md

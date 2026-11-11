@@ -9,6 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { TechOrbit } from './components/tech-orbit/tech-orbit';
 import { SocialLinks } from './components/social-links/social-links';
 import { BrandMark } from './components/brand-mark/brand-mark';
 import { gsap } from 'gsap';
@@ -22,9 +23,17 @@ import { PreferencesStore, Theme } from './settings/preferences';
 
 @Component({
   selector: 'app-root',
-  imports: [DesktopWindow, AppIcon, WindowContent, WindowOverlays, BrandMark, SocialLinks],
+  imports: [
+    TechOrbit,
+    DesktopWindow,
+    AppIcon,
+    WindowContent,
+    WindowOverlays,
+    BrandMark,
+    SocialLinks,
+  ],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss', './app-interactions.scss'],
+  styleUrls: ['./app.scss', './app-shortcuts.scss', './app-dock.scss', './app-interactions.scss'],
 })
 export class App {
   protected readonly themes: readonly { value: Theme; label: string; icon: IconName }[] = [

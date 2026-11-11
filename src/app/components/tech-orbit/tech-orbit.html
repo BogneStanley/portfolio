@@ -1,0 +1,12 @@
+<div class="orbit-ring orbit-ring--outer"></div>
+<div class="orbit-ring orbit-ring--inner"></div>
+@for (technology of technologies; track technology.id; let index = $index) {
+  <div class="tech-position" [style.left.%]="technology.x" [style.top.%]="technology.y">
+    <div class="tech-motion">
+      <div class="tech-chip" [style.--delay]="index * -1.1 + 's'">
+        <img [ngSrc]="'/technologies/' + technology.id + '.svg'" alt="" width="38" height="38" />
+        <span>{{ technology.label }}</span>
+      </div>
+    </div>
+  </div>
+}

@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && node scripts/generate-seo.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:seo": "node --test scripts/generate-seo.test.mjs",
+    "test:deploy": "node --test scripts/deploy.test.mjs"
   },
   "private": true,
   "packageManager": "npm@11.19.0",

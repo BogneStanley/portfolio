@@ -82,6 +82,8 @@
     <span class="hero__annotation hero__line">Passez en plein écran. Explorez à votre rythme.</span>
   </section>
 
+  <app-tech-orbit [hidden]="activeWindow() || immersive()" />
+
   @if (immersive() && !activeWindow()) {
     <section
       class="immersive-hint"
@@ -116,7 +118,15 @@
           (closed)="setStatus(app.id, 'closed')"
           (reduced)="setStatus(app.id, 'minimized')"
         >
-          <app-window-content [section]="app.id" (contactRequested)="open('contact')" />
+          @defer (on immediate) {
+            <app-window-content [section]="app.id" (contactRequested)="open('contact')" />
+          } @loading (after 150ms) {
+            <p class="window-loading" role="status">Ouverture du dossier…</p>
+          } @error {
+            <p class="window-loading" role="alert">
+              Le dossier n’a pas pu être chargé. Fermez-le puis réessayez.
+            </p>
+          }
         </app-desktop-window>
       }
     }

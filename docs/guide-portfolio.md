@@ -212,3 +212,13 @@ La direction retenue est **Impulsion**, avec une inclinaison vers l’avant et d
 Le footer affiche `PROFILE.email` comme lien `mailto:` et les profils LinkedIn/GitHub renseignés dans `SOCIAL_PROFILES`. Les réseaux utilisent des icônes avec un libellé accessible et s’ouvrent dans un nouvel onglet avec `noopener noreferrer`. Un profil non renseigné n’affiche pas de lien.
 
 Les réseaux professionnels utilisent le composant partagé `SocialLinks` dans le footer (icônes seules), À propos, Contact et les réponses du chat liées au contact. Les URL restent définies à un seul endroit, `SOCIAL_PROFILES`, et chaque icône conserve son libellé accessible et l’ouverture sécurisée dans un nouvel onglet.
+
+## Chargement différé et livraison de production
+
+Le bureau reste dans le chargement initial. Un bloc Angular `@defer (on immediate)` est créé dans chaque fenêtre à son ouverture et charge alors `WindowContent` et ses dépendances. L’état de chargement apparaît après 150 ms ; un message permet de comprendre un échec de téléchargement. Réduire une fenêtre ne détruit pas le composant : les filtres et le contenu restent présents.
+
+Les styles du bureau sont répartis entre structure, raccourcis, dock et interactions ; ceux du contenu séparent les éléments communs du profil et des expériences. Tous gardent l’encapsulation Angular du composant. Les règles devenues inutilisées pour l’ancien sous-titre du hero ont été supprimées.
+
+La compilation produit une application statique. Le script de build génère les URL de référencement à partir de `SITE_URL`, ainsi que le sitemap et `robots.txt`. Docker compile avec Node, puis copie uniquement le résultat dans une petite image Nginx. Traefik reçoit le trafic HTTPS et transmet la requête à Nginx sur le réseau Docker partagé.
+
+Le [README](../README.md) décrit les commandes et les variables de déploiement. Le [rapport de performances](performance.md) distingue la taille brute, l’estimation Angular et la mesure gzip locale.

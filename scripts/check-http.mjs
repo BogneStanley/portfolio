@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+
+const base = new URL(process.argv[2] || 'http://127.0.0.1:8080');
+async function request(path, options) {
+  return fetch(new URL(path, base), { ...options, signal: AbortSignal.timeout(10000) });
+}
+const health = await request('/healthz');
+assert.equal(health.status, 200);
+assert.equal((await health.text()).trim(), 'ok');
+const page = await request('/');
+assert.equal(page.status, 200);
+assert.equal(page.headers.get('cache-control'), 'no-cache');
+assert.equal(page.headers.get('x-content-type-options'), 'nosniff');
+const html = await page.text();
+assert.ok(html.includes('property="og:image"'));
+const main = html.match(/src="([^"]*main-[^\"]+\.js)"/)[1];
+const bundle = await request(main, { headers: { 'Accept-Encoding': 'gzip' } });
+assert.equal(bundle.status, 200);
+assert.equal(bundle.headers.get('content-encoding'), 'gzip');
+assert.match(bundle.headers.get('cache-control'), /max-age=31536000, immutable/);
+assert.equal(bundle.headers.get('x-content-type-options'), 'nosniff');
+assert.ok((await bundle.text()).length > 1000);
+const missing = await request('/missing-asset.js');
+assert.equal(missing.status, 404);
+const route = await request('/a-client-route');
+assert.equal(route.status, 200);
+assert.equal(route.headers.get('cache-control'), 'no-cache');
+assert.ok((await route.text()).includes('<app-root>'));
+const image = await request('/social-preview.png');
+assert.equal(image.status, 200);
+assert.match(image.headers.get('content-type'), /^image\/png/);
+assert.match(image.headers.get('cache-control'), /max-age=3600/);
+const robots = await request('/robots.txt');
+assert.equal(robots.status, 200);
+assert.equal(robots.headers.get('cache-control'), 'no-cache');
+const robotsText = await robots.text();
+assert.match(robotsText, /Sitemap: https:\/\//);
+const sitemap = await request('/sitemap.xml');
+assert.equal(sitemap.status, 200);
+assert.match(await sitemap.text(), /<loc>https:\/\//);
+console.log('HTTP validé : santé, HTML, SEO, PNG, gzip, cache, en-têtes, repli SPA et 404.');

@@ -1,0 +1,88 @@
+name: Test and deploy portfolio
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+concurrency:
+  group: portfolio-${{ github.ref }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test -- --watch=false
+      - run: npm run test:seo
+      - run: npm run test:deploy
+      - run: npm run build
+      - name: Validate Traefik configuration
+        run: docker compose --env-file .env.example config --quiet
+      - name: Build runtime image
+        run: docker build -t portfolio:ci .
+      - name: Check Nginx and HTTP responses
+        run: |
+          docker run --rm portfolio:ci nginx -t
+          docker run -d --name portfolio-ci -p 127.0.0.1:8080:80 portfolio:ci
+          trap 'docker rm -f portfolio-ci' EXIT
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8080/healthz; then break; fi
+            sleep 1
+          done
+          node scripts/check-http.mjs http://127.0.0.1:8080
+
+  deploy:
+    name: Deploy production
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    concurrency:
+      group: portfolio-production
+      cancel-in-progress: false
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Configure SSH
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SSH_HOST" =~ ^[a-zA-Z0-9.-]+$ ]] || { echo 'SSH_HOST manquant ou invalide'; exit 1; }
+          [[ "$SSH_USER" =~ ^[a-zA-Z0-9_-]+$ ]] || { echo 'SSH_USER manquant ou invalide'; exit 1; }
+          [[ "$SSH_PORT" =~ ^[0-9]{1,5}$ ]] && ((10#$SSH_PORT > 0 && 10#$SSH_PORT <= 65535)) || { echo 'SSH_PORT invalide'; exit 1; }
+          [[ "$DEPLOY_PATH" =~ ^/([a-zA-Z0-9_.-]+/)*[a-zA-Z0-9_.-]+$ && "$DEPLOY_PATH/" != *'/../'* && "$DEPLOY_PATH/" != *'/./'* ]] || { echo 'DEPLOY_PATH manquant ou invalide'; exit 1; }
+          [[ -n "$SSH_PRIVATE_KEY" && -n "$SSH_KNOWN_HOSTS" ]] || { echo 'Clé SSH ou known_hosts manquant'; exit 1; }
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/portfolio
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/portfolio ~/.ssh/known_hosts
+          printf 'Host portfolio-deploy\n  HostName %s\n  User %s\n  Port %s\n  IdentityFile ~/.ssh/portfolio\n  IdentitiesOnly yes\n  BatchMode yes\n  StrictHostKeyChecking yes\n  ConnectTimeout 15\n  ServerAliveInterval 15\n  ServerAliveCountMax 4\n' "$SSH_HOST" "$SSH_USER" "$SSH_PORT" > ~/.ssh/config
+      - name: Transfer exact tested revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive --format=tar HEAD | gzip > "$RUNNER_TEMP/portfolio.tar.gz"
+          ssh portfolio-deploy "test -f '$DEPLOY_PATH/.env' && mkdir -p '$DEPLOY_PATH/incoming' '$DEPLOY_PATH/releases/$GITHUB_SHA'"
+          scp "$RUNNER_TEMP/portfolio.tar.gz" "portfolio-deploy:$DEPLOY_PATH/incoming/$GITHUB_SHA.tar.gz"
+          ssh portfolio-deploy "tar -xzf '$DEPLOY_PATH/incoming/$GITHUB_SHA.tar.gz' -C '$DEPLOY_PATH/releases/$GITHUB_SHA' && bash '$DEPLOY_PATH/releases/$GITHUB_SHA/scripts/deploy.sh' '$DEPLOY_PATH' '$GITHUB_SHA'"
+      - name: Clean runner credentials
+        if: always()
+        shell: bash
+        run: rm -f ~/.ssh/portfolio ~/.ssh/config ~/.ssh/known_hosts

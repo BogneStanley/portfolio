@@ -1,3 +1,4 @@
+import { DeferBlockBehavior } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './app';
@@ -16,7 +17,10 @@ describe('Portfolio desktop', () => {
         removeEventListener: vi.fn(),
       })),
     );
-    TestBed.configureTestingModule({ imports: [App] });
+    TestBed.configureTestingModule({
+      imports: [App],
+      deferBlockBehavior: DeferBlockBehavior.Playthrough,
+    });
   });
   afterEach(() => {
     TestBed.resetTestingModule();
@@ -239,7 +243,10 @@ describe('Immersive desktop', () => {
         removeEventListener: vi.fn(),
       })),
     );
-    TestBed.configureTestingModule({ imports: [App] });
+    TestBed.configureTestingModule({
+      imports: [App],
+      deferBlockBehavior: DeferBlockBehavior.Playthrough,
+    });
   });
   afterEach(() => {
     TestBed.resetTestingModule();

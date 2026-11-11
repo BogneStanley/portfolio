@@ -1,0 +1,23 @@
+services:
+  portfolio:
+    image: portfolio:${IMAGE_TAG:-local}
+    build:
+      context: .
+      args:
+        SITE_URL: https://${DOMAIN:?Renseigner DOMAIN dans .env}
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:?Renseigner le réseau existant de Traefik}
+      - traefik.http.routers.portfolio.rule=Host(`${DOMAIN:?Renseigner DOMAIN dans .env}`)
+      - traefik.http.routers.portfolio.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.portfolio.tls=true
+      - traefik.http.routers.portfolio.tls.certresolver=${TRAEFIK_CERTRESOLVER:?Renseigner le résolveur TLS existant}
+      - traefik.http.routers.portfolio.service=portfolio
+      - traefik.http.services.portfolio.loadbalancer.server.port=80
+networks:
+  proxy:
+    external: true
+    name: ${TRAEFIK_NETWORK:?Renseigner le réseau existant de Traefik}
