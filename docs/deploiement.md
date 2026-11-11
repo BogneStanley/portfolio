@@ -2,7 +2,7 @@
 
 # Déploiement Docker et CI/CD
 
-La configuration utilise **le Traefik déjà présent sur le serveur**. Il doit avoir le provider Docker activé, un point d’entrée HTTPS et un résolveur de certificats configuré. Le domaine doit pointer vers le serveur et le réseau Docker partagé doit déjà exister.
+La configuration utilise **le Traefik déjà présent sur le serveur**. Il utilise le provider **file**, avec un répertoire dynamique surveillé. Les exemples ci-dessous supposent que Traefik tourne dans Docker, avec un point d’entrée HTTPS et un résolveur de certificats déjà configurés. Le domaine doit pointer vers le serveur et le réseau Docker partagé doit déjà exister.
 
 ```sh
 cp .env.example .env
@@ -12,8 +12,6 @@ Renseignez dans `.env` :
 
 - `DOMAIN` : domaine seul, sans `https://`, ni chemin. Il sert aussi à générer les URL SEO.
 - `TRAEFIK_NETWORK` : nom exact du réseau Docker auquel Traefik est connecté.
-- `TRAEFIK_ENTRYPOINT` : nom du point d’entrée HTTPS, généralement `websecure`.
-- `TRAEFIK_CERTRESOLVER` : nom exact de votre résolveur de certificats, par exemple `letsencrypt` ou `le`.
 - `IMAGE_TAG` : étiquette locale de l’image, par défaut `local`.
 
 Sur le serveur, depuis le dossier du dépôt :
@@ -27,9 +25,42 @@ docker compose ps
 docker compose logs --tail=100 portfolio
 ```
 
-Le seul service ajouté est `portfolio`. Aucun port n’est publié sur l’hôte : Traefik joint Nginx sur le port interne **80**, via le réseau externe. Traefik termine le TLS ; Nginx sert le contenu en HTTP sur ce réseau. Le nom des routeur et service Traefik est `portfolio` : changez ces labels si ce nom est déjà utilisé sur votre serveur.
+Le seul service ajouté est `portfolio`. Aucun port n’est publié sur l’hôte : Traefik joint Nginx sur le port interne **80**, via le réseau externe. Le Compose donne au service l’alias réseau stable `stanley-portfolio`. Le provider file utilise cet alias, sans dépendre de l’adresse IP du conteneur ni de son nom de livraison.
 
-Si votre Traefik utilise des certificats préchargés plutôt qu’un résolveur ACME, retirez le label `tls.certresolver` du Compose et la variable correspondante. La redirection HTTP vers HTTPS reste gérée par votre Traefik existant.
+### Déclarer la route dans le provider file
+
+Conservez votre configuration statique :
+
+```json
+"providers": {
+  "file": {
+    "directory": "/etc/traefik/dynamic",
+    "watch": true
+  }
+}
+```
+
+Copiez le modèle [portfolio.yml](../docker/traefik/portfolio.yml.example) dans le **dossier du serveur monté vers `/etc/traefik/dynamic`**, sous le nom `portfolio.yml`. Retrouvez ce dossier avec :
+
+```sh
+docker inspect NOM_TRAEFIK --format '{{range .Mounts}}{{println .Source "->" .Destination}}{{end}}'
+```
+
+Par exemple, si `/opt/traefik/dynamic` est monté vers `/etc/traefik/dynamic`, le fichier à créer est `/opt/traefik/dynamic/portfolio.yml`.
+
+Dans ce fichier, adaptez :
+
+- `rule` : le même domaine que `DOMAIN` dans le `.env` du portfolio.
+- `entryPoints` : le point d’entrée HTTPS déjà défini dans Traefik, par exemple `websecure`.
+- `tls.certResolver` : le nom exact du résolveur de certificats existant, par exemple `letsencrypt` ou `le`.
+
+Le domaine et ces noms ne sont pas interpolés depuis le `.env` du portfolio : le fichier dynamique appartient à Traefik. Si Traefik utilise des certificats préchargés, remplacez `tls: { certResolver: ... }` par `tls: {}`. La redirection HTTP vers HTTPS reste gérée par votre configuration Traefik existante.
+
+Traefik doit lui aussi être attaché au réseau `TRAEFIK_NETWORK` et pouvoir résoudre `stanley-portfolio`. Avec `watch: true`, il recharge les changements du fichier dynamique. Montez le répertoire dynamique complet pour que les remplacements de fichiers restent détectables. Les mises à jour suivantes du portfolio conservent l’alias et ne nécessitent pas de réécrire cette route.
+
+Le compte de déploiement n’a besoin d’écrire que dans le dossier du portfolio. La CI/CD ne modifie pas la configuration de Traefik.
+
+Si Traefik est installé directement sur l’hôte, l’alias Docker ne sera pas accessible depuis ce processus. Dans ce cas, publiez Nginx uniquement sur une interface locale (par exemple `127.0.0.1:8080:80`), retirez la configuration de réseau externe devenue inutile et utilisez `http://127.0.0.1:8080` comme URL du service dans le fichier dynamique.
 
 ### Mise à jour
 

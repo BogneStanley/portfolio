@@ -44,4 +44,4 @@ La CI vérifie les tests Angular, les tests de génération SEO, le build de pro
 
 - Chargement différé Angular : https://angular.dev/guide/templates/defer
 - Images Docker multi-étapes : https://docs.docker.com/build/building/multi-stage/
-- Labels Traefik Docker : https://doc.traefik.io/traefik/reference/routing-configuration/other-providers/docker/
+- Provider file Traefik : https://doc.traefik.io/traefik/reference/install-configuration/providers/others/file/

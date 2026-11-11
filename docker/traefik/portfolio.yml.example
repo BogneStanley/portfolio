@@ -1,0 +1,16 @@
+# Copier sous le nom portfolio.yml dans le répertoire dynamique de Traefik.
+# Adapter le domaine, l'entrypoint et le résolveur TLS aux valeurs du serveur.
+http:
+  routers:
+    stanley-portfolio:
+      rule: Host(`stanley-bogne.me`)
+      entryPoints:
+        - websecure
+      service: stanley-portfolio
+      tls:
+        certResolver: letsencrypt
+  services:
+    stanley-portfolio:
+      loadBalancer:
+        servers:
+          - url: http://stanley-portfolio:80
