@@ -14,6 +14,7 @@ export type IconName =
   | 'arrow'
   | 'minus'
   | 'close'
+  | 'back'
   | 'maximize'
   | 'restore'
   | 'sun'
@@ -65,6 +66,7 @@ export class AppIcon {
     arrow: 'M5 19 19 5M5 5h14v14',
     minus: 'M5 12h14',
     close: 'm6 6 12 12M6 18 18 6',
+    back: 'M15 18l-6-6 6-6',
     maximize: 'M4 4h16v16H4V4Z',
     sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5',
     moon: 'M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z',

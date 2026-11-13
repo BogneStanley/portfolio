@@ -1,0 +1,46 @@
+<div class="phone-home">
+  <header class="phone-status">
+    <span class="phone-status__name">Bogne Stanley</span>
+    <div class="phone-status__actions">
+      @if (immersive()) {
+      <button type="button" aria-label="Quitter le mode immersif" (click)="immersionExited.emit()">
+        <app-icon name="exit-fullscreen" />
+      </button>
+      }
+      <button type="button" [attr.aria-label]="dark() ? 'Activer le thème clair' : 'Activer le thème sombre'"
+        (click)="themeToggled.emit()">
+        <app-icon [name]="dark() ? 'sun' : 'moon'" />
+      </button>
+    </div>
+  </header>
+
+  <div class="phone-clock">
+    <time>{{ time() }}</time>
+    <span>{{ date() }}</span>
+  </div>
+
+  <section class="profile-widget" aria-label="Présentation de Bogne Stanley">
+    <div>
+      <p class="widget-eyebrow">DERRIÈRE LES APPS</p>
+      <h2>{{ profile.name }}</h2>
+      <p class="widget-role">{{ profile.role }}</p>
+      <span class="widget-stack">Spring Boot <span>·</span> Angular <span>·</span> Flutter <span>·</span> AI </span>
+    </div>
+    <app-brand-mark />
+  </section>
+
+  <nav class="desktop-icons phone-apps" aria-label="Applications du téléphone">
+    @for (app of applications; track app.id; let index = $index) {
+    <button class="desktop-icon phone-app" [attr.data-window-id]="app.id" [style.--order]="index" type="button"
+      [attr.aria-label]="'Ouvrir ' + app.label" (click)="applicationOpened.emit(app.id)">
+      <span class="phone-app__tile"><app-icon [name]="app.id" /></span>
+      <span class="phone-app__label">{{ app.label }}</span>
+    </button>
+    }
+  </nav>
+
+  <footer class="phone-footer">
+    <span class="phone-page-indicator" aria-hidden="true"></span>
+    <p>Un univers à découvrir.<br /><span>Ouvrez une app pour explorer.</span></p>
+  </footer>
+</div>

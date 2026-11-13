@@ -263,3 +263,13 @@
   font-size: 12px;
   line-height: 1.7;
 }
+
+@media (max-width: 600px) {
+  .menu-bar,
+  .hero,
+  .desktop-footer,
+  .immersive-hint,
+  .immersive-notice {
+    display: none;
+  }
+}

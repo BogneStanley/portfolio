@@ -222,3 +222,9 @@ Les styles du bureau sont répartis entre structure, raccourcis, dock et interac
 La compilation produit une application statique. Le script de build génère les URL de référencement à partir de `SITE_URL`, ainsi que le sitemap et `robots.txt`. Docker compile avec Node, puis copie uniquement le résultat dans une petite image Nginx. Traefik reçoit le trafic HTTPS et transmet la requête à Nginx sur le réseau Docker partagé.
 
 Le [guide de déploiement](deploiement.md) décrit les commandes et les variables de déploiement. Le [rapport de performances](performance.md) distingue la taille brute, l’estimation Angular et la mesure gzip locale.
+
+## Accueil mobile comme un téléphone
+
+Sous 600 px, `PhoneHome` remplace l’accueil du bureau. Ce composant présente une horloge, la date, une carte de profil et une grille d’apps aux fonds et pictogrammes monochromes assortis au bureau. Les boutons émettent l’identifiant de l’application vers le contrôleur existant, sans dupliquer la gestion des fenêtres.
+
+L’accueil est masqué lorsqu’une app s’ouvre en plein écran. Le bouton de retour ferme l’app et rend l’accueil accessible ; le dock reste absent. Le bouton de thème reste disponible sur l’accueil, ainsi que la sortie du mode immersif si celui-ci est actif. Les animations d’entrée respectent la préférence de réduction des mouvements et l’accueil peut défiler sur les écrans courts.

@@ -61,10 +61,12 @@
       <button
         class="window__close"
         type="button"
-        [attr.aria-label]="'Fermer ' + title() + (manager.mobile() ? ' et revenir au bureau' : '')"
+        [attr.aria-label]="
+          'Fermer ' + title() + (manager.mobile() ? ' et revenir à l’accueil' : '')
+        "
         (click)="close()"
       >
-        <app-icon name="close" />
+        <app-icon [name]="manager.mobile() ? 'back' : 'close'" />
       </button>
     </div>
   </header>

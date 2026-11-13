@@ -9,6 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { PhoneHome } from './components/phone-home/phone-home';
 import { TechOrbit } from './components/tech-orbit/tech-orbit';
 import { SocialLinks } from './components/social-links/social-links';
 import { BrandMark } from './components/brand-mark/brand-mark';
@@ -25,6 +26,7 @@ import { PreferencesStore, Theme } from './settings/preferences';
   selector: 'app-root',
   imports: [
     TechOrbit,
+    PhoneHome,
     DesktopWindow,
     AppIcon,
     WindowContent,

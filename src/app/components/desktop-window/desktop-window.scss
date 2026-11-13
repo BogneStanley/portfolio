@@ -207,3 +207,24 @@ h2 {
   padding: 0;
   overflow: auto;
 }
+
+@media (max-width: 600px) {
+  .window__header {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .window__controls {
+    order: -1;
+  }
+  .window__controls app-icon {
+    width: 23px;
+    height: 23px;
+  }
+  .window__identity > app-icon {
+    display: none;
+  }
+  .window__controls .window__close:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+}

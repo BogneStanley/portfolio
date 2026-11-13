@@ -40,20 +40,34 @@
     </div>
   </header>
 
-  <nav class="desktop-icons" aria-label="Applications du bureau">
-    @for (app of applications; track app.id) {
-      <button
-        class="desktop-icon"
-        [attr.data-window-id]="app.id"
-        type="button"
-        (click)="open(app.id)"
-        [attr.aria-label]="'Ouvrir ' + app.label"
-      >
-        <span class="desktop-icon__symbol"><app-icon [name]="app.id" /></span
-        ><span>{{ app.label }}</span>
-      </button>
-    }
-  </nav>
+  @if (manager.mobile()) {
+    <app-phone-home
+      [hidden]="activeWindow()"
+      [time]="currentTime()"
+      [dark]="settings.effectiveTheme() === 'dark'"
+      [immersive]="immersive()"
+      (applicationOpened)="open($event)"
+      (themeToggled)="
+        settings.update({ theme: settings.effectiveTheme() === 'dark' ? 'light' : 'dark' })
+      "
+      (immersionExited)="exitImmersive()"
+    />
+  } @else {
+    <nav class="desktop-icons" aria-label="Applications du bureau">
+      @for (app of applications; track app.id) {
+        <button
+          class="desktop-icon"
+          [attr.data-window-id]="app.id"
+          type="button"
+          (click)="open(app.id)"
+          [attr.aria-label]="'Ouvrir ' + app.label"
+        >
+          <span class="desktop-icon__symbol"><app-icon [name]="app.id" /></span
+          ><span>{{ app.label }}</span>
+        </button>
+      }
+    </nav>
+  }
 
   <section
     class="hero"
