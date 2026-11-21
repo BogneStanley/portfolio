@@ -206,13 +206,18 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'portfolio',
-    title: 'Portfolio · Stanley OS',
+    title: 'Portfolio',
     description:
       'Portfolio interactif inspiré d’un système d’exploitation : fenêtres déplaçables et redimensionnables, ancrage des applications, thèmes personnalisables et assistant local. Sur mobile, le bureau devient un écran d’accueil avec des applications en plein écran.',
     technologies: ['Angular', 'TypeScript', 'GSAP', 'SCSS', 'Docker'],
     topics: ['Interface interactive', 'Animations', 'Design responsive'],
     category: 'web',
-    image: '/projects/portfolio.png',
+    image: '/projects/portfolio.svg',
+    screenshot: {
+      src: '/projects/screens/portfolio.png',
+      kind: 'web',
+      alt: 'Bureau du portfolio de Bogne Stanley avec sa présentation et ses technologies',
+    },
     links: [{ label: 'Explorer le portfolio', url: 'https://stanley-bogne.me/' }],
     number: '08',
   },
