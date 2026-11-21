@@ -94,28 +94,6 @@ export const PROJECTS: Project[] = [
     number: '02',
   },
   {
-    id: 'kusa',
-    title: 'Kusa',
-    description:
-      'Migration d’une API de paiement de NestJS vers Spring Boot. Reprise du backend pour faciliter sa maintenance et accompagner son évolution, en conservant le paiement comme cœur métier.',
-    technologies: ['NestJS', 'Spring Boot'],
-    topics: ['Paiements', 'Migration backend', 'API'],
-    category: 'backend',
-    image: '/projects/kusa.svg',
-    number: '03',
-  },
-  {
-    id: 'metoua',
-    title: 'Metoua',
-    description:
-      'Service de mobilité réunissant taxi à la demande et covoiturage. Lead développement mobile et backend : choix techniques et réalisation des fonctionnalités de l’application.',
-    technologies: ['Flutter', 'Spring Boot'],
-    topics: ['Mobilité', 'Taxi à la demande', 'Covoiturage'],
-    category: 'mobile',
-    image: '/projects/metoua.svg',
-    number: '04',
-  },
-  {
     id: 'toupesu',
     title: 'Toupesu',
     description:
@@ -135,69 +113,7 @@ export const PROJECTS: Project[] = [
       kind: 'mobile',
       alt: 'Capture de l’application Toupesu publiée sur Google Play',
     },
-    number: '05',
-  },
-  {
-    id: 'afrolancer',
-    title: 'Afrolancer',
-    description:
-      'Plateforme reliant freelances et clients autour de prestations de services. Conception et développement des interfaces Angular pour le parcours web de mise en relation.',
-    technologies: ['Angular'],
-    topics: ['Freelance', 'Mise en relation', 'Interfaces web'],
-    category: 'web',
-    image: '/projects/afrolancer.svg',
-    number: '06',
-  },
-  {
-    id: 'get-typed-router',
-    title: 'Get Typed Router',
-    description:
-      'Générateur de routes pour Flutter et GetX : des annotations sur les pages produisent un routeur et des arguments typés. Son outil en ligne de commande évite de maintenir manuellement les listes de routes.',
-    technologies: ['Flutter', 'GetX'],
-    topics: ['Navigation typée', 'Génération de code', 'Outils développeur'],
-    category: 'package',
-    image: '/projects/get-typed-router.svg',
-    screenshot: {
-      src: '/projects/screens/get-typed-router.webp',
-      kind: 'web',
-      alt: 'Page officielle du package Get Typed Router sur pub.dev',
-    },
-    links: [{ label: 'Voir sur pub.dev', url: 'https://pub.dev/packages/get_typed_router' }],
-    number: '07',
-  },
-  {
-    id: 'form-validator-x',
-    title: 'Form Validator X',
-    description:
-      'Bibliothèque de validation de formulaires Flutter fondée sur des règles composables : champs requis, e-mails, dates, nombres et motifs. Messages personnalisables et règles extensibles, sans dépendance externe hors Flutter.',
-    technologies: ['Flutter'],
-    topics: ['Formulaires', 'Validation composable', 'Règles personnalisées'],
-    category: 'package',
-    image: '/projects/form-validator-x.svg',
-    screenshot: {
-      src: '/projects/screens/form-validator-x.webp',
-      kind: 'web',
-      alt: 'Page officielle du package Form Validator X sur pub.dev',
-    },
-    links: [{ label: 'Voir sur pub.dev', url: 'https://pub.dev/packages/form_validator_x' }],
-    number: '08',
-  },
-  {
-    id: 'dev-talk',
-    title: 'The Dev Talk Show CMR',
-    description:
-      'Podcast de conversations sur les parcours et les métiers de la tech au Cameroun et en Afrique : ingénierie logicielle, entrepreneuriat, freelance et place des femmes dans la tech. Participation à l’animation, au montage et au design.',
-    technologies: [],
-    topics: ['Tech en Afrique', 'Parcours professionnels', 'Entretiens'],
-    category: 'media',
-    image: '/projects/dev-talk.svg',
-    screenshot: {
-      src: '/projects/screens/dev-talk.webp',
-      kind: 'web',
-      alt: 'Chaîne YouTube The Dev Talk Show Camer et ses épisodes',
-    },
-    links: [{ label: 'Voir la chaîne YouTube', url: 'https://www.youtube.com/@TheDevTalkShowCMR' }],
-    number: '09',
+    number: '03',
   },
   {
     id: 'lehiboo',
@@ -219,51 +135,7 @@ export const PROJECTS: Project[] = [
       alt: 'Capture du site Le Hiboo Experiences',
     },
     image: '/projects/lehiboo.svg',
-    number: '10',
-  },
-  {
-    id: 'smalldeals',
-    title: 'SmallDeals',
-    description:
-      'Marketplace mobile dédiée au commerce au Cameroun. Elle réunit des produits et des boutiques dans un même catalogue, avec commande depuis le téléphone, offres promotionnelles et livraison.',
-    technologies: [],
-    topics: ['E-commerce', 'Marketplace', 'Commerce local'],
-    category: 'mobile',
-    links: [
-      {
-        label: 'Google Play',
-        url: 'https://play.google.com/store/apps/details?id=cm.viaziza.smalldeals',
-      },
-    ],
-    screenshot: {
-      src: '/projects/screens/smalldeals.webp',
-      kind: 'mobile',
-      alt: 'Visuel de SmallDeals publié sur Google Play',
-    },
-    image: '/projects/smalldeals.svg',
-    number: '11',
-  },
-  {
-    id: 'badgee',
-    title: 'Badgee',
-    description:
-      'Outil de coordination des agences et de leurs équipes terrain : planning des missions, consignes, formulaires et preuves d’intervention. Les agents indépendants peuvent aussi consulter les missions proposées et y candidater.',
-    technologies: [],
-    topics: ['Gestion d’agence', 'Équipes terrain', 'Suivi des missions'],
-    category: 'mobile',
-    links: [
-      {
-        label: 'Google Play',
-        url: 'https://play.google.com/store/apps/details?id=com.dilios.badgee',
-      },
-    ],
-    screenshot: {
-      src: '/projects/screens/badgee.webp',
-      kind: 'mobile',
-      alt: 'Capture de Badgee publiée sur Google Play',
-    },
-    image: '/projects/badgee.svg',
-    number: '12',
+    number: '04',
   },
   {
     id: 'bluedata',
@@ -286,7 +158,97 @@ export const PROJECTS: Project[] = [
       alt: 'Capture du site Blue Data',
     },
     image: '/projects/bluedata.svg',
-    number: '13',
+    number: '05',
+  },
+  {
+    id: 'smalldeals',
+    title: 'SmallDeals',
+    description:
+      'Marketplace mobile dédiée au commerce au Cameroun. Elle réunit des produits et des boutiques dans un même catalogue, avec commande depuis le téléphone, offres promotionnelles et livraison.',
+    technologies: [],
+    topics: ['E-commerce', 'Marketplace', 'Commerce local'],
+    category: 'mobile',
+    links: [
+      {
+        label: 'Google Play',
+        url: 'https://play.google.com/store/apps/details?id=cm.viaziza.smalldeals',
+      },
+    ],
+    screenshot: {
+      src: '/projects/screens/smalldeals.webp',
+      kind: 'mobile',
+      alt: 'Visuel de SmallDeals publié sur Google Play',
+    },
+    image: '/projects/smalldeals.svg',
+    number: '06',
+  },
+  {
+    id: 'badgee',
+    title: 'Badgee',
+    description:
+      'Outil de coordination des agences et de leurs équipes terrain : planning des missions, consignes, formulaires et preuves d’intervention. Les agents indépendants peuvent aussi consulter les missions proposées et y candidater.',
+    technologies: [],
+    topics: ['Gestion d’agence', 'Équipes terrain', 'Suivi des missions'],
+    category: 'mobile',
+    links: [
+      {
+        label: 'Google Play',
+        url: 'https://play.google.com/store/apps/details?id=com.dilios.badgee',
+      },
+    ],
+    screenshot: {
+      src: '/projects/screens/badgee.webp',
+      kind: 'mobile',
+      alt: 'Capture de Badgee publiée sur Google Play',
+    },
+    image: '/projects/badgee.svg',
+    number: '07',
+  },
+  {
+    id: 'portfolio',
+    title: 'Portfolio · Stanley OS',
+    description:
+      'Portfolio interactif inspiré d’un système d’exploitation : fenêtres déplaçables et redimensionnables, ancrage des applications, thèmes personnalisables et assistant local. Sur mobile, le bureau devient un écran d’accueil avec des applications en plein écran.',
+    technologies: ['Angular', 'TypeScript', 'GSAP', 'SCSS', 'Docker'],
+    topics: ['Interface interactive', 'Animations', 'Design responsive'],
+    category: 'web',
+    image: '/projects/portfolio.png',
+    links: [{ label: 'Explorer le portfolio', url: 'https://stanley-bogne.me/' }],
+    number: '08',
+  },
+  {
+    id: 'get-typed-router',
+    title: 'Get Typed Router',
+    description:
+      'Générateur de routes pour Flutter et GetX : des annotations sur les pages produisent un routeur et des arguments typés. Son outil en ligne de commande évite de maintenir manuellement les listes de routes.',
+    technologies: ['Flutter', 'GetX'],
+    topics: ['Navigation typée', 'Génération de code', 'Outils développeur'],
+    category: 'package',
+    image: '/projects/get-typed-router.svg',
+    screenshot: {
+      src: '/projects/screens/get-typed-router.webp',
+      kind: 'web',
+      alt: 'Page officielle du package Get Typed Router sur pub.dev',
+    },
+    links: [{ label: 'Voir sur pub.dev', url: 'https://pub.dev/packages/get_typed_router' }],
+    number: '09',
+  },
+  {
+    id: 'form-validator-x',
+    title: 'Form Validator X',
+    description:
+      'Bibliothèque de validation de formulaires Flutter fondée sur des règles composables : champs requis, e-mails, dates, nombres et motifs. Messages personnalisables et règles extensibles, sans dépendance externe hors Flutter.',
+    technologies: ['Flutter'],
+    topics: ['Formulaires', 'Validation composable', 'Règles personnalisées'],
+    category: 'package',
+    image: '/projects/form-validator-x.svg',
+    screenshot: {
+      src: '/projects/screens/form-validator-x.webp',
+      kind: 'web',
+      alt: 'Page officielle du package Form Validator X sur pub.dev',
+    },
+    links: [{ label: 'Voir sur pub.dev', url: 'https://pub.dev/packages/form_validator_x' }],
+    number: '10',
   },
   {
     id: 'cours-flutter',
@@ -303,7 +265,7 @@ export const PROJECTS: Project[] = [
       },
     ],
     image: '/projects/cours-flutter.svg',
-    number: '14',
+    number: '11',
   },
   {
     id: 'cours-figma',
@@ -320,7 +282,57 @@ export const PROJECTS: Project[] = [
       },
     ],
     image: '/projects/cours-figma.svg',
+    number: '12',
+  },
+  {
+    id: 'dev-talk',
+    title: 'The Dev Talk Show CMR',
+    description:
+      'Podcast de conversations sur les parcours et les métiers de la tech au Cameroun et en Afrique : ingénierie logicielle, entrepreneuriat, freelance et place des femmes dans la tech. Participation à l’animation, au montage et au design.',
+    technologies: [],
+    topics: ['Tech en Afrique', 'Parcours professionnels', 'Entretiens'],
+    category: 'media',
+    image: '/projects/dev-talk.svg',
+    screenshot: {
+      src: '/projects/screens/dev-talk.webp',
+      kind: 'web',
+      alt: 'Chaîne YouTube The Dev Talk Show Camer et ses épisodes',
+    },
+    links: [{ label: 'Voir la chaîne YouTube', url: 'https://www.youtube.com/@TheDevTalkShowCMR' }],
+    number: '13',
+  },
+  {
+    id: 'metoua',
+    title: 'Metoua',
+    description:
+      'Service de mobilité réunissant taxi à la demande et covoiturage. Lead développement mobile et backend : choix techniques et réalisation des fonctionnalités de l’application.',
+    technologies: ['Flutter', 'Spring Boot'],
+    topics: ['Mobilité', 'Taxi à la demande', 'Covoiturage'],
+    category: 'mobile',
+    image: '/projects/metoua.svg',
+    number: '14',
+  },
+  {
+    id: 'kusa',
+    title: 'Kusa',
+    description:
+      'Migration d’une API de paiement de NestJS vers Spring Boot. Reprise du backend pour faciliter sa maintenance et accompagner son évolution, en conservant le paiement comme cœur métier.',
+    technologies: ['NestJS', 'Spring Boot'],
+    topics: ['Paiements', 'Migration backend', 'API'],
+    category: 'backend',
+    image: '/projects/kusa.svg',
     number: '15',
+  },
+  {
+    id: 'afrolancer',
+    title: 'Afrolancer',
+    description:
+      'Plateforme reliant freelances et clients autour de prestations de services. Conception et développement des interfaces Angular pour le parcours web de mise en relation.',
+    technologies: ['Angular'],
+    topics: ['Freelance', 'Mise en relation', 'Interfaces web'],
+    category: 'web',
+    image: '/projects/afrolancer.svg',
+    number: '16',
   },
 ];
 export const SKILLS = [

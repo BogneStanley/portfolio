@@ -17,7 +17,7 @@ describe('Local portfolio answers', () => {
   });
   it('selects a named project and supports questions spanning multiple sections', () => {
     const detail = answerPortfolio('Parle-moi de Kusa');
-    expect(detail.text).toContain(PROJECTS[2].description);
+    expect(detail.text).toContain(PROJECTS.find((project) => project.id === 'kusa')!.description);
     expect(detail.text).not.toContain('FreemoPay');
     const combined = answerPortfolio('Quels sont ses projets et ses compétences ?');
     expect(combined.sources).toEqual(['projects', 'skills']);
